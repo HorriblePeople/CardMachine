@@ -99,3 +99,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Data files
+# =========================
+
+BaBOC/
+TSSSF/
+WSotT/
