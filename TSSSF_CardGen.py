@@ -6,7 +6,7 @@ DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
 
 
-LegacySymbolMode = True
+LegacySymbolMode = False
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
@@ -168,13 +168,20 @@ ColorDict={
 
 RulesDict={
     "{replace}": "While in your hand, you may discard a Pony card from the grid and play this card in its place. This power cannot be copied.",
-    "{swap}": "You may swap 2 Pony cards on the shipping grid. Neither of their powers activate.",
+    "{swap}": "You may swap 2 Pony cards on the shipping grid.",
+    "{3swap}": "You may swap up to 3 Pony cards on the grid.",
     "{draw}": "You may draw a card from the Ship or Pony deck.",
-    "{goal}": "You may put 1 Goal at the bottom of the Goal deck and draw a new one to replace it.",
+    "{goal}": "You may discard a Goal and draw a new one to replace it.",
     "{search}": "You may search the Ship or Pony discard pile for a card of your choice and play it.",
     "{copy}": "You may copy the power of any Pony card currently on the shipping grid, except for Changelings.",
+    "{hermaphrodite}": "May count as either {male} or {female} for all Goals, Ships, and powers.",
+    "{double pony}": "This card counts as 2 Ponies.",
     "{love poison}": "Instead of playing this ship with a Pony card from your hand, or connecting two ponies already on the grid, take a Pony card from the shipping grid and reattach it elsewhere with this Ship. That card's power activates.",
-    "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as having any one keyword of your choice, except pony names."
+    "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as having any one keyword of your choice, except pony names.",
+    "{gender change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes the opposite gender.",
+    "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes a race of your choice. This cannot affect Changelings.",
+    "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as {postapocalypse}.",
+    "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
     }
 
 backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
@@ -206,7 +213,7 @@ def FixUnicode(text):
         text=text.replace(';', u"\u2642")
         text=text.replace('*', u"\u2640")
         text=text.replace('>', u"\u26A4")
-        text=text.replace('#', u"\u2714")
+        #text=text.replace('#', u"\u2714")
         text=text.replace('<', u"\u2764")
         text=text.replace('%', u"\uE000")
         text=text.replace('8', u"\uE001")
@@ -217,7 +224,7 @@ def FixUnicode(text):
         text=text.replace('{male}', u"\u2642")
         text=text.replace('{female}', u"\u2640")
         text=text.replace('{malefemale}', u"\u26A4")
-        text=text.replace('{goal}', u"\u2714")
+        #text=text.replace('{goal}', u"\u2714")
         text=text.replace('{ship}', u"\u2764")
         text=text.replace('{earthpony}', u"\uE000")
         text=text.replace('{unicorn}', u"\uE001")
