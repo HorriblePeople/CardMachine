@@ -473,8 +473,16 @@ def MakeBlankCard():
     return image
 
 def MakeStartCard(tags):
-    image = PIL_Helper.BlankImage(base_w, base_h,color=ColorDict[tags[TYPE]])
-
+    image = GetFrame(tags[TYPE])
+    AddCardArt(image, tags[PICTURE], Anchors["PonyArt"])
+    TitleText(image, tags[TITLE], ColorDict["START"])
+    AddSymbols(image, tags[SYMBOLS].split('!'))
+    BarText(image, tags[KEYWORDS], ColorDict["START bar text"])
+    text_size = FlavorText(image, tags[FLAVOR], ColorDict["START flavor"])
+    BodyText(image, tags[BODY], ColorDict["START"], text_size)
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    if len(tags) > EXPANSION:
+        AddExpansion(image, tags[EXPANSION])
     return image
 
 def MakePonyCard(tags):
