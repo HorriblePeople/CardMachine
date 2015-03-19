@@ -1,7 +1,7 @@
 import os, glob, shutil, traceback, random
 import PIL_Helper
 
-TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION = range(8)
+TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, CLIENT = range(9)
 DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
 
@@ -407,13 +407,20 @@ def FlavorText(image, text, color):
         leading_offset=+1,
         max_width = textmaxwidth,
         )
+
 def AddExpansion(image, expansion):
+    #print "Expansion: {}".format(expansion)
     expansion_symbol = Expansions.get(expansion, None)
     if expansion_symbol:
         image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
-def CopyrightText(image, color):
-    text = "{}; TSSSF (C) Horrible People Productions. Art by {}.".format(
-        CardSet.replace('_',' '),
+
+def CopyrightText(tags, image, color):
+    card_set = CardSet.replace('_',' ')
+    #print tags[CLIENT], repr(tags)
+    if len(tags)-1 >= CLIENT:
+        card_set += " " + str(tags[CLIENT])
+    text = "{}; TSSSF by Horrible People Games. Art by {}.".format(
+        card_set,
         ARTIST
         )
     PIL_Helper.AddText(
