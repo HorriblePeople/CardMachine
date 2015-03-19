@@ -381,13 +381,15 @@ def BarText(image, text, color):
         anchor = Anchors["Bar"],
         halign = "right"
         )
-def BodyText(image, text, color, flavor_text_size=0):
+
+def BodyText(image, text, color, flavor_text_size=0, font=None):
     # Replacement of keywords with symbols
     for keyword in RulesDict:
         if keyword in text:
             text = text.replace(keyword, RulesDict[keyword])
     text = FixUnicode(text)
-    font = fonts["Body"]
+    if font is None:
+        font = fonts["Body"]
     anchor = Anchors["Body"]
     leading = -1
     # Get the size of the body text as (w,h)
