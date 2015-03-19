@@ -238,7 +238,7 @@ def FixUnicode(text):
     return text
 
 def BuildCard(linein):
-    tags = linein.strip('\n').replace(r'\n', '\n').split('`')
+    tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
         im = PickCardFunc(tags[TYPE], tags)
         if len(tags)>3:
