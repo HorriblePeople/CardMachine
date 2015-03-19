@@ -24,7 +24,7 @@ VassalPath = DIRECTORY+"/vassal-images/"
 VassalTemplatesPath = DIRECTORY+"/vassal templates/"
 VassalWorkspacePath = DIRECTORY+"/vassal workspace/"
 VassalImagesPath = os.path.join(VassalWorkspacePath, "images")
-vassalscale=(260,359)
+VASSAL_SCALE=(260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
@@ -36,11 +36,7 @@ w_marg = 31
 h_marg = 36
 baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
-# SymbolX = 58
-# PonySymbolYs = [56, 160, 535]
-# GoalSymbolYs = [86, 550]
 
-#croprect=[(50,63),(788,1088)]
 croprect=(50,63,788+50,1088+63)
 
 TextHeightThresholds = [363, 378, 600]
@@ -195,7 +191,6 @@ backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
          "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
-
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
     invalid_chars = [",", "?", '"', ":"]
@@ -258,7 +253,6 @@ def BuildBack(linein):
     #print("Back type: " + tags[TYPE])
     return backs[tags[TYPE]]
   
-
 def PickCardFunc(card_type, tags):
     if tags[TYPE] == "START":
         return MakePonyCard(tags)
@@ -284,6 +278,7 @@ def PickCardFunc(card_type, tags):
         return MakeSpecialCard(tags[PICTURE])
     else:
         raise Exception("No card of type {0}".format(tags[TYPE]))
+
 def GetFrame(card_type):
     return Frames[card_type].copy()
 
@@ -344,6 +339,7 @@ def TitleText(image, text, color):
         halign = "right",
         leading_offset = leading
         )
+
 def BarText(image, text, color):
     bar_text_size = PIL_Helper.GetTextBlockSize(text,fonts["Bar"],textmaxwidth)
     if bar_text_size[0] > BarTextThreshold[0]:
@@ -398,6 +394,7 @@ def BodyText(image, text, color, flavor_text_size=0):
         max_width = textmaxwidth,
         leading_offset=leading
         )
+
 def FlavorText(image, text, color):
     return PIL_Helper.AddText(
         image = image,
@@ -428,6 +425,7 @@ def CopyrightText(image, color):
         valign = "bottom",
         halign = "right",
         )
+
 def MakeBlankCard():
     image = PIL_Helper.BlankImage(base_w, base_h)
     
@@ -445,6 +443,7 @@ def MakeStartCard(tags):
     image = PIL_Helper.BlankImage(base_w, base_h,color=ColorDict[tags[TYPE]])
 
     return image
+
 def MakePonyCard(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["PonyArt"])
@@ -453,9 +452,11 @@ def MakePonyCard(tags):
     BarText(image, tags[KEYWORDS], ColorDict["Pony bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Pony flavor"])
     BodyText(image, tags[BODY], ColorDict["Pony"], text_size)
-    AddExpansion(image, tags[EXPANSION])
-    CopyrightText(image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    if len(tags) > EXPANSION:
+        AddExpansion(image, tags[EXPANSION])
     return image
+
 def MakeShipCard(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["ShipArt"])
@@ -465,9 +466,11 @@ def MakeShipCard(tags):
     BarText(image, tags[KEYWORDS], ColorDict["Ship bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Ship flavor"])
     BodyText(image, tags[BODY], ColorDict["Ship"], text_size)
-    AddExpansion(image, tags[EXPANSION])
-    CopyrightText(image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    if len(tags) > EXPANSION:
+        AddExpansion(image, tags[EXPANSION])
     return image
+
 def MakeGoalCard(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["GoalArt"])
@@ -478,8 +481,10 @@ def MakeGoalCard(tags):
     AddExpansion(image, tags[EXPANSION])
     CopyrightText(image, ColorDict["Copyright"])
     return image
-def MakeSpecialCard(cardtype):
-    return GetFrame(cardtype)
+
+def MakeSpecialCard(picture):
+    print repr(picture)
+    return GetFrame(picture)
 
 def InitVassalModule():
     pass

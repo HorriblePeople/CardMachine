@@ -5,6 +5,7 @@ Master Game Gen
 import os, glob
 import PIL_Helper
 from OS_Helper import *
+from sys import exit
 
 #TSSSF Migration TODO:
 #automagickally create vassal module :D
@@ -19,7 +20,7 @@ def main(folder=".", filepath="deck.cards"):
     # Read first line of file to determine module
     first_line = CardFile.readline()
     try:
-        module=(__import__(first_line.strip()))
+        module = __import__(first_line.strip())
     except ValueError:
         print "Failed to load module: " + str(ValueError)
         return
