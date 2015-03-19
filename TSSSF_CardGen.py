@@ -145,7 +145,11 @@ Expansions = {
     "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
     "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
     "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png")
+    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
+    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
+    "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
+    "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
+    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png")
     }
 
 ColorDict={
