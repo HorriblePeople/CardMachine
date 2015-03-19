@@ -185,7 +185,16 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     #     page.save(filename)
     # else:
         # bg.save(filename)
-    bg.save(filename)
+    # Create a paper image the exact size of an 8.5x11 paper
+    # to paste the card images onto
+    paper_width = int(8.5*300)  # 8.5 inches times 300 dpi
+    paper_height = int(11*300)  # 11 inches times 300 dpi
+    paper_image = Image.new("RGB", (paper_width, paper_height), (255, 255, 255))
+    w,h = bg.size
+    # TODO Add code that shrinks the bg if it's bigger than any dimension
+    # of the Paper image
+    paper_image.paste(bg, ((paper_width - w)/2, (paper_height - h)/2))
+    paper_image.save(filename)
 
 def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)

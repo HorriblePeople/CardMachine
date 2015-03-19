@@ -44,24 +44,41 @@ def main(folder=".", filepath="deck.cards"):
     cardlines = [line for line in CardFile if not line[0] in ('#', ';', '/')]
     CardFile.close()
 
-    # Make a list of lists of cards, each one page in scale
-    cardpages=[]
-    cardlines+=["BLANK" for i in range(1,module.TOTAL_CARDS)]
-    cardlines.reverse()
-    while len(cardlines)>module.TOTAL_CARDS:
-        cardpages.append([cardlines.pop() for i in range(0,module.TOTAL_CARDS)])
+##    # Make a list of lists of cards, each one page in scale
+##    cardpages = []
+##    cardlines += ["BLANK" for i in range(1, module.TOTAL_CARDS)]
+##    cardlines.reverse()
+##    while len(cardlines) > module.TOTAL_CARDS:
+##        cardpages.append([cardlines.pop() for i in range(0,module.TOTAL_CARDS)])
 
     # Make pages
-    card_list=[]
-    back_list=[]
-    for i,page in enumerate(cardpages):
-        for line in page:
-            card_list.append(module.BuildCard(line))
-            back_list.append(module.BuildBack(line))
-        BuildPage(card_list,i,module.PAGE_WIDTH,module.PAGE_HEIGHT,workspace_path)
-        BuildBack(back_list,i,module.PAGE_WIDTH,module.PAGE_HEIGHT,workspace_path)
-        card_list=[]
-        back_list=[]
+    card_list = []
+    back_list = []
+    page_num = 0
+    for line in cardlines:
+        card_list.append(module.BuildCard(line))
+        back_list.append(module.BuildBack(line))
+        # If the card_list is big enough to make a page
+        # do that now, and set the card list to empty again
+        if len(card_list) >= module.TOTAL_CARDS:
+            page_num += 1
+            print "Building Page {}...".format(page_num)
+            BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+            BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+            card_list = []
+            back_list = []
+
+    # If there are leftover cards, fill in the remaining
+    # card slots with blanks and gen the last page
+    if len(card_list) > 0:
+        # Fill in the missing slots with blanks
+        while len(card_list) < module.TOTAL_CARDS:
+            card_list.append(module.BuildCard("BLANK"))
+            back_list.append(module.BuildCard("BLANK"))
+        page_num += 1
+        print "Building Page {}...".format(page_num)
+        BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+        BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
 
     #Build Vassal
     module.CompileVassalModule()
