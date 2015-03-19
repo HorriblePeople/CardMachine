@@ -48,7 +48,7 @@ fonts = {
     "TitleSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 45),
     "Body":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
     "BodySmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 33),
+    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 31),
     "Bar":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 38),
     "BarSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
     "Flavortext":PIL_Helper.BuildFont(ResourcePath+"KlinicSlabBookIt.otf", 28),
@@ -69,11 +69,11 @@ Anchors = {
     "TitleTwoLine": (-65-50, 159),
     "TitleSmall": (-65-50, 157),
     "Bar": (-68-50, 598+67),
-    "Body": (base_w_center, 730),
-    "BodyShiftedUp": (base_w_center, 720),
+    "Body": (base_w_center, 735),
+    "BodyShiftedUp": (base_w_center, 730),
     "Flavor": (base_w_center, -110),
     "Expansion": (640+50, 525+63),
-    "Copyright": (-38-50, -15-63)
+    "Copyright": (-38-50, -13-61)
 }
 
 ArtMissing = [
@@ -388,8 +388,7 @@ def BodyText(image, text, color, flavor_text_size=0):
         # the changeling cards
         if body_text_size[1] + flavor_text_size[1] > TextHeightThresholds[1]:
             font = fonts["BodyChangeling"]
-            leading = -5
-            print "changeling bodytext"
+            leading = -3
     Anchors["BodyShiftedUp"]
     PIL_Helper.AddText(
         image = image,
