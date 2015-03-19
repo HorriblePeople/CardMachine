@@ -237,21 +237,37 @@ def FixUnicode(text):
         text=text.replace('{postapocalypse}', u"\uE004")
     return text
 
+def SaveCard(filepath, image_to_save):
+    '''
+    If the filepath already exists, insert _001 just before the
+    extension. If that exists, increment the number until we get to
+    a filepath that doesn't exist yet.
+    '''
+    if os.path.exists(filepath):
+        basepath, extension = os.path.splitext(filepath)
+        i = 0
+        while os.path.exists(filepath):
+            i += 1
+            filepath = "{}_{:>03}{}".format(basepath, i, extension)
+    image_to_save.save(filepath)
+
 def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
         im = PickCardFunc(tags[TYPE], tags)
-        if len(tags)>3:
-            #print os.path.join(BleedsPath,FixFileName(tags[0]+"__"+tags[3]))
-            im.save(os.path.join(BleedsPath,FixFileName(tags[0]+"__"+tags[3])))
+        if len(tags) >= 2:
+            if len(tags) == 2:
+                filename = FixFileName(tags[0]+"_"+tags[1])
+            else:
+                filename = FixFileName(tags[0]+"_"+tags[3])
+            SaveCard(os.path.join(BleedsPath, filename), im)
             im_crop=im.crop(croprect)
-            im_crop.save(os.path.join(CropPath,FixFileName(tags[0]+"__"+tags[3])))
-            im_vassal=PIL_Helper.ResizeImage(im_crop,vassalscale)
-            im_vassal.save(os.path.join(VassalPath,FixFileName(tags[0]+"__"+tags[3])))
+            SaveCard(os.path.join(CropPath, filename), im_crop)
+            im_vassal=PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
+            SaveCard(os.path.join(VassalPath, filename), im_vassal)
         else:
             im_crop=im.crop(croprect)
         #MakeVassalCard(im_cropped)
-
     except Exception as e:
         print "Warning, Bad Card: {0}".format(tags)
         traceback.print_exc()
