@@ -519,8 +519,9 @@ def MakeGoalCard(tags):
     AddSymbols(image, tags[SYMBOLS].split('!'), card_type="Goal")
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Goal flavor"])
     BodyText(image, tags[BODY], ColorDict["Goal"], text_size)
-    AddExpansion(image, tags[EXPANSION])
-    CopyrightText(image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    if len(tags) > EXPANSION:
+        AddExpansion(image, tags[EXPANSION])
     return image
 
 def MakeSpecialCard(picture):
