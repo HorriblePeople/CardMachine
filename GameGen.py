@@ -24,7 +24,7 @@ def main(folder=".", filepath="deck.cards"):
     card_set = os.path.dirname(filepath)
 
     # Read first line of file to determine module
-    first_line = CardFile.readline().decode('utf-8', 'replace').strip()
+    first_line = CardFile.readline().decode('utf-8-sig', 'replace').strip()
     try:
         module = __import__(first_line)
     except ValueError:
@@ -38,7 +38,7 @@ def main(folder=".", filepath="deck.cards"):
             continue
 
         with open(tpath, 'rb') as fp:
-            translation = json.loads(fp.read().decode('utf-8', 'replace'))
+            translation = json.loads(fp.read().decode('utf-8-sig', 'replace'))
 
         if 'RulesDict' in translation:
             module.RulesDict.update(translation['RulesDict'])
