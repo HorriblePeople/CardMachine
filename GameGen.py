@@ -7,9 +7,7 @@ Master Game Gen
 import os, glob, json
 import PIL_Helper
 from OS_Helper import *
-
 import sys
-reload(sys).setdefaultencoding('utf-8')
 
 #TSSSF Migration TODO:
 #automagickally create vassal module :D
@@ -17,7 +15,6 @@ reload(sys).setdefaultencoding('utf-8')
 #.pon files have symbols like {ALICORN} and so on.
 
 def main(folder=".", filepath="deck.cards"):
-
     CardFile = open(os.path.join(folder, filepath), 'rb')
     card_set = os.path.dirname(filepath)
 
@@ -104,11 +101,40 @@ def main(folder=".", filepath="deck.cards"):
     #Build Vassal
     module.CompileVassalModule()
 
-    print "\nCreating PDF..."
-    os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "\nCreating PDF of backs..."
-    os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "Done!"
+    if sys.platform == 'win32':
+        print "\nCreating PDF (Windows)..."
+        if os.path.isfile(r'imagemagick\convert.exe'):
+            # on windows it working only with ascii path
+            os.system(ur'imagemagick\convert.exe "{}/page_*.png" "{}/{}.pdf"'.format(
+                workspace_path.decode('utf-8'),
+                output_folder,
+                card_set
+                ))
+            print "\nCreating PDF of backs..."
+            os.system(ur'imagemagick\convert.exe "{}/backs_*.png" "{}/backs_{}.pdf"'.format(
+                workspace_path.decode('utf-8'),
+                output_folder,
+                card_set
+                ))
+            print "Done!"
+        else:
+            print "Please download and unpack ImageMagick for Windows into imagemagick directory"
+            print "PDF was not created"
+
+    else:
+        print "\nCreating PDF (*nix)..."
+        os.system(ur'convert "{}/page_*.png" "{}/{}.pdf"'.format(
+            workspace_path.decode('utf-8'),
+            output_folder,
+            card_set
+            ))
+        print "\nCreating PDF of backs..."
+        os.system(ur'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(
+            workspace_path.decode('utf-8'),
+            output_folder,
+            card_set
+            ))
+        print "Done!"
 
 if __name__ == '__main__':
     #main('TSSSF', '1.1.0 Patch/cards.pon')
