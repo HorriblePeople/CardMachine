@@ -4,7 +4,7 @@
 Master Game Gen 
 1.0b
 '''
-import os, glob
+import os, glob, json
 import PIL_Helper
 from OS_Helper import *
 
@@ -22,13 +22,30 @@ def main(folder=".", filepath="deck.cards"):
     card_set = os.path.dirname(filepath)
 
     # Read first line of file to determine module
-    first_line = CardFile.readline().decode('utf-8')
+    first_line = CardFile.readline().decode('utf-8', 'replace').strip()
     try:
-        module = __import__(first_line.strip())
+        module = __import__(first_line)
     except ValueError:
         print "Failed to load module: " + str(ValueError)
         return
     module.CardSet = card_set
+
+    # Custom translations: using translation.json file from card set folder and from game folder
+    for tpath in (os.path.join(folder, 'translation.json'), os.path.join(folder, card_set, 'translation.json')):
+        if not os.path.isfile(tpath):
+            continue
+
+        with open(tpath, 'rb') as fp:
+            translation = json.loads(fp.read().decode('utf-8', 'replace'))
+
+        if 'RulesDict' in translation:
+            module.RulesDict.update(translation['RulesDict'])
+
+        if first_line == "TSSSF_CardGen":
+            if 'CopyrightString' in translation:
+                module.CopyrightString = translation['CopyrightString']
+            if 'ArtArtist' in translation:
+                module.ARTIST = translation['ArtArtist']
 
     # Create workspace for card images
     workspace_path = CleanDirectory(path=folder, mkdir="workspace", rmstring="*.*")
@@ -45,7 +62,7 @@ def main(folder=".", filepath="deck.cards"):
     output_folder = CleanDirectory(path=folder, mkdir=card_set,rmstring="*.pdf")
 
     # Load Card File and strip out comments
-    cardlines = [line.decode('utf-8') for line in CardFile if not line[0] in ('#', ';', '/')]
+    cardlines = [line.decode('utf-8', 'replace') for line in CardFile if not line[0] in ('#', ';', '/')]
     CardFile.close()
 
 ##    # Make a list of lists of cards, each one page in scale

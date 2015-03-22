@@ -202,6 +202,8 @@ backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
          "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
+CopyrightString = u"{}; TSSSF by Horrible People Games. Art by {}."
+
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
     invalid_chars = [",", "?", '"', ":"]
@@ -447,7 +449,7 @@ def CopyrightText(tags, image, color):
     #print tags[CLIENT], repr(tags)
     if len(tags)-1 >= CLIENT:
         card_set += " " + str(tags[CLIENT])
-    text = u"{}; TSSSF by Horrible People Games. Art by {}.".format(
+    text = CopyrightString.format(
         card_set,
         ARTIST
         )
