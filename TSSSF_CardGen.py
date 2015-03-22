@@ -445,7 +445,7 @@ def AddExpansion(image, expansion):
         image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
 
 def CopyrightText(tags, image, color):
-    card_set = CardSet.replace('_',' ').decode('utf-8', 'replace')
+    card_set = CardSet.replace('_',' ')
     #print tags[CLIENT], repr(tags)
     if len(tags)-1 >= CLIENT:
         card_set += " " + str(tags[CLIENT])

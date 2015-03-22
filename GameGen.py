@@ -15,6 +15,11 @@ import sys
 #.pon files have symbols like {ALICORN} and so on.
 
 def main(folder=".", filepath="deck.cards"):
+    if isinstance(folder, str):
+        folder = folder.decode('utf-8', 'replace')
+    if isinstance(filepath, str):
+        filepath = filepath.decode('utf-8', 'replace')
+
     CardFile = open(os.path.join(folder, filepath), 'rb')
     card_set = os.path.dirname(filepath)
 
@@ -127,13 +132,13 @@ def main(folder=".", filepath="deck.cards"):
             workspace_path.decode('utf-8'),
             output_folder,
             card_set
-            ))
+            ).encode('utf-8'))
         print "\nCreating PDF of backs..."
         os.system(ur'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(
             workspace_path.decode('utf-8'),
             output_folder,
             card_set
-            ))
+            ).encode('utf-8'))
         print "Done!"
 
 if __name__ == '__main__':
