@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 '''
 Master Game Gen 
 1.0b
@@ -5,7 +7,9 @@ Master Game Gen
 import os, glob
 import PIL_Helper
 from OS_Helper import *
-from sys import exit
+
+import sys
+reload(sys).setdefaultencoding('utf-8')
 
 #TSSSF Migration TODO:
 #automagickally create vassal module :D
@@ -14,11 +18,11 @@ from sys import exit
 
 def main(folder=".", filepath="deck.cards"):
 
-    CardFile = open(os.path.join(folder, filepath))
+    CardFile = open(os.path.join(folder, filepath), 'rb')
     card_set = os.path.dirname(filepath)
 
     # Read first line of file to determine module
-    first_line = CardFile.readline()
+    first_line = CardFile.readline().decode('utf-8')
     try:
         module = __import__(first_line.strip())
     except ValueError:
@@ -41,7 +45,7 @@ def main(folder=".", filepath="deck.cards"):
     output_folder = CleanDirectory(path=folder, mkdir=card_set,rmstring="*.pdf")
 
     # Load Card File and strip out comments
-    cardlines = [line for line in CardFile if not line[0] in ('#', ';', '/')]
+    cardlines = [line.decode('utf-8') for line in CardFile if not line[0] in ('#', ';', '/')]
     CardFile.close()
 
 ##    # Make a list of lists of cards, each one page in scale
