@@ -448,7 +448,7 @@ def CopyrightText(tags, image, color):
     card_set = CardSet.replace('_',' ')
     #print tags[CLIENT], repr(tags)
     if len(tags)-1 >= CLIENT:
-        card_set += " " + str(tags[CLIENT])
+        card_set += " " + unicode(tags[CLIENT])
     text = CopyrightString.format(
         card_set,
         ARTIST
