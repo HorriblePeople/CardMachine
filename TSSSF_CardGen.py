@@ -282,7 +282,7 @@ def BuildBack(linein):
   
 def PickCardFunc(card_type, tags):
     if tags[TYPE] == "START":
-        return MakePonyCard(tags)
+        return MakeStartCard(tags)
     elif tags[TYPE] == "Pony":
         return MakePonyCard(tags)
     elif tags[TYPE] == "Ship":

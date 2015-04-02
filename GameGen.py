@@ -1,5 +1,5 @@
 '''
-Master Game Gen 
+Master Game Gen
 1.0b
 '''
 import os, glob
