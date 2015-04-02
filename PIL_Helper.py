@@ -194,7 +194,7 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     # TODO Add code that shrinks the bg if it's bigger than any dimension
     # of the Paper image
     paper_image.paste(bg, ((paper_width - w)/2, (paper_height - h)/2))
-    paper_image.save(filename)
+    paper_image.save(filename, dpi=(300, 300))
 
 def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)
