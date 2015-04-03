@@ -167,7 +167,10 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     '''
     # Create card grid based on size of the first card
     w,h = card_list[0].size
-    bg = Image.new("RGB", (w*grid_width, h*grid_height))
+    bg = Image.new("RGB", (w * grid_width + cut_line_width * (grid_width - 1),
+                           h * grid_height + cut_line_width * (grid_height - 1)
+                           )
+                  )
     # Add cards to the grid, top down, left to right
     for y in xrange(grid_height):
         for x in xrange(grid_width):
