@@ -251,7 +251,7 @@ def SaveCard(filepath, image_to_save):
         while os.path.exists(filepath):
             i += 1
             filepath = u"{}_{:>03}{}".format(basepath, i, extension)
-    image_to_save.save(filepath)
+    image_to_save.save(filepath, dpi=(300, 300))
 
 def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
@@ -284,7 +284,7 @@ def BuildBack(linein):
   
 def PickCardFunc(card_type, tags):
     if tags[TYPE] == "START":
-        return MakePonyCard(tags)
+        return MakeStartCard(tags)
     elif tags[TYPE] == "Pony":
         return MakePonyCard(tags)
     elif tags[TYPE] == "Ship":

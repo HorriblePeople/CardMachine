@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 '''
-Master Game Gen 
+Master Game Gen
 1.0b
 '''
 import os, glob, json
