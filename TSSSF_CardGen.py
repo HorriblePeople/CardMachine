@@ -202,6 +202,8 @@ backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
          "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
+CopyrightString = u"{}; TSSSF by Horrible People Games. Art by {}."
+
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
     invalid_chars = [",", "?", '"', ":"]
@@ -248,7 +250,7 @@ def SaveCard(filepath, image_to_save):
         i = 0
         while os.path.exists(filepath):
             i += 1
-            filepath = "{}_{:>03}{}".format(basepath, i, extension)
+            filepath = u"{}_{:>03}{}".format(basepath, i, extension)
     image_to_save.save(filepath, dpi=(300, 300))
 
 def BuildCard(linein):
@@ -446,8 +448,8 @@ def CopyrightText(tags, image, color):
     card_set = CardSet.replace('_',' ')
     #print tags[CLIENT], repr(tags)
     if len(tags)-1 >= CLIENT:
-        card_set += " " + str(tags[CLIENT])
-    text = "{}; TSSSF by Horrible People Games. Art by {}.".format(
+        card_set += " " + unicode(tags[CLIENT])
+    text = CopyrightString.format(
         card_set,
         ARTIST
         )

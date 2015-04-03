@@ -1,0 +1,9 @@
+{
+    "comment": "If you need replace rules, artist or copyright, place this file into TSSSF/translation.json and/or TSSSF/card_set_name/translation.json and edit it",
+    "RulesDict": {
+        "{replace}": "While in your hand, you may discard a Pony card from the grid and play this card in its place. This power cannot be copied.",
+        "{copy}": "You may copy the power of any Pony card currently on the shipping grid, except for Changelings."
+        }
+    },
+    "ArtArtist": "Pixel Prism"
+}
