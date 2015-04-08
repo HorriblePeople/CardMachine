@@ -94,19 +94,22 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     # Set leading
     leading = font.font.ascent + font.font.descent + leading_offset
 
+    sw = font.getsize("   ")[0]
+
     # Begin laying down the lines, top to bottom
     y = start_y
     max_line_width = 0
     for line in lines:
         # If current line is blank, just change y and skip to next
         if not line == "":
+            line = "   " + line + "   "  # dirty fix
             line_width, line_height = font.getsize(line)
             if halign == "left":
-                x_pos = start_x
+                x_pos = start_x-sw
             elif halign == "center":
                 x_pos = start_x-(line_width/2)
             elif halign == "right":
-                x_pos = start_x-line_width
+                x_pos = start_x-line_width+sw
             # Keep track of the longest line width
             max_line_width = max(max_line_width, line_width)
             draw.text((x_pos, y), line, font=font, fill=255)
@@ -167,7 +170,10 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     '''
     # Create card grid based on size of the first card
     w,h = card_list[0].size
-    bg = Image.new("RGB", (w*grid_width, h*grid_height))
+    bg = Image.new("RGB", (w * grid_width + cut_line_width * (grid_width - 1),
+                           h * grid_height + cut_line_width * (grid_height - 1)
+                           )
+                  )
     # Add cards to the grid, top down, left to right
     for y in xrange(grid_height):
         for x in xrange(grid_width):
