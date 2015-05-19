@@ -14,6 +14,8 @@ from sys import exit
 
 def main(folder=".", filepath="deck.cards"):
 
+    print "Creating {} from file {}".format(folder, filepath)
+
     CardFile = open(os.path.join(folder, filepath))
     card_set = os.path.dirname(filepath)
 
@@ -54,9 +56,11 @@ def main(folder=".", filepath="deck.cards"):
     # Make pages
     card_list = []
     back_list = []
+    item_num = 0
     page_num = 0
     for line in cardlines:
-        card_list.append(module.BuildCard(line))
+        item_num += 1
+        card_list.append(module.BuildCard(line, filename="{:>03}.png".format(item_num)))
         back_list.append(module.BuildBack(line))
         # If the card_list is big enough to make a page
         # do that now, and set the card list to empty again

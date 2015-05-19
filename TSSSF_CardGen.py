@@ -10,7 +10,9 @@ LegacySymbolMode = False
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
-
+BLEED_SCALING = 0.97  # Percentage, 1 = no scaling
+USE_BLEEDS_FOR_PDF = False
+ABORT_ON_ERROR = True
 
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
@@ -39,7 +41,7 @@ textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
 
-TextHeightThresholds = [363, 378, 600]
+TextHeightThresholds = [350, 360, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
@@ -68,12 +70,12 @@ Anchors = {
     "Title": (-65-50, 160),
     "TitleTwoLine": (-65-50, 159),
     "TitleSmall": (-65-50, 157),
-    "Bar": (-68-50, 598+67),
+    "Bar": (-68-50, 660),
     "Body": (base_w_center, 735),
-    "BodyShiftedUp": (base_w_center, 730),
+    "BodyShiftedUp": (base_w_center, 725),
     "Flavor": (base_w_center, -110),
     "Expansion": (640+50, 525+63),
-    "Copyright": (-38-50, -13-61)
+    "Copyright": (-38-50, -13-58)
 }
 
 ArtMissing = [
@@ -113,6 +115,7 @@ Symbols = {
     "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
     "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
     "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
+    "eqg":PIL_Helper.LoadImage(ResourcePath+"/symbol-canterlot.png"),
     "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
     "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
     "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
@@ -123,7 +126,7 @@ Symbols = {
     "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
     "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
     }
-TIMELINE_SYMBOL_LIST = ["Dystopian"]
+TIMELINE_SYMBOL_LIST = ["Dystopian","eqg"]
 
 Expansions = {
     "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
@@ -149,7 +152,8 @@ Expansions = {
     "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
     "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
     "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png")
+    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png"),
+    "Fluffle": PIL_Helper.LoadImage(ResourcePath+"/symbol-Fluffle.png")
     }
 
 ColorDict={
@@ -171,20 +175,20 @@ ColorDict={
     }
 
 RulesDict={
-    "{replace}": "While in your hand, you may discard a Pony card from the grid and play this card in its place. This power cannot be copied.",
-    "{swap}": "You may swap 2 Pony cards on the shipping grid.",
+    "{replace}": "While this card is in your hand, you may discard a Pony card from the grid and play this card in its place. This power cannot be copied.",
+    "{swap}": "You may swap 2 Pony cards on the grid.",
     "{3swap}": "You may swap up to 3 Pony cards on the grid.",
-    "{draw}": "You may draw a card from the Ship or Pony deck.",
-    "{goal}": "You may discard a Goal and draw a new one to replace it.",
-    "{search}": "You may search the Ship or Pony discard pile for a card of your choice and play it.",
-    "{copy}": "You may copy the power of any Pony card currently on the shipping grid, except for Changelings.",
+    "{draw}": "You may draw 1 card from the Ship or Pony deck.",
+    "{goal}": "You may discard 1 Goal card and draw 1 new Goal card to replace it.",
+    "{search}": "You may search the Ship or Pony discard pile for 1 card of your choice and put it into your hand. If it's still in your hand at the end of your turn, discard it.",
+    "{copy}": "You may copy the power of any Pony card currently on the grid, except for Changelings.",
     "{hermaphrodite}": "May count as either {male} or {female} for all Goals, Ships, and powers.",
     "{double pony}": "This card counts as 2 Ponies.",
-    "{love poison}": "Instead of playing this ship with a Pony card from your hand, or connecting two ponies already on the grid, take a Pony card from the shipping grid and reattach it elsewhere with this Ship. That card's power activates.",
+    "{love poison}": "Instead of playing this Ship with a Pony card from your hand, you must remove a Pony card from the grid and reattach it elsewhere with this Ship. That card's power activates.",
     "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as having any one keyword of your choice, except pony names.",
     "{gender change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes the opposite gender.",
     "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes a race of your choice. This cannot affect Changelings.",
-    "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as {postapocalypse}.",
+    "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as {postapocalypse}",
     "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
     }
 
@@ -195,9 +199,9 @@ backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
          "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
          "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
          "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "Rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
-         "Rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
-         "Rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
+         "Rules1": PIL_Helper.LoadImage(CardPath + "BLEED_Rules2.png"),
+         "Rules3": PIL_Helper.LoadImage(CardPath + "BLEED_Rules4.png"),
+         "Rules5": PIL_Helper.LoadImage(CardPath + "BLEED_Rules6.png"),
          "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
          "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
@@ -235,9 +239,10 @@ def FixUnicode(text):
         text=text.replace('{pegasus}', u"\uE002")
         text=text.replace('{alicorn}', u"\uE003")
         text=text.replace('{postapocalypse}', u"\uE004")
+        text=text.replace('{<3}', u"\u27B3")
     return text
 
-def SaveCard(filepath, image_to_save):
+def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
     '''
     If the filepath already exists, insert _001 just before the
     extension. If that exists, increment the number until we get to
@@ -249,18 +254,26 @@ def SaveCard(filepath, image_to_save):
         while os.path.exists(filepath):
             i += 1
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
-    image_to_save.save(filepath, dpi=(300, 300))
+    w,h = image.size
+    new_w = int(scale*w)
+    new_h = int(scale*h)
+    image = PIL_Helper.ResizeImage(image, (new_w, new_h))
+    if convert_to_cmyk:
+        PIL_Helper.ConvertToCmyk(image)
+    image.save(filepath, dpi=(300,300))
 
-def BuildCard(linein):
+def BuildCard(linein, filename=None):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
-        im = PickCardFunc(tags[TYPE], tags)
+        im = PickCardFunc(tags)
         if len(tags) >= 2:
+            if filename is None:
             if len(tags) == 2:
                 filename = FixFileName(tags[0]+"_"+tags[1])
             else:
                 filename = FixFileName(tags[0]+"_"+tags[3])
-            SaveCard(os.path.join(BleedsPath, filename), im)
+            im_bleed = PIL_Helper.ResizeImage(im, BLEED_SCALING)
+            SaveCard(os.path.join(BleedsPath, filename), im_bleed)
             im_crop=im.crop(croprect)
             SaveCard(os.path.join(CropPath, filename), im_crop)
             im_vassal=PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
@@ -269,10 +282,15 @@ def BuildCard(linein):
             im_crop=im.crop(croprect)
         #MakeVassalCard(im_cropped)
     except Exception as e:
+        if ABORT_ON_ERROR:
+            raise
         print "Warning, Bad Card: {0}".format(tags)
         traceback.print_exc()
         im_crop = MakeBlankCard().crop(croprect)
     #im.show()  # TEST
+    if USE_BLEEDS_FOR_PDF:
+        return im
+    else:
     return im_crop
 
 def BuildBack(linein):
@@ -280,7 +298,7 @@ def BuildBack(linein):
     #print("Back type: " + tags[TYPE])
     return backs[tags[TYPE]]
   
-def PickCardFunc(card_type, tags):
+def PickCardFunc(tags):
     if tags[TYPE] == "START":
         return MakeStartCard(tags)
     elif tags[TYPE] == "Pony":
@@ -292,17 +310,17 @@ def PickCardFunc(card_type, tags):
     elif tags[TYPE] == "BLANK":
         return MakeBlankCard()
     elif tags[TYPE] == "Warning":
-        return MakeSpecialCard("Warning")
+        return MakeSpecialCard(tags)
     elif tags[TYPE] == "Rules1":
-        return MakeSpecialCard("Rules1")
+        return MakeSpecialCard(tags)
     elif tags[TYPE] == "Rules3":
-        return MakeSpecialCard("Rules3")
+        return MakeSpecialCard(tags)
     elif tags[TYPE] == "Rules5":
-        return MakeSpecialCard("Rules5")
+        return MakeSpecialCard(tags)
     elif tags[TYPE] == "TestSubject":
         return MakePonyCard(tags)
     elif tags[TYPE] == "Card":
-        return MakeSpecialCard(tags[PICTURE])
+        return MakeSpecialCard(tags)
     else:
         raise Exception("No card of type {0}".format(tags[TYPE]))
 
@@ -424,6 +442,7 @@ def BodyText(image, text, color, flavor_text_size=0, font=None):
         )
 
 def FlavorText(image, text, color):
+    text = FixUnicode(text)
     return PIL_Helper.AddText(
         image = image,
         text = text,
@@ -526,9 +545,11 @@ def MakeGoalCard(tags):
         AddExpansion(image, tags[EXPANSION])
     return image
 
-def MakeSpecialCard(picture):
-    print repr(picture)
-    return GetFrame(picture)
+def MakeSpecialCard(tags):
+    print repr(tags[TYPE])
+    image = GetFrame(tags[TYPE])
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    return image
 
 def InitVassalModule():
     pass
@@ -536,7 +557,7 @@ def InitVassalModule():
 def MakeVassalCard(im):
     VassalCard[0]+=1
     #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
-    im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png")
+    im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png", dpi=(300,300))
     
 def CompileVassalModule():
     pass
