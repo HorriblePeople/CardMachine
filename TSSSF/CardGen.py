@@ -1,32 +1,63 @@
 import os, glob, shutil, traceback, random
 import PIL_Helper
+import OS_Helper
+
+# Make an alias for os.path.join() function
+pjoin = os.path.join
 
 TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, CLIENT = range(9)
-DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
-
 
 LegacySymbolMode = False
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
-TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
+TOTAL_CARDS = PAGE_WIDTH * PAGE_HEIGHT
 BLEED_SCALING = 0.97  # Percentage, 1 = no scaling
 USE_BLEEDS_FOR_PDF = False
 ABORT_ON_ERROR = True
 
-workspace_path = os.path.dirname("workspace")
-card_set = os.path.dirname("deck.cards")
-CardSet = os.path.dirname("deck.cards")
-CardPath = DIRECTORY+"/Card Art/"
-ResourcePath = DIRECTORY+"/resources/"
-BleedsPath = DIRECTORY+"/bleed-images/"
-CropPath = DIRECTORY+"/cropped-images/"
-VassalPath = DIRECTORY+"/vassal-images/"
+CardSet = None  # Replaced with actual card set when GameGen runs
+# Retrieve directory of this module
+DIRECTORY = os.path.dirname(__file__)
+CardPath = pjoin(DIRECTORY, "Card Art")
+ResourcePath = pjoin(DIRECTORY, "resources")
+WorkspacePath = pjoin(DIRECTORY, "workspace")
+OutputPath = None
+BleedsPath = "bleed-images"
+CropPath = "cropped-images"
+VassalPath = "vassal-images"
 
-VassalTemplatesPath = DIRECTORY+"/vassal templates/"
-VassalWorkspacePath = DIRECTORY+"/vassal workspace/"
-VassalImagesPath = os.path.join(VassalWorkspacePath, "images")
-VASSAL_SCALE=(260,359)
+def LoadAssets(card_set):
+    global CardSet
+    CardSet = card_set
+    LoadPaths(card_set)
+    CleanDirectories(card_set)
+
+def LoadPaths(card_set):
+    global BleedsPath
+    global CropPath
+    global VassalPath
+    global OutputPath
+    print "Loading paths..."
+    BleedsPath = pjoin(DIRECTORY, card_set, BleedsPath)
+    CropPath = pjoin(DIRECTORY, card_set, CropPath)
+    VassalPath = pjoin(DIRECTORY, card_set, VassalPath)
+    OutputPath = pjoin(DIRECTORY, card_set)
+
+def CleanDirectories(card_set):
+    print "Cleaning directories..."
+    # Create workspace for card images
+    OS_Helper.CleanDirectory(WorkspacePath)
+    # Create image directories
+    OS_Helper.CleanDirectory(BleedsPath)
+    OS_Helper.CleanDirectory(CropPath)
+    OS_Helper.CleanDirectory(VassalPath)
+    # Create output directory
+    OS_Helper.CleanDirectory(OutputPath, rmstring="*.pdf")
+
+VassalWorkspacePath = pjoin(DIRECTORY, "vassal workspace")
+VassalImagesPath = pjoin(VassalWorkspacePath, "images")
+VASSAL_SCALE = (260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
@@ -36,7 +67,7 @@ base_w_center = base_w/2
 base_h_center = base_h/2
 w_marg = 31
 h_marg = 36
-baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
+baserect = [(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
@@ -45,17 +76,7 @@ TextHeightThresholds = [350, 360, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
-fonts = {
-    "Title":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 55),
-    "TitleSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 45),
-    "Body":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodySmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 31),
-    "Bar":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 38),
-    "BarSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "Flavortext":PIL_Helper.BuildFont(ResourcePath+"KlinicSlabBookIt.otf", 28),
-    "Copyright":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 18)
-}
+print pjoin(ResourcePath, "TSSSFBartholomew-Bold.otf")
 
 Anchors = {
     "Blank": (base_w_center, 300),
@@ -78,82 +99,94 @@ Anchors = {
     "Copyright": (-38-50, -13-58)
 }
 
+fonts = {
+    "Title":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFBartholomew-Bold.otf"), 55),
+    "TitleSmall":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFBartholomew-Bold.otf"), 45),
+    "Body":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 35),
+    "BodySmall":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 35),
+    "BodyChangeling":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 31),
+    "Bar":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 38),
+    "BarSmall":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 35),
+    "Flavortext":PIL_Helper.BuildFont(pjoin(ResourcePath, "KlinicSlabBookIt.otf"), 28),
+    "Copyright":PIL_Helper.BuildFont(pjoin(ResourcePath, "TSSSFCabin-Medium.ttf"), 18)
+}
+
 ArtMissing = [
-    PIL_Helper.LoadImage(CardPath+"/artmissing01.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing02.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing03.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing04.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing05.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing06.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing07.png"),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing01.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing02.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing03.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing04.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing05.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing06.png")),
+    PIL_Helper.LoadImage(pjoin(CardPath, "artmissing07.png")),
     ]
 
 Frames = {
-    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start.png"),
-    "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony.png"),
-    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship.png"),
-    "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
-    "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
-    "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal.png"),
-    "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
-    "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
+    "START": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Start.png")),
+    "Warning": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Card - Warning.png")),
+    "Pony": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Pony.png")),
+    "Ship": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Ship.png")),
+    "Rules1": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules1.png")),
+    "Rules3": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules3.png")),
+    "Rules5": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules5.png")),
+    "Goal": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Goal.png")),
+    "Derpy": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Card - Derpy Hooves.png")),
+    "TestSubject": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Card - OverlayTest Subject Cheerilee.png"))
     }
 
 Symbols = {
-    "male": PIL_Helper.LoadImage(ResourcePath+"/Symbol-male.png"),
-    "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
-    "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
-    "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
-    "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
-    "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
-    "alicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Alicorn.png"),
-    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingEarthPony.png"),
-    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingUnicorn.png"),
-    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
-    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
-    "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
-    "eqg":PIL_Helper.LoadImage(ResourcePath+"/symbol-canterlot.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
-    "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
-    "1": PIL_Helper.LoadImage(ResourcePath+"/symbol-1.png"),
-    "2": PIL_Helper.LoadImage(ResourcePath+"/symbol-2.png"),
-    "3": PIL_Helper.LoadImage(ResourcePath+"/symbol-3.png"),
-    "4": PIL_Helper.LoadImage(ResourcePath+"/symbol-4.png"),
-    "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
-    "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
+    "male": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-male.png")),
+    "female": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Female.png")),
+    "malefemale": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-MaleFemale.png")),
+    "earth pony": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Earth-Pony.png")),
+    "unicorn": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Unicorn.png")),
+    "uniearth": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-uniearth.png")),
+    "pegasus": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Pegasus.png")),
+    "alicorn": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Alicorn.png")),
+    "changelingearthpony": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-ChangelingEarthPony.png")),
+    "changelingunicorn": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-ChangelingUnicorn.png")),
+    "changelingpegasus": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-ChangelingPegasus.png")),
+    "changelingalicorn": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-ChangelingAlicorn.png")),
+    "dystopian": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-dystopian-future.png")),
+    "eqg":PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-canterlot.png")),
+    "ship": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Ship.png")),
+    "goal": PIL_Helper.LoadImage(pjoin(ResourcePath, "Symbol-Goal.png")),
+    "0": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-0.png")),
+    "1": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-1.png")),
+    "2": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-2.png")),
+    "3": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-3.png")),
+    "4": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-4.png")),
+    "3-4": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-34.png")),
+    "2-3": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-23.png"))
     }
 TIMELINE_SYMBOL_LIST = ["Dystopian","eqg"]
 
 Expansions = {
-    "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
-    "Indiegogo": PIL_Helper.LoadImage(ResourcePath+"/symbol-Indiegogo.png"),
-    "Birthday": PIL_Helper.LoadImage(ResourcePath+"/symbol-birthday.png"),
-    "Bronycon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycon14.png"),
-    "Summer": PIL_Helper.LoadImage(ResourcePath+"/symbol-summer-lovin.png"),
-    "Apricity": PIL_Helper.LoadImage(ResourcePath+"/symbol-apricity.png"),
-    "BronyCAN": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycan14.png"),
-    "Xtra": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit.png"),
-    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit-black.png"),
-    "NMND": PIL_Helper.LoadImage(ResourcePath+"/symbol-nightmarenights.png"),
-    "Ciderfest": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponyvilleciderfest.png"),
-    "Adventure": PIL_Helper.LoadImage(ResourcePath+"/symbol-adventure.png"),
-    "Custom": PIL_Helper.LoadImage(ResourcePath+"/symbol-custom.png"),
-    "Power": PIL_Helper.LoadImage(ResourcePath+"/symbol-power.png"),
-    "Multiplicity": PIL_Helper.LoadImage(ResourcePath+"/symbol-multiplicity.png"),
-    "Canon": PIL_Helper.LoadImage(ResourcePath+"/symbol-canon.png"),
-    "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
-    "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
-    "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
-    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
-    "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
-    "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png"),
-    "Fluffle": PIL_Helper.LoadImage(ResourcePath+"/symbol-Fluffle.png")
+    "Everfree14": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Everfree14.png")),
+    "Indiegogo": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Indiegogo.png")),
+    "Birthday": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-birthday.png")),
+    "Bronycon": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Bronycon14.png")),
+    "Summer": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-summer-lovin.png")),
+    "Apricity": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-apricity.png")),
+    "BronyCAN": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Bronycan14.png")),
+    "Xtra": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-extracredit.png")),
+    "Xtra-dark": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-extracredit-black.png")),
+    "NMND": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-nightmarenights.png")),
+    "Ciderfest": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-ponyvilleciderfest.png")),
+    "Adventure": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-adventure.png")),
+    "Custom": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-custom.png")),
+    "Power": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-power.png")),
+    "Multiplicity": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-multiplicity.png")),
+    "Canon": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-canon.png")),
+    "Dungeon": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-dungeon.png")),
+    "50": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-50.png")),
+    "2014": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-2014.png")),
+    "Hearthswarming": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-hearthswarming.png")),
+    "Ponycon 2015": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-ponynyc.png")),
+    "Patreon": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Patreon.png")),
+    "Gameshow": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-gameshow.png")),
+    "BABScon": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-BABScon.png")),
+    "Fluffle": PIL_Helper.LoadImage(pjoin(ResourcePath, "symbol-Fluffle.png"))
     }
 
 ColorDict={
@@ -192,18 +225,18 @@ RulesDict={
     "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
     }
 
-backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
-         "Pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
-         "Ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
-         "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "Rules1": PIL_Helper.LoadImage(CardPath + "BLEED_Rules2.png"),
-         "Rules3": PIL_Helper.LoadImage(CardPath + "BLEED_Rules4.png"),
-         "Rules5": PIL_Helper.LoadImage(CardPath + "BLEED_Rules6.png"),
-         "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
+backs = {"START": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Start.png")),
+         "Pony": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Main.png")),
+         "Goal": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Goals.png")),
+         "Ship": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Ships.png")),
+         "Card": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Main.png")),
+         "Shipwrecker": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Main.png")),
+         "BLANK": PIL_Helper.LoadImage(pjoin(ResourcePath, "Blank - Intentionally Left Blank.png")),
+         "Rules1": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules2.png")),
+         "Rules3": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules4.png")),
+         "Rules5": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Rules6.png")),
+         "TestSubject": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Main.png")),
+         "Warning": PIL_Helper.LoadImage(pjoin(CardPath, "Card - Contact.png"))
         }
 
 def FixFileName(tagin):
@@ -268,18 +301,18 @@ def BuildCard(linein, filename=None):
         im = PickCardFunc(tags)
         if len(tags) >= 2:
             if filename is None:
-            if len(tags) == 2:
-                filename = FixFileName(tags[0]+"_"+tags[1])
-            else:
-                filename = FixFileName(tags[0]+"_"+tags[3])
+                if len(tags) == 2:
+                    filename = FixFileName(tags[0]+"_"+tags[1])
+                else:
+                    filename = FixFileName(tags[0]+"_"+tags[3])
             im_bleed = PIL_Helper.ResizeImage(im, BLEED_SCALING)
-            SaveCard(os.path.join(BleedsPath, filename), im_bleed)
-            im_crop=im.crop(croprect)
-            SaveCard(os.path.join(CropPath, filename), im_crop)
-            im_vassal=PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
-            SaveCard(os.path.join(VassalPath, filename), im_vassal)
+            SaveCard(pjoin(BleedsPath, filename), im_bleed)
+            im_crop = im.crop(croprect)
+            SaveCard(pjoin(CropPath, filename), im_crop)
+            im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
+            SaveCard(pjoin(VassalPath, filename), im_vassal)
         else:
-            im_crop=im.crop(croprect)
+            im_crop = im.crop(croprect)
         #MakeVassalCard(im_cropped)
     except Exception as e:
         if ABORT_ON_ERROR:
@@ -291,7 +324,7 @@ def BuildCard(linein, filename=None):
     if USE_BLEEDS_FOR_PDF:
         return im
     else:
-    return im_crop
+        return im_crop
 
 def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
@@ -330,8 +363,8 @@ def GetFrame(card_type):
 def AddCardArt(image, filename, anchor):
     if filename == "NOART":
         return
-    if os.path.exists(os.path.join(CardPath, filename)):
-        art = PIL_Helper.LoadImage(os.path.join(CardPath, filename))
+    if os.path.exists(pjoin(CardPath, filename)):
+        art = PIL_Helper.LoadImage(pjoin(CardPath, filename))
     else:
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
@@ -555,8 +588,7 @@ def InitVassalModule():
     pass
 
 def MakeVassalCard(im):
-    VassalCard[0]+=1
-    #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
+    VassalCard[0] += 1
     im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png", dpi=(300,300))
     
 def CompileVassalModule():
