@@ -4,7 +4,7 @@ Master Game Gen
 '''
 import os, glob
 import PIL_Helper
-from OS_Helper import *
+from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
 from sys import exit
 
 #TSSSF Migration TODO:
