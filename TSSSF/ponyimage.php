@@ -19,19 +19,13 @@ if ($_POST["card_gender"] != "None")
   array_push($symbols_array, $_POST["card_gender"]);
 if ($_POST["card_race"] != "None")
   array_push($symbols_array, $_POST["card_race"]);
-if (array_key_exists("card_symbols_ship", $_POST))
-  array_push($symbols_array, "Ship");
-if (array_key_exists("card_symbols_goal", $_POST))
-  array_push($symbols_array, "Goal");
-
-if (count($symbols_array) > 2) {
-  print "<b>Script can't handle more than two non-Dystopian symbols!</b><br />";
-  die;
-}
+if ($_POST["card_type"] == "Ship")
+  $symbols_array = ["Ship"];
+if ($_POST["card_type"] == "Goal")
+  $symbols_array = ["Goal"];
 
 if (array_key_exists("card_symbols_dystopian", $_POST))
   array_push($symbols_array, "Dystopian");
-
 
 $card_str .= "`" . implode("!", $symbols_array);
 $card_str .= "`" . sanitize($_POST["card_name"]);
