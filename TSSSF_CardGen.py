@@ -11,6 +11,10 @@ PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
 
+IMAGE_TYPE_BLEEDS = 0
+IMAGE_TYPE_CROP = 1
+IMAGE_TYPE_VASSAL = 2
+IMAGE_TYPE_ALL = 3
 
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
@@ -202,6 +206,9 @@ backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
          "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
+class ImageTypeUnhandledException(Exception):
+    pass
+
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
     invalid_chars = [",", "?", '"', ":"]
@@ -250,6 +257,27 @@ def SaveCard(filepath, image_to_save):
             i += 1
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
     image_to_save.save(filepath, dpi=(300, 300))
+
+def BuildSingleCard(linein, output_name, image_type=IMAGE_TYPE_BLEEDS):
+    tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
+    im = PickCardFunc(tags[TYPE], tags)
+
+    if image_type == IMAGE_TYPE_ALL:
+        base, ext = os.path.splitext(output_name)
+        im.save("{}_bleed{}".format(base, ext), dpi=(300,300))
+        im_crop = im.crop(croprect)
+        im_crop.save("{}_cropped{}".format(base, ext), dpi=(300,300))
+        im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
+        im_vassal.save("{}_vassal{}".format(base, ext), dpi=(300,300))
+    elif image_type == IMAGE_TYPE_BLEEDS:
+        im.save(output_name, dpi=(300,300))
+    elif image_type == IMAGE_TYPE_CROP:
+        im.crop(croprect).save(output_name, dpi=(300,300))
+    elif image_type == IMAGE_TYPE_VASSAL:
+        im_vassal = PIL_Helper.ResizeImage(im.crop(croprect), VASSAL_SCALE)
+        im_vassal.save(output_name, dpi=(300,300))
+    else:
+        raise ImageTypeUnhandledException("{}".format(tags))
 
 def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
