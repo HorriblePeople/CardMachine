@@ -15,10 +15,10 @@ $card_str .= $_POST["card_type"];
 $card_str .= "`" . $_POST["card_art"];
 
 $symbols_array = [];
-if ($_POST["card_gender"] != "None")
-  array_push($symbols_array, $_POST["card_gender"]);
 if ($_POST["card_race"] != "None")
   array_push($symbols_array, $_POST["card_race"]);
+if ($_POST["card_gender"] != "None")
+  array_push($symbols_array, $_POST["card_gender"]);
 if ($_POST["card_type"] == "Ship")
   $symbols_array = ["Ship"];
 if ($_POST["card_type"] == "Goal")
