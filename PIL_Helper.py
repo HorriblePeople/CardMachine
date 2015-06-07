@@ -203,7 +203,7 @@ def LoadImage(filepath, fallback="blank.png"):
     try:
         return Image.open(filepath)
     except Exception:
-        if fallback is not None:
+        if fallback:
             return Image.open(os.path.join(os.path.split(filepath)[0], fallback))
         else:
             raise
