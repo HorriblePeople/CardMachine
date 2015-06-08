@@ -12,7 +12,29 @@ function sanitize($str)
 $card_str = "";
 $card_str .= $_POST["card_type"];
 
-$card_str .= "`" . $_POST["card_art"];
+$card_art = sanitize($_POST["card_art"]);
+$allowed_sites = ['/^https?:\/\/i\.imgur\.com\//',
+                  '/^https?:\/\/img\.booru\.org\/secretshipfic\//'];
+
+// If it's a URL, check it for validity
+if (substr($card_art, 0, 4) === "http") {
+  $found = false;
+  foreach ($allowed_sites as $regex) {
+    if (preg_match($regex, $card_art)) {
+      // It's good, add it
+      $card_str .= "`" . $card_art;
+      $found = true;
+      break;
+    }
+  }
+  // It's a URL but not an approved one
+  if ($found === false) {
+    print "<b>Only URLs from imgur or the secretshipfic booru are allowed!</b><br />\n";
+    $card_str .= "`NOART";
+  }
+} else {
+  $card_str .= "`" . $_POST["card_art"];
+}
 
 $symbols_array = [];
 if ($_POST["card_race"] != "None")

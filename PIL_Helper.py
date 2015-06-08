@@ -1,6 +1,13 @@
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-import os, glob
+from StringIO import StringIO
+import os, glob, requests
 from math import ceil
+
+class BadNetStatusException(Exception):
+   '''
+   An exception for LoadImageFromURL to throw if it has
+   problems fetching the remote URL.
+   '''
 
 def BuildFont(fontname, fontsize):
     return ImageFont.truetype(fontname, fontsize)
@@ -198,6 +205,12 @@ def BuildPage(card_list, grid_width, grid_height, filename,
 
 def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)
+
+def LoadImageFromURL(url):
+    r = requests.get(url)
+    if r.status_code is not 200:
+        raise BadNetStatusException(r.status_code)
+    return Image.open(StringIO(r.content))
 
 def LoadImage(filepath, fallback="blank.png"):
     try:
