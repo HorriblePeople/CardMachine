@@ -180,6 +180,9 @@ if (isset($_POST["classes"])) {
   if ($point != "")
     $_POST["card_points"] = ltrim($point, "s");
 
+  if (preg_match("/\btime\b/", $_POST["classes"]))
+    $_POST["card_symbols_dystopian"] = "True";
+
 }
 
 if (isset($_POST["card_gender"]) && ($_POST["card_gender"] != "None"))
