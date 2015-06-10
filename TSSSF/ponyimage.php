@@ -9,7 +9,26 @@ function sanitize($str)
   return $retval;
 }
 
-if (count($_POST) == 0) {
+function dieError($error,$details){
+  die(json_encode(Array(
+      "error"=>$error,
+      "details"=>$details
+  )));
+}
+
+function searchClasses($classes, $string_array){
+  $outstr = "";
+  foreach ($string_array as $item) {
+    if (preg_match("/\b" . $item . "\b/", $_POST["classes"])) {
+      $outstr = $item;
+      break;
+    }
+  }
+  return $outstr;
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
   $output = <<<EOF
 <html>
 <head>
@@ -45,6 +64,15 @@ What gender symbol do you want?<br />
   <input type="radio" name="card_gender" value="MaleFemale">Male/Female<br />
   <input type="radio" name="card_gender" value="None" checked="checked">None<br />
 <br />
+What point-value symbol do you want (for goal cards)?<br />
+  <input type="radio" name="card_points" value="0">0<br />
+  <input type="radio" name="card_points" value="1">1<br />
+  <input type="radio" name="card_points" value="2">2<br />
+  <input type="radio" name="card_points" value="3">3<br />
+  <input type="radio" name="card_points" value="4">4<br />
+  <input type="radio" name="card_points" value="2-3">2-3<br />
+  <input type="radio" name="card_points" value="3-4">3-4<br />
+<br />
 What other miscellaneous symbols do you want?<br />
   <input type="checkbox" name="card_symbols_dystopian">Dystopian Future<br />
 <br />
@@ -77,10 +105,28 @@ EOF;
   die;
 }
 
-$card_str = "";
-$card_str .= $_POST["card_type"];
+//Uncomment to turn this script into a POST reflector for debug purposes
+//die(json_encode($_POST));
 
-$card_art = sanitize($_POST["card_art"]);
+$card_str = "";
+if (isset($_POST["classes"])) {
+  $types = array("pony", "ship",
+                 "goal", "start");
+  $type = searchClasses($_POST["classes"], $types);
+  if ($type != "")
+    $_POST["card_type"] = ucfirst($type);
+  else
+    dieError("Didn't match type in classes", $_POST["classes"]);
+}
+
+if (isset($_POST["card_type"]))
+  $card_str .= $_POST["card_type"];
+
+if (isset($_POST["card_art"]))
+  $card_art = sanitize($_POST["card_art"]);
+else
+  dieError("No card art string supplied", "");
+
 $allowed_sites = ['/^https?:\/\/i\.imgur\.com\//',
                   '/^https?:\/\/img\.booru\.org\/secretshipfic\//'];
 
@@ -97,7 +143,7 @@ if (substr($card_art, 0, 4) === "http") {
   }
   // It's a URL but not an approved one
   if ($found === false) {
-    print "<b>Only URLs from imgur or the secretshipfic booru are allowed!</b><br />\n";
+    //dieError("Only URLs from imgur or the secretshipfic booru are allowed", $card_art);
     $card_str .= "`NOART";
   }
 } else {
@@ -105,16 +151,50 @@ if (substr($card_art, 0, 4) === "http") {
 }
 
 $symbols_array = [];
-if ($_POST["card_race"] != "None")
-  array_push($symbols_array, $_POST["card_race"]);
-if ($_POST["card_gender"] != "None")
+
+if (isset($_POST["classes"])) {
+  $races = array("unicorn", "pegasus",
+                 "earthPony", "alicorn");
+  $race = searchClasses($_POST["classes"], $races);
+  if (preg_match("/\bchangeling\b/", $_POST["classes"]) && ($race != "")) {
+    $race = "changeling" . $race;
+  }
+  if ($race != "")
+    $_POST["card_race"] = $race;
+  else
+    $_POST["card_race"] = "None";
+
+  $genders = array("male",
+                   "female",
+                   "maleFemale");
+  $gender = searchClasses($_POST["classes"], $genders);
+  if ($race != "")
+    $_POST["card_gender"] = $gender;
+  else
+    $_POST["card_gender"] = "None";
+
+  $points = array("s0", "s1", "s2",
+                  "s3", "s2-3", "s3-4");
+
+  $point = searchClasses($_POST["classes"], $points);
+  if ($point != "")
+    $_POST["card_points"] = ltrim($point, "s");
+
+}
+
+if (isset($_POST["card_gender"]) && ($_POST["card_gender"] != "None"))
   array_push($symbols_array, $_POST["card_gender"]);
+if (isset($_POST["card_race"]) && ($_POST["card_race"] != "None"))
+  array_push($symbols_array, $_POST["card_race"]);
 if ($_POST["card_type"] == "Ship")
   $symbols_array = ["Ship"];
-if ($_POST["card_type"] == "Goal")
+if ($_POST["card_type"] == "Goal") {
   $symbols_array = ["Goal"];
+  if (isset($_POST["card_points"]))
+    array_push($symbols_array, $_POST["card_points"]);
+}
 
-if (array_key_exists("card_symbols_dystopian", $_POST))
+if (isset($_POST["card_symbols_dystopian"]))
   array_push($symbols_array, "Dystopian");
 
 $card_str .= "`" . implode("!", $symbols_array);
@@ -122,17 +202,31 @@ $card_str .= "`" . sanitize($_POST["card_name"]);
 $card_str .= "`" . sanitize($_POST["card_keywords"]);
 $card_str .= "`" . sanitize($_POST["card_body"]);
 $card_str .= "`" . sanitize($_POST["card_flavor"]);
-$card_str .= "`" . sanitize($_POST["card_expansion"]);
+if (isset($_POST["card_expansion"]))
+  $card_str .= "`" . sanitize($_POST["card_expansion"]);
+else
+  $card_str .= "`";
 
-if ($_POST["card_override"] != "")
+if (isset($_POST["card_override"]) && ($_POST["card_override"] != ""))
   $card_str = $_POST["card_override"];
 
 $filename = uniqid() . ".png";
 
-print "<br /><br />" . $card_str . "<br />";
 chdir("../");
-$cmd_str = './single_card.py -c "' . base64_encode($card_str) . '" -s "' . base64_encode($_POST["card_set"]) . '" -o "TSSSF/' . $filename . '"';
+$cmd_str = './single_card.py -c "' . base64_encode(utf8_encode($card_str)) . '" -s "' . base64_encode($_POST["card_set"]) . '" -o "TSSSF/' . $filename . '"';
 exec($cmd_str, $cmd_out, $cmd_retval);
+
+if (isset($_POST["classes"])) {
+  if ($cmd_retval == 0) {
+    $server_name = $_SERVER["HTTP_HOST"];
+    die(json_encode(array("img_url" => $server_name . "/TSSSF/$filename",
+                          "card_str" => $card_str)));
+  } else {
+    dieError("Card build failed!", $cmd_out);
+  }
+}
+
+print "<br /><br />" . $card_str . "<br />";
 print "<br /> cmd_str is " . $cmd_str . "<br />";
 print "<br />";
 if ($cmd_retval == 0) {

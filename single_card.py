@@ -18,7 +18,7 @@ def make_single_card(base_dir, card_line, output_file, module_name, set_name):
     try:
         decoded_cardline = base64.b64decode(card_line)
         print("Attempting to build card '%s' to %s" % (decoded_cardline, output_file))
-        module.BuildSingleCard(base64.b64decode(card_line), output_file)
+        module.BuildSingleCard(base64.b64decode(card_line).decode('utf-8'), output_file)
     except Exception as e:
         print("Failed to build single card '%s'" % decoded_cardline)
         print(traceback.format_exc())
