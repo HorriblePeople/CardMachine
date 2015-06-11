@@ -221,7 +221,7 @@ exec($cmd_str, $cmd_out, $cmd_retval);
 
 if (isset($_POST["classes"])) {
   if ($cmd_retval == 0) {
-    $server_name = $_SERVER["HTTP_HOST"];
+    $server_name = "http://" . $_SERVER["HTTP_HOST"];
     die(json_encode(array("img_url" => $server_name . "/TSSSF/$filename",
                           "card_str" => $card_str)));
   } else {
