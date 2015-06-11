@@ -338,7 +338,7 @@ def AddCardArt(image, filename, anchor):
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
     w, h = art.size
-    if h > w:
+    if float(w)/float(h) < float(ART_WIDTH)/float(ART_HEIGHT):
         h = int((float(ART_WIDTH)/w)*h)
         # Resize image to fit in frame
         art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
