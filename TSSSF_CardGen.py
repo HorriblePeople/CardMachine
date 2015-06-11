@@ -39,7 +39,6 @@ baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
-ART_CROPRECT=(0,0,ART_WIDTH, ART_HEIGHT)
 
 TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
@@ -281,7 +280,7 @@ def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
     #print("Back type: " + tags[TYPE])
     return backs[tags[TYPE]]
-  
+
 def PickCardFunc(card_type, tags):
     if tags[TYPE] == "START":
         return MakeStartCard(tags)
@@ -324,12 +323,14 @@ def AddCardArt(image, filename, anchor):
         h = int((float(ART_WIDTH)/w)*h)
         # Resize image to fit in frame
         art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+        cropRect = (0,(h-ART_HEIGHT)/2,ART_WIDTH,(h+ART_HEIGHT)/2)
     else:
         w = int((float(ART_HEIGHT)/h)*w)
         # Resize image to fit in frame
         art = PIL_Helper.ResizeImage(art, (w, ART_HEIGHT))
+        cropRect = ((ART-WIDTH-w)/2,0,(ART-WIDTH+w)/2,ART_HEIGHT)
 
-    art = art.crop(ART_CROPRECT)
+    art = art.crop(cropRect)
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
@@ -472,7 +473,7 @@ def CopyrightText(tags, image, color):
 
 def MakeBlankCard():
     image = PIL_Helper.BlankImage(base_w, base_h)
-    
+
     PIL_Helper.AddText(
         image = image,
         text = "This Card Intentionally Left Blank",
@@ -480,7 +481,7 @@ def MakeBlankCard():
         fill = ColorDict["Blankfill"],
         anchor = Anchors["Blank"],
         max_width = textmaxwidth
-        )    
+        )
     return image
 
 def MakeStartCard(tags):
@@ -546,7 +547,7 @@ def MakeVassalCard(im):
     VassalCard[0]+=1
     #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
     im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png")
-    
+
 def CompileVassalModule():
     pass
 
