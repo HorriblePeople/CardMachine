@@ -89,14 +89,14 @@ ArtMissing = [
     ]
 
 Frames = {
-    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start.png"),
+    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
     "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony.png"),
-    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship.png"),
+    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
+    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
     "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
     "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
     "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal.png"),
+    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
     "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
     "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
