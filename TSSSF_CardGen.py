@@ -108,6 +108,7 @@ Symbols = {
     "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
     "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
     "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
+    "earthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
     "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
     "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
     "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
@@ -128,7 +129,7 @@ Symbols = {
     "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
     "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
     }
-TIMELINE_SYMBOL_LIST = ["Dystopian","eqg"]
+TIMELINE_SYMBOL_LIST = ["dystopian","eqg"]
 
 Expansions = {
     "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
@@ -351,6 +352,7 @@ def AddCardArt(image, filename, anchor):
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
+    symbols = [x.lower() for x in symbols]
     # Remove any timeline symbols from the symbols list
     pruned_symbols = set(symbols)-set(TIMELINE_SYMBOL_LIST)
     if card_type == "Goal":
@@ -365,7 +367,7 @@ def AddSymbols(image, symbols, card_type=""):
             positions = [Anchors["Symbol1"], Anchors["Symbol2"]]
 
     for index,s in enumerate(symbols):
-        sym = Symbols.get(s.lower(), None)
+        sym = Symbols.get(s, None)
         if sym:
             if s in TIMELINE_SYMBOL_LIST:
                 image.paste(sym, Anchors["TimelineSymbol"], sym)
