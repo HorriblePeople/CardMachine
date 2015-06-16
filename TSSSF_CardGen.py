@@ -11,11 +11,6 @@ PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
 
-IMAGE_TYPE_BLEEDS = 0
-IMAGE_TYPE_CROP = 1
-IMAGE_TYPE_VASSAL = 2
-IMAGE_TYPE_ALL = 3
-
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
 CardSet = os.path.dirname("deck.cards")
@@ -130,7 +125,7 @@ Symbols = {
     "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
     "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
     }
-TIMELINE_SYMBOL_LIST = ["Dystopian"]
+TIMELINE_SYMBOL_LIST = ["dystopian", "Dystopian"]
 
 Expansions = {
     "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
@@ -261,26 +256,13 @@ def SaveCard(filepath, image_to_save):
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
     image_to_save.save(filepath, dpi=(300, 300))
 
-def BuildSingleCard(linein, output_name, image_type=IMAGE_TYPE_BLEEDS):
+def BuildSingleCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
-    im = PickCardFunc(tags[TYPE], tags)
+    im_bleed = PickCardFunc(tags[TYPE], tags)
+    im_crop = im_bleed.crop(croprect)
+    im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
 
-    if image_type == IMAGE_TYPE_ALL:
-        base, ext = os.path.splitext(output_name)
-        im.save("{}_bleed{}".format(base, ext), dpi=(300,300))
-        im_crop = im.crop(croprect)
-        im_crop.save("{}_cropped{}".format(base, ext), dpi=(300,300))
-        im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
-        im_vassal.save("{}_vassal{}".format(base, ext), dpi=(300,300))
-    elif image_type == IMAGE_TYPE_BLEEDS:
-        im.save(output_name, dpi=(300,300))
-    elif image_type == IMAGE_TYPE_CROP:
-        im.crop(croprect).save(output_name, dpi=(300,300))
-    elif image_type == IMAGE_TYPE_VASSAL:
-        im_vassal = PIL_Helper.ResizeImage(im.crop(croprect), VASSAL_SCALE)
-        im_vassal.save(output_name, dpi=(300,300))
-    else:
-        raise ImageTypeUnhandledException("{}".format(tags))
+    return (im_bleed, im_crop, im_vassal)
 
 def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
@@ -398,7 +380,7 @@ def TitleText(image, text, color):
     if len(text)>TitleWidthThresholds[0]:
         anchor = Anchors["TitleSmall"]
         font = fonts["TitleSmall"]
-    print repr(text)
+    #print repr(text)
     PIL_Helper.AddText(
         image = image,
         text = text,
