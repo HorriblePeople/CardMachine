@@ -79,17 +79,28 @@ if(isset($_POST["pycard"])) {
   if ($returntype == "file")
     $outstr = '-o "TSSSF/' . uniqid() . '.png"';
 
-  $card_str = base64_encode(utf8_encode(implode("`", $pycard_arr)));
+  $card_str = implode("`", $pycard_arr);
+  $encoded_str = base64_encode(utf8_encode($card_str));
 
   chdir("../");
 
-  $cmd_str = './single_card.py -c "' . $card_str . '"' . " -i $imagetype -r $returntype " . $outstr;
+  $cmd_str = './single_card.py -c "' . $encoded_str . '"' . " -i $imagetype -r $returntype " . $outstr;
 
   exec($cmd_str, $cmd_out, $cmd_retval);
 
   if ($cmd_retval == 0) {
-    $img_url = "http://" . $_SERVER["HTTP_HOST"] . "/" . $cmd_out[0];
-    die(json_encode(array("image" => ($returntype == "file") ? $img_url : $cmd_out[0],
+    switch($returntype) {
+      case "file":
+        $img_url = "http://" . $_SERVER["HTTP_HOST"] . "/" . $cmd_out[0];
+        break;
+      case "imgur":
+        $img_url = "http://imgur.com/" . $cmd_out[0];
+        break;
+      case "encoded_url":
+        $img_url = $cmd_out[0];
+        break;
+    }
+    die(json_encode(array("image" => $img_url,
                           "card_str" => $card_str)));
   } else {
     dieError("Card build failed!", $cmd_str);

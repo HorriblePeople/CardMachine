@@ -53,7 +53,7 @@ def SaveCardToImgur(image_object):
         }
     )
     #return img_json.text
-    return json.loads(img_json.text)["data"]["link"]
+    return json.loads(img_json.text)["data"]["id"]
 
 
 def SaveCard(image, save_type, location=None):
