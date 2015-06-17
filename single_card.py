@@ -7,7 +7,10 @@ import base64
 import traceback
 import sys
 import urllib
+import requests
 import TSSSF_CardGen
+import json
+import imgur_auth
 from StringIO import StringIO
 
 
@@ -23,13 +26,43 @@ def SaveCardToURL(image_object):
     return("data:image/png;base64," + urllib.quote(encoded_image))
 
 
+def GetImgurCredits():
+    credits = requests.get(
+        'https://api.imgur.com/3/credits.json',
+        headers={'Authorization': 'Client-ID %s' % imgur_auth.CLIENT_ID},
+        data={'key': imgur_auth.CLIENT_SECRET}
+    )
+    return json.loads(credits.text)["data"]["ClientRemaining"]
+
+
+def SaveCardToImgur(image_object):
+    #Make sure we have the budget to do this
+    if GetImgurCredits() < 10:
+        raise ValueError("Insufficient imgur credits remaining")
+    fileobj = StringIO()
+    image_object.save(fileobj, format="PNG", dpi=(300, 300))
+
+    img_json = requests.post(
+        'https://api.imgur.com/3/upload.json',
+        headers={'Authorization': 'Client-ID %s' % imgur_auth.CLIENT_ID},
+        data={
+            'key': imgur_auth.CLIENT_SECRET,
+            'title': 'Card generated with TSSSF Card Generator',
+            'type': 'base64',
+            'image': fileobj.getvalue().encode("base64")
+        }
+    )
+    #return img_json.text
+    return json.loads(img_json.text)["data"]["link"]
+
+
 def SaveCard(image, save_type, location=None):
     if save_type == "file":
         retval = SaveCardToFile(image, location)
     elif save_type == "encoded_url":
         retval = SaveCardToURL(image)
     elif save_type == "imgur":
-        raise ValueError("imgur save not yet implemented")
+        retval = SaveCardToImgur(image)
     else:
         raise ValueError("save type not recognized")
     return retval

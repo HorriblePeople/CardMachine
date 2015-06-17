@@ -106,3 +106,7 @@ $RECYCLE.BIN/
 BaBOC/
 TSSSF/
 WSotT/
+
+# Key-containing config
+# =========================
+imgur_auth.py
