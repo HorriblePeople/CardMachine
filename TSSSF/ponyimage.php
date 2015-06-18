@@ -24,12 +24,12 @@ function dieError($error,$details,$allowed=NULL){
   }
 }
 
-$http_origin = $_SERVER['HTTP_ORIGIN'];
+$http_origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : NULL;
 //Add your domain here if you want to be able to do CORS cross-domain requests
 $origin_array = array("http://latent-logic.github.io",
                       "http://coandco.github.io");
 
-if (in_array($http_origin, $origin_array))
+if (in_array($http_origin, $origin_array) && !is_null($http_origin))
 {
     header("Access-Control-Allow-Origin: $http_origin");
 }
