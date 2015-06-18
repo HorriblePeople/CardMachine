@@ -24,6 +24,16 @@ function dieError($error,$details,$allowed=NULL){
   }
 }
 
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+//Add your domain here if you want to be able to do CORS cross-domain requests
+$origin_array = array("http://latent-logic.github.io",
+                      "http://coandco.github.io");
+
+if (in_array($http_origin, $origin_array))
+{
+    header("Access-Control-Allow-Origin: $http_origin");
+}
+
 //Uncomment to turn this script into a POST reflector for debug purposes
 //die(json_encode($_POST));
 
