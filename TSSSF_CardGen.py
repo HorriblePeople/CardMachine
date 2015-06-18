@@ -325,7 +325,7 @@ def GetFrame(card_type):
 def AddCardArt(image, filename, anchor):
     if filename == "NOART":
         return
-    if filename.startswith("http") and filename.endswith(("png", "jpg", "gif")):
+    if filename.startswith("http") and filename.endswith(("png", "jpg", "jpeg", "gif")):
         try:
             art = PIL_Helper.LoadImageFromURL(filename)
         except PIL_Helper.BadNetStatusException as e:
