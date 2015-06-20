@@ -1,7 +1,7 @@
 import os, glob, shutil, traceback, random
 import PIL_Helper
 
-TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, CLIENT = range(9)
+TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, COPYRIGHT = range(9)
 DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
 
@@ -468,24 +468,25 @@ def AddExpansion(image, expansion):
     if expansion_symbol:
         image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
 
+
 def CopyrightText(tags, image, color):
-    card_set = CardSet.replace('_',' ')
-    #print tags[CLIENT], repr(tags)
-    if len(tags)-1 >= CLIENT:
-        card_set += " " + str(tags[CLIENT])
+    card_set = CardSet.replace('_', ' ')
     text = "{}; TSSSF by Horrible People Games. Art by {}.".format(
         card_set,
         ARTIST
         )
+    if len(tags)-1 >= COPYRIGHT:
+        text = tags[COPYRIGHT]
     PIL_Helper.AddText(
-        image = image,
-        text = text,
-        font = fonts["Copyright"],
-        fill = color,
-        anchor = Anchors["Copyright"],
-        valign = "bottom",
-        halign = "right",
+        image=image,
+        text=text,
+        font=fonts["Copyright"],
+        fill=color,
+        anchor=Anchors["Copyright"],
+        valign="bottom",
+        halign="right",
         )
+
 
 def MakeBlankCard():
     image = PIL_Helper.BlankImage(base_w, base_h)

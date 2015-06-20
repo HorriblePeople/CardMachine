@@ -80,6 +80,10 @@ if(isset($_POST["pycard"])) {
       dieError("Unrecognized symbol", $symbol);
   }
 
+  if (!preg_match('/TSSSF by Horrible People Games/', $pycard_arr[8])) {
+    $pycard_arr[8] .= '; TSSSF by Horrible People Games';
+  }
+
   //Modes check
   if (!in_array($imagetype, array("bleed", "cropped", "vassal")))
     dieError("Invalid image type", $imagetype);
