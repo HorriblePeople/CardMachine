@@ -11,6 +11,7 @@ import requests
 import TSSSF_CardGen
 import json
 import imgur_auth
+import re
 from StringIO import StringIO
 
 
@@ -75,7 +76,7 @@ def make_single_card(encoded_line, output_file, image_type, save_type,
 
     try:
         card_line = base64.b64decode(encoded_line).decode('utf-8')
-        print("Attempting to build card '%s'" % (card_line))
+        print("Attempting to build card %r" % card_line)
         (im["bleed"],
          im["cropped"],
          im["vassal"]) = TSSSF_CardGen.BuildSingleCard(card_line)
@@ -84,7 +85,7 @@ def make_single_card(encoded_line, output_file, image_type, save_type,
                           imgurdesc)
         print >> ACTUAL_STDOUT, outstr
     except Exception:
-        print("Failed to build single card '%s'" % card_line)
+        print("Failed to build single card %r" % card_line)
         print(traceback.format_exc())
         sys.exit(1)
     print("Success!")
