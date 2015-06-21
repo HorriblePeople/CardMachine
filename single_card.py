@@ -70,9 +70,6 @@ def SaveCard(image, save_type, location=None):
 
 def make_single_card(base_dir, encoded_line, output_file,
                      image_type, set_name, save_type):
-    my_stdout = sys.stdout
-    sys.stdout = sys.stderr
-
     TSSSF_CardGen.CardSet = base64.b64decode(set_name)
 
     im = {}
@@ -85,7 +82,7 @@ def make_single_card(base_dir, encoded_line, output_file,
          im["vassal"]) = TSSSF_CardGen.BuildSingleCard(card_line)
 
         outstr = SaveCard(im[image_type], save_type, output_file)
-        print >> my_stdout, outstr
+        print >> ACTUAL_STDOUT, outstr
     except Exception:
         print("Failed to build single card '%s'" % card_line)
         print(traceback.format_exc())
@@ -94,6 +91,8 @@ def make_single_card(base_dir, encoded_line, output_file,
     sys.exit(0)
 
 if __name__ == '__main__':
+    ACTUAL_STDOUT = sys.stdout
+    sys.stdout = sys.stderr
     parser = argparse.ArgumentParser(prog="GameGen")
 
     parser.add_argument('-b', '--basedir',
