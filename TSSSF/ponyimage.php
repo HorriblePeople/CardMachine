@@ -24,6 +24,24 @@ function dieError($error,$details,$allowed=NULL){
   }
 }
 
+function pipe_exec($cmd, $input='') {
+    $proc = proc_open($cmd, array(array('pipe', 'r'),
+                                  array('pipe', 'w'),
+                                  array('pipe', 'w')), $pipes);
+    fwrite($pipes[0], $input);
+    fclose($pipes[0]);
+
+    $stdout = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+
+    $stderr = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+
+    $return_code = (int)proc_close($proc);
+
+    return array($return_code, $stdout, $stderr);
+}
+
 $http_origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : NULL;
 //Add your domain here if you want to be able to do CORS cross-domain requests
 $origin_array = array("http://latent-logic.github.io",
@@ -107,24 +125,25 @@ if(isset($_POST["pycard"])) {
 
   $cmd_str = './single_card.py -c "' . $encoded_str . '"' . " -i $imagetype -r $returntype " . $outstr . $imgurargs;
 
-  exec($cmd_str, $cmd_out, $cmd_retval);
+  list($cmd_retval, $cmd_stdout, $cmd_stderr) = pipe_exec($cmd_str);
 
   if ($cmd_retval == 0) {
     switch($returntype) {
       case "file":
-        $img_url = "http://" . $_SERVER["HTTP_HOST"] . "/" . $cmd_out[0];
+        $img_url = "http://" . $_SERVER["HTTP_HOST"] . "/" . $cmd_stdout;
         break;
       case "imgur":
-        $img_url = "http://imgur.com/" . $cmd_out[0];
+        $img_url = "http://imgur.com/" . $cmd_stdout;
         break;
       case "encoded_url":
-        $img_url = $cmd_out[0];
+        $img_url = $cmd_stdout;
         break;
     }
     die(json_encode(array("image" => $img_url,
-                          "card_str" => $card_str)));
+                          "card_str" => $card_str,
+                          "output" => $cmd_stderr)));
   } else {
-    dieError("Card build failed!", $cmd_str);
+    dieError("Card build failed!", $cmd_stderr);
   }
 } else {
   dieError("No pycard string found", $_POST);
