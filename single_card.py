@@ -68,10 +68,8 @@ def SaveCard(image, save_type, location=None):
     return retval
 
 
-def make_single_card(base_dir, encoded_line, output_file,
-                     image_type, set_name, save_type):
-    TSSSF_CardGen.CardSet = base64.b64decode(set_name)
-
+def make_single_card(encoded_line, output_file, image_type, save_type,
+                     imgurtitle, imgurdesc):
     im = {}
 
     try:
@@ -93,20 +91,14 @@ def make_single_card(base_dir, encoded_line, output_file,
 if __name__ == '__main__':
     ACTUAL_STDOUT = sys.stdout
     sys.stdout = sys.stderr
-    parser = argparse.ArgumentParser(prog="GameGen")
+    parser = argparse.ArgumentParser(prog="single_card.py")
 
-    parser.add_argument('-b', '--basedir',
-                        help="Workspace base directory with resources output directory",
-                        default="TSSSF")
     parser.add_argument('-c', '--card_line',
-                        help="Base64 encoded single-line card definition",
+                        help="Base64-encoded single-line card definition",
                         required=True)
     parser.add_argument('-o', '--output',
                         help="File to write card to",
                         default=None)
-    parser.add_argument('-s', '--setname',
-                        help="Set name to use",
-                        default="TEST CARD")
     parser.add_argument('-i', '--imagetype',
                         help="Set image type to output",
                         choices=("bleed", "cropped", "vassal"),
@@ -115,11 +107,17 @@ if __name__ == '__main__':
                         help="Output format",
                         choices=("file", "encoded_url", "imgur"),
                         default="cropped")
+    parser.add_argument('-t', '--imgurtitle',
+                        help="Base64-encoded alternate imgur title",
+                        default=None)
+    parser.add_argument('-d', '--imgurdesc',
+                        help="Base64-encoded alternate imgur description",
+                        default=None)
 
     args = parser.parse_args()
 
     if args.returntype == "file" and args.output is None:
         parser.error("--output must be defined if --returntype is set to file")
 
-    make_single_card(args.basedir, args.card_line, args.output,
-                     args.imagetype, args.setname, args.returntype)
+    make_single_card(args.card_line, args.output, args.imagetype,
+                     args.returntype, args.imgurtitle, args.imgurdesc)
