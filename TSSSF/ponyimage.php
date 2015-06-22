@@ -50,6 +50,7 @@ $origin_array = array("http://latent-logic.github.io",
 if (in_array($http_origin, $origin_array) && !is_null($http_origin))
 {
     header("Access-Control-Allow-Origin: $http_origin");
+    header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 }
 
 $content_type = isset($_SERVER["CONTENT_TYPE"]) ? $_SERVER["CONTENT_TYPE"] : "";
