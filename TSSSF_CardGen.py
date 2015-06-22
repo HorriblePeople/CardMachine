@@ -331,7 +331,7 @@ def AddCardArt(image, filename, anchor):
             art = PIL_Helper.LoadImageFromURL(filename)
         except PIL_Helper.BadNetStatusException as e:
             art = random.choice(ArtMissing)
-    elif os.path.exists(os.path.join(CardPath, filename)):
+    elif os.path.exists(os.path.join(CardPath, filename)) and filename != "":
         art = PIL_Helper.LoadImage(os.path.join(CardPath, filename))
     else:
         art = random.choice(ArtMissing)
