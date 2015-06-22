@@ -85,8 +85,8 @@ def make_single_card(encoded_line, output_file, image_type, save_type,
                           imgurdesc)
         print >> ACTUAL_STDOUT, outstr
     except Exception:
-        print("Failed to build single card %r" % card_line)
         print(traceback.format_exc())
+        print("Failed to build single card %r" % card_line)
         sys.exit(1)
     print("Success!")
     sys.exit(0)
