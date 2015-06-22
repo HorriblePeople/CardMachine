@@ -111,6 +111,12 @@ if(isset($data["pycard"])) {
       dieError("Unrecognized symbol", $symbol);
   }
 
+  //Expansion check
+  $valid_expansions = array("Web", "");
+  if (!in_array($pycard_arr[7], $valid_expansions))
+    dieError("Unrecognized expansion", $pycard_arr[7]);
+
+  //Copyright check
   if (!preg_match('/TSSSF by Horrible People Games/', $pycard_arr[8])) {
     $pycard_arr[8] .= '; TSSSF by Horrible People Games';
   }
