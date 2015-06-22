@@ -130,7 +130,7 @@ if(isset($data["pycard"])) {
   }
 
   $card_str = implode("`", $pycard_arr);
-  $encoded_str = base64_encode(utf8_encode($card_str));
+  $encoded_str = base64_encode($card_str);
 
   chdir("../");
 
