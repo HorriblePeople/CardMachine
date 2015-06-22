@@ -52,18 +52,29 @@ if (in_array($http_origin, $origin_array) && !is_null($http_origin))
     header("Access-Control-Allow-Origin: $http_origin");
 }
 
+$content_type = isset($_SERVER["CONTENT_TYPE"]) ? $_SERVER["CONTENT_TYPE"] : "";
+
+//If our content_type string starts with "application/json", decode it
+if (substr($content_type, 0, strlen("application/json")) == "application/json"){
+  $data = json_decode(file_get_contents('php://input'), true);
+} else {
+  $data = $_POST;
+}
+
+//dieError("Reflector", $data["pycard"]);
+
 //Uncomment to turn this script into a POST reflector for debug purposes
 //die(json_encode($_POST));
 
-$imagetype = isset($_POST["imagetype"]) ? $_POST["imagetype"] : "cropped";
-$returntype = isset($_POST["returntype"]) ? $_POST["returntype"] : "encoded_url";
-$source_url = isset($_POST["my_url"]) ? $_POST["my_url"] : "";
+$imagetype = isset($data["imagetype"]) ? $data["imagetype"] : "cropped";
+$returntype = isset($data["returntype"]) ? $data["returntype"] : "encoded_url";
+$source_url = isset($data["my_url"]) ? $data["my_url"] : "";
 
-if(isset($_POST["pycard"])) {
-  $pycard_arr = explode("`", $_POST["pycard"]);
+if(isset($data["pycard"])) {
+  $pycard_arr = explode("`", $data["pycard"]);
   if (count($pycard_arr) < 7)
     dieError("Pycard string failed basic sanity check (at least 6 backticks)", 
-             $_POST["pycard"]);
+             $data["pycard"]);
 
   //Type check
   $valid_types = array("Pony", "Ship", "Goal", "Start");
@@ -146,7 +157,7 @@ if(isset($_POST["pycard"])) {
     dieError("Card build failed!", $cmd_stderr);
   }
 } else {
-  dieError("No pycard string found", $_POST);
+  dieError("No pycard string found", $data);
 }
 
 ?>
