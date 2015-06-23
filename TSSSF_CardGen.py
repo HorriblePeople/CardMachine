@@ -59,9 +59,9 @@ fonts = {
 
 Anchors = {
     "Blank": (base_w_center, 300),
-    "PonyArt": (173, 225),
-    "ShipArt": (173, 226),
-    "GoalArt": (174, 224),
+    "PonyArt": (175, 225),
+    "ShipArt": (175, 226),
+    "GoalArt": (175, 224),
     "Symbol1": (58+50,56+63),
     "Symbol2": (58+50,160+63),
     "LoneSymbol": (108,153),
