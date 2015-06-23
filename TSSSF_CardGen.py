@@ -262,6 +262,9 @@ def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
         PIL_Helper.ConvertToCmyk(image)
     image.save(filepath, dpi=(300,300))
 
+def BuildSpecial():
+    pass
+    
 def BuildCard(linein, filename=None):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
