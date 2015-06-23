@@ -264,6 +264,9 @@ def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
 
 def BuildSpecial():
     pass
+
+def BuildSpecial2():
+    pass
     
 def BuildCard(linein, filename=None):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
