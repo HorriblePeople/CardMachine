@@ -152,7 +152,9 @@ Expansions = {
     "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
     "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
     "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png"),
-    "Web": PIL_Helper.LoadImage(ResourcePath+"/symbol-web-circledark.png")
+    "web-outline": PIL_Helper.LoadImage(ResourcePath+"/symbol-web-circledark.png"),
+    "web-white": PIL_Helper.LoadImage(ResourcePath+"/symbol-www.png"),
+    "web-grey": PIL_Helper.LoadImage(ResourcePath+"/symbol-web-circlegrey.png")
     }
 
 ColorDict={
