@@ -33,6 +33,7 @@ def GetImgurCredits():
         headers={'Authorization': 'Client-ID %s' % imgur_auth.CLIENT_ID},
         data={'key': imgur_auth.CLIENT_SECRET}
     )
+    print "Full GetCredits retval: %r" % credits.text
     return json.loads(credits.text)["data"]["ClientRemaining"]
 
 
