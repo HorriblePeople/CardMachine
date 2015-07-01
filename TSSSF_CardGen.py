@@ -88,16 +88,16 @@ ArtMissing = [
     ]
 
 Frames = {
-    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
-    "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
-    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
-    "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
-    "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
-    "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
-    "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
-    "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
+    "start": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
+    "warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
+    "pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
+    "ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
+    "rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
+    "rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
+    "rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
+    "goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
+    "derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
+    "testsubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
 
 Symbols = {
@@ -193,18 +193,18 @@ RulesDict={
     "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
     }
 
-backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
-         "Pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
-         "Ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
-         "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "Rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
-         "Rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
-         "Rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
-         "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
+backs = {"start": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
+         "pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
+         "ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
+         "card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "blank": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
+         "rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
+         "rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
+         "rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
+         "testsubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
 class ImageTypeUnhandledException(Exception):
@@ -294,36 +294,37 @@ def BuildCard(linein):
 def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
     #print("Back type: " + tags[TYPE])
-    return backs[tags[TYPE]]
+    return backs[tags[TYPE].lower()]
   
 def PickCardFunc(card_type, tags):
-    if tags[TYPE] == "START":
+    card_type = card_type.lower()
+    if card_type == "start":
         return MakeStartCard(tags)
-    elif tags[TYPE] == "Pony":
+    elif card_type == "pony":
         return MakePonyCard(tags)
-    elif tags[TYPE] == "Ship":
+    elif card_type == "ship":
         return MakeShipCard(tags)
-    elif tags[TYPE] == "Goal":
+    elif card_type == "goal":
         return MakeGoalCard(tags)
-    elif tags[TYPE] == "BLANK":
+    elif card_type == "blank":
         return MakeBlankCard()
-    elif tags[TYPE] == "Warning":
+    elif card_type == "warning":
         return MakeSpecialCard("Warning")
-    elif tags[TYPE] == "Rules1":
+    elif card_type == "rules1":
         return MakeSpecialCard("Rules1")
-    elif tags[TYPE] == "Rules3":
+    elif card_type == "rules3":
         return MakeSpecialCard("Rules3")
-    elif tags[TYPE] == "Rules5":
+    elif card_type == "rules5":
         return MakeSpecialCard("Rules5")
-    elif tags[TYPE] == "TestSubject":
+    elif card_type == "testsubject":
         return MakePonyCard(tags)
-    elif tags[TYPE] == "Card":
+    elif card_type == "card":
         return MakeSpecialCard(tags[PICTURE])
     else:
-        raise Exception("No card of type {0}".format(tags[TYPE]))
+        raise Exception("No card of type {0}".format(card_type))
 
 def GetFrame(card_type):
-    return Frames[card_type].copy()
+    return Frames[card_type.lower()].copy()
 
 def AddCardArt(image, filename, anchor):
     if filename == "NOART":
