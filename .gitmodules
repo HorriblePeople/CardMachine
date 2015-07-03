@@ -1,0 +1,3 @@
+[submodule "TSSSF/resources"]
+	path = TSSSF/resources
+	url = https://github.com/coandco/TSSSFTemplates.git
