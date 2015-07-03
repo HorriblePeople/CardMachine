@@ -1,7 +1,7 @@
 import os, glob, shutil, traceback, random
 import PIL_Helper
 
-TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, CLIENT = range(9)
+TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, COPYRIGHT = range(9)
 DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
 
@@ -10,7 +10,6 @@ LegacySymbolMode = False
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
-
 
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
@@ -28,6 +27,7 @@ VASSAL_SCALE=(260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
+ART_HEIGHT = 443
 base_w = 889
 base_h = 1215
 base_w_center = base_w/2
@@ -38,21 +38,23 @@ baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
+ART_CROPRECT=(0,0,ART_WIDTH, ART_HEIGHT)
 
 TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
+FONTS_DIR = "fonts/"
 fonts = {
-    "Title":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 55),
-    "TitleSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 45),
-    "Body":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodySmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 31),
-    "Bar":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 38),
-    "BarSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "Flavortext":PIL_Helper.BuildFont(ResourcePath+"KlinicSlabBookIt.otf", 28),
-    "Copyright":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 18)
+    "Title":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFBartholomew-Bold.otf", 55),
+    "TitleSmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFBartholomew-Bold.otf", 45),
+    "Body":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "BodySmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 31),
+    "Bar":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 38),
+    "BarSmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "Flavortext":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "KlinicSlabBookIt.otf", 28),
+    "Copyright":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 18)
 }
 
 Anchors = {
@@ -76,80 +78,88 @@ Anchors = {
     "Copyright": (-38-50, -13-61)
 }
 
+ARTMISSING_DIR = "placeholder art/"
 ArtMissing = [
-    PIL_Helper.LoadImage(CardPath+"/artmissing01.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing02.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing03.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing04.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing05.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing06.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing07.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing01.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing02.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing03.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing04.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing05.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing06.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing07.png"),
     ]
 
+FRAMES_DIR = "bleed templates filled/"
 Frames = {
-    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start.png"),
-    "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony.png"),
-    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship.png"),
-    "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
-    "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
-    "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal.png"),
-    "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
-    "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
+    "start": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Start-bleed.png"),
+    "warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
+    "pony": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Pony-bleed.png"),
+    "ship": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Ship-bleed.png"),
+    "rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
+    "rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
+    "rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
+    "goal": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Goal-bleed.png"),
+    "derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
+    "testsubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
 
+SYMBOLS_DIR = "symbols/"
 Symbols = {
-    "male": PIL_Helper.LoadImage(ResourcePath+"/Symbol-male.png"),
-    "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
-    "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
-    "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
-    "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
-    "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
-    "alicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Alicorn.png"),
-    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingEarthPony.png"),
-    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingUnicorn.png"),
-    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
-    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
-    "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
-    "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
-    "1": PIL_Helper.LoadImage(ResourcePath+"/symbol-1.png"),
-    "2": PIL_Helper.LoadImage(ResourcePath+"/symbol-2.png"),
-    "3": PIL_Helper.LoadImage(ResourcePath+"/symbol-3.png"),
-    "4": PIL_Helper.LoadImage(ResourcePath+"/symbol-4.png"),
-    "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
-    "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
+    "male": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-male.png"),
+    "female": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Female.png"),
+    "malefemale": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-MaleFemale.png"),
+    "earth pony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Earth-Pony.png"),
+    "earthpony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Earth-Pony.png"),
+    "unicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Unicorn.png"),
+    "uniearth": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-uniearth.png"),
+    "pegasus": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Pegasus.png"),
+    "alicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Alicorn.png"),
+    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingEarthPony.png"),
+    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingUnicorn.png"),
+    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingPegasus.png"),
+    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingAlicorn.png"),
+    "dystopian": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-dystopian-future.png"),
+    "ship": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Ship.png"),
+    "goal": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Goal.png"),
+    "0": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-0.png"),
+    "1": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-1.png"),
+    "2": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-2.png"),
+    "3": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-3.png"),
+    "4": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-4.png"),
+    "3-4": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-34.png"),
+    "2-3": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-23.png")
     }
-TIMELINE_SYMBOL_LIST = ["Dystopian"]
+TIMELINE_SYMBOL_LIST = ["dystopian"]
 
+EXPS_DIR = "symbols/"
 Expansions = {
-    "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
-    "Indiegogo": PIL_Helper.LoadImage(ResourcePath+"/symbol-Indiegogo.png"),
-    "Birthday": PIL_Helper.LoadImage(ResourcePath+"/symbol-birthday.png"),
-    "Bronycon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycon14.png"),
-    "Summer": PIL_Helper.LoadImage(ResourcePath+"/symbol-summer-lovin.png"),
-    "Apricity": PIL_Helper.LoadImage(ResourcePath+"/symbol-apricity.png"),
-    "BronyCAN": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycan14.png"),
-    "Xtra": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit.png"),
-    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit-black.png"),
-    "NMND": PIL_Helper.LoadImage(ResourcePath+"/symbol-nightmarenights.png"),
-    "Ciderfest": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponyvilleciderfest.png"),
-    "Adventure": PIL_Helper.LoadImage(ResourcePath+"/symbol-adventure.png"),
-    "Custom": PIL_Helper.LoadImage(ResourcePath+"/symbol-custom.png"),
-    "Power": PIL_Helper.LoadImage(ResourcePath+"/symbol-power.png"),
-    "Multiplicity": PIL_Helper.LoadImage(ResourcePath+"/symbol-multiplicity.png"),
-    "Canon": PIL_Helper.LoadImage(ResourcePath+"/symbol-canon.png"),
-    "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
-    "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
-    "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
-    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
-    "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
-    "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png")
+    "Everfree14": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Everfree14.png"),
+    "Indiegogo": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Indiegogo.png"),
+    "Birthday": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-birthday.png"),
+    "Bronycon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Bronycon14.png"),
+    "Summer": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-summer-lovin.png"),
+    "Apricity": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-apricity.png"),
+    "BronyCAN": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Bronycan14.png"),
+    "Xtra": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-extracredit.png"),
+    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-extracredit-black.png"),
+    "NMND": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-nightmarenights.png"),
+    "Ciderfest": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-ponyvilleciderfest.png"),
+    "Adventure": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-adventure.png"),
+    "Custom": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-custom.png"),
+    "Power": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-power.png"),
+    "Multiplicity": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-multiplicity.png"),
+    "Canon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-canon.png"),
+    "Dungeon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-dungeon.png"),
+    "50": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-50.png"),
+    "2014": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-2014.png"),
+    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-hearthswarming.png"),
+    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-ponynyc.png"),
+    "Patreon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Patreon.png"),
+    "Gameshow": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-gameshow.png"),
+    "BABScon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-BABScon.png"),
+    "web-outline": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-web-circledark.png"),
+    "web-white": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-www.png"),
+    "web-grey": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-web-circlegrey.png")
     }
 
 ColorDict={
@@ -188,19 +198,22 @@ RulesDict={
     "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
     }
 
-backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
-         "Pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
-         "Ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
-         "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "Rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
-         "Rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
-         "Rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
-         "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
+backs = {"start": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
+         "pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
+         "ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
+         "card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "blank": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
+         "rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
+         "rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
+         "rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
+         "testsubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
+
+class ImageTypeUnhandledException(Exception):
+    pass
 
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
@@ -251,6 +264,14 @@ def SaveCard(filepath, image_to_save):
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
     image_to_save.save(filepath, dpi=(300, 300))
 
+def BuildSingleCard(linein):
+    tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
+    im_bleed = PickCardFunc(tags[TYPE], tags)
+    im_crop = im_bleed.crop(croprect)
+    im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
+
+    return (im_bleed, im_crop, im_vassal)
+
 def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
@@ -278,52 +299,66 @@ def BuildCard(linein):
 def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
     #print("Back type: " + tags[TYPE])
-    return backs[tags[TYPE]]
+    return backs[tags[TYPE].lower()]
   
 def PickCardFunc(card_type, tags):
-    if tags[TYPE] == "START":
+    card_type = card_type.lower()
+    if card_type == "start":
         return MakeStartCard(tags)
-    elif tags[TYPE] == "Pony":
+    elif card_type == "pony":
         return MakePonyCard(tags)
-    elif tags[TYPE] == "Ship":
+    elif card_type == "ship":
         return MakeShipCard(tags)
-    elif tags[TYPE] == "Goal":
+    elif card_type == "goal":
         return MakeGoalCard(tags)
-    elif tags[TYPE] == "BLANK":
+    elif card_type == "blank":
         return MakeBlankCard()
-    elif tags[TYPE] == "Warning":
+    elif card_type == "warning":
         return MakeSpecialCard("Warning")
-    elif tags[TYPE] == "Rules1":
+    elif card_type == "rules1":
         return MakeSpecialCard("Rules1")
-    elif tags[TYPE] == "Rules3":
+    elif card_type == "rules3":
         return MakeSpecialCard("Rules3")
-    elif tags[TYPE] == "Rules5":
+    elif card_type == "rules5":
         return MakeSpecialCard("Rules5")
-    elif tags[TYPE] == "TestSubject":
+    elif card_type == "testsubject":
         return MakePonyCard(tags)
-    elif tags[TYPE] == "Card":
+    elif card_type == "card":
         return MakeSpecialCard(tags[PICTURE])
     else:
-        raise Exception("No card of type {0}".format(tags[TYPE]))
+        raise Exception("No card of type {0}".format(card_type))
 
 def GetFrame(card_type):
-    return Frames[card_type].copy()
+    return Frames[card_type.lower()].copy()
 
 def AddCardArt(image, filename, anchor):
     if filename == "NOART":
         return
-    if os.path.exists(os.path.join(CardPath, filename)):
+    if filename.startswith("http"):
+        try:
+            art = PIL_Helper.LoadImageFromURL(filename)
+        except PIL_Helper.BadNetStatusException as e:
+            art = random.choice(ArtMissing)
+    elif os.path.exists(os.path.join(CardPath, filename)) and filename != "":
         art = PIL_Helper.LoadImage(os.path.join(CardPath, filename))
     else:
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
     w, h = art.size
-    h = int((float(ART_WIDTH)/w)*h)
-    # Resize image to fit in frame
-    art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+    if float(w)/float(h) < float(ART_WIDTH)/float(ART_HEIGHT):
+        h = int((float(ART_WIDTH)/w)*h)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+    else:
+        w = int((float(ART_HEIGHT)/h)*w)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (w, ART_HEIGHT))
+
+    art = art.crop(ART_CROPRECT)
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
+    symbols = [x.lower() for x in symbols]
     # Remove any timeline symbols from the symbols list
     pruned_symbols = set(symbols)-set(TIMELINE_SYMBOL_LIST)
     if card_type == "Goal":
@@ -338,7 +373,7 @@ def AddSymbols(image, symbols, card_type=""):
             positions = [Anchors["Symbol1"], Anchors["Symbol2"]]
 
     for index,s in enumerate(symbols):
-        sym = Symbols.get(s.lower(), None)
+        sym = Symbols.get(s, None)
         if sym:
             if s in TIMELINE_SYMBOL_LIST:
                 image.paste(sym, Anchors["TimelineSymbol"], sym)
@@ -355,7 +390,7 @@ def TitleText(image, text, color):
     if len(text)>TitleWidthThresholds[0]:
         anchor = Anchors["TitleSmall"]
         font = fonts["TitleSmall"]
-    print repr(text)
+    #print repr(text)
     PIL_Helper.AddText(
         image = image,
         text = text,
@@ -442,24 +477,25 @@ def AddExpansion(image, expansion):
     if expansion_symbol:
         image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
 
+
 def CopyrightText(tags, image, color):
-    card_set = CardSet.replace('_',' ')
-    #print tags[CLIENT], repr(tags)
-    if len(tags)-1 >= CLIENT:
-        card_set += " " + str(tags[CLIENT])
+    card_set = CardSet.replace('_', ' ')
     text = "{}; TSSSF by Horrible People Games. Art by {}.".format(
         card_set,
         ARTIST
         )
+    if len(tags)-1 >= COPYRIGHT:
+        text = tags[COPYRIGHT]
     PIL_Helper.AddText(
-        image = image,
-        text = text,
-        font = fonts["Copyright"],
-        fill = color,
-        anchor = Anchors["Copyright"],
-        valign = "bottom",
-        halign = "right",
+        image=image,
+        text=text,
+        font=fonts["Copyright"],
+        fill=color,
+        anchor=Anchors["Copyright"],
+        valign="bottom",
+        halign="right",
         )
+
 
 def MakeBlankCard():
     image = PIL_Helper.BlankImage(base_w, base_h)

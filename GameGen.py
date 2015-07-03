@@ -4,7 +4,8 @@ Master Game Gen
 '''
 import os, glob
 import PIL_Helper
-from OS_Helper import *
+import argparse
+from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
 from sys import exit
 
 #TSSSF Migration TODO:
@@ -90,6 +91,18 @@ def main(folder=".", filepath="deck.cards"):
     print "Done!"
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog="GameGen")
+
+    parser.add_argument('-f', '--set-file', \
+                        help="Location of set file to be parsed",
+                        default="cards.pon")
+    parser.add_argument('-b', '--basedir',
+                        help="Workspace base directory with resources output directory",
+                        default="TSSSF")
+
+    args = parser.parse_args()
+
+    main(args.basedir, args.set_file)
     #main('TSSSF', '1.1.0 Patch/cards.pon')
     #main('TSSSF', '2014 Con Exclusives/cards.pon')
     #main('TSSSF', 'BABScon 2015/cards.pon')
@@ -99,7 +112,7 @@ if __name__ == '__main__':
     #main('TSSSF', 'Core 1.1.0 Test/cards.pon')
     #main('TSSSF', 'Custom Card for/cards.pon')
     #main('TSSSF', 'Extra Credit 0.10.4/cards.pon')
-    main('TSSSF', 'Indiegogo/cards.pon')
+    #main('TSSSF', 'Indiegogo/cards.pon')
     #main('TSSSF', 'Patreon Expansion 1/cards.pon')
     #main('TSSSF', 'Ponycon Panel 2015/cards.pon')
     #main('TSSSF', 'Ponyville University 0.0.2/cards.pon')
