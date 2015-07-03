@@ -44,16 +44,17 @@ TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
+FONTS_DIR = "fonts/"
 fonts = {
-    "Title":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 55),
-    "TitleSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 45),
-    "Body":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodySmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 31),
-    "Bar":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 38),
-    "BarSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "Flavortext":PIL_Helper.BuildFont(ResourcePath+"KlinicSlabBookIt.otf", 28),
-    "Copyright":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 18)
+    "Title":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFBartholomew-Bold.otf", 55),
+    "TitleSmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFBartholomew-Bold.otf", 45),
+    "Body":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "BodySmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 31),
+    "Bar":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 38),
+    "BarSmall":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 35),
+    "Flavortext":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "KlinicSlabBookIt.otf", 28),
+    "Copyright":PIL_Helper.BuildFont(ResourcePath + FONTS_DIR + "TSSSFCabin-Medium.ttf", 18)
 }
 
 Anchors = {
@@ -77,84 +78,88 @@ Anchors = {
     "Copyright": (-38-50, -13-61)
 }
 
+ARTMISSING_DIR = "placeholder art/"
 ArtMissing = [
-    PIL_Helper.LoadImage(CardPath+"/artmissing01.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing02.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing03.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing04.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing05.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing06.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing07.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing01.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing02.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing03.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing04.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing05.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing06.png"),
+    PIL_Helper.LoadImage(ResourcePath + ARTMISSING_DIR + "/artmissing07.png"),
     ]
 
+FRAMES_DIR = "bleed templates filled/"
 Frames = {
-    "start": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
+    "start": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Start-bleed.png"),
     "warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
+    "pony": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Pony-bleed.png"),
+    "ship": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Ship-bleed.png"),
     "rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
     "rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
     "rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
+    "goal": PIL_Helper.LoadImage(ResourcePath + FRAMES_DIR + "/BLEED-Blank-Goal-bleed.png"),
     "derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
     "testsubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
 
+SYMBOLS_DIR = "symbols/"
 Symbols = {
-    "male": PIL_Helper.LoadImage(ResourcePath+"/Symbol-male.png"),
-    "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
-    "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
-    "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "earthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
-    "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
-    "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
-    "alicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Alicorn.png"),
-    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingEarthPony.png"),
-    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingUnicorn.png"),
-    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
-    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
-    "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
-    "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
-    "1": PIL_Helper.LoadImage(ResourcePath+"/symbol-1.png"),
-    "2": PIL_Helper.LoadImage(ResourcePath+"/symbol-2.png"),
-    "3": PIL_Helper.LoadImage(ResourcePath+"/symbol-3.png"),
-    "4": PIL_Helper.LoadImage(ResourcePath+"/symbol-4.png"),
-    "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
-    "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
+    "male": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-male.png"),
+    "female": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Female.png"),
+    "malefemale": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-MaleFemale.png"),
+    "earth pony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Earth-Pony.png"),
+    "earthpony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Earth-Pony.png"),
+    "unicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Unicorn.png"),
+    "uniearth": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-uniearth.png"),
+    "pegasus": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Pegasus.png"),
+    "alicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Alicorn.png"),
+    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingEarthPony.png"),
+    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingUnicorn.png"),
+    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingPegasus.png"),
+    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-ChangelingAlicorn.png"),
+    "dystopian": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-dystopian-future.png"),
+    "ship": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Ship.png"),
+    "goal": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/Symbol-Goal.png"),
+    "0": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-0.png"),
+    "1": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-1.png"),
+    "2": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-2.png"),
+    "3": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-3.png"),
+    "4": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-4.png"),
+    "3-4": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-34.png"),
+    "2-3": PIL_Helper.LoadImage(ResourcePath + SYMBOLS_DIR + "/symbol-23.png")
     }
 TIMELINE_SYMBOL_LIST = ["dystopian"]
 
+EXPS_DIR = "symbols/"
 Expansions = {
-    "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
-    "Indiegogo": PIL_Helper.LoadImage(ResourcePath+"/symbol-Indiegogo.png"),
-    "Birthday": PIL_Helper.LoadImage(ResourcePath+"/symbol-birthday.png"),
-    "Bronycon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycon14.png"),
-    "Summer": PIL_Helper.LoadImage(ResourcePath+"/symbol-summer-lovin.png"),
-    "Apricity": PIL_Helper.LoadImage(ResourcePath+"/symbol-apricity.png"),
-    "BronyCAN": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycan14.png"),
-    "Xtra": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit.png"),
-    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit-black.png"),
-    "NMND": PIL_Helper.LoadImage(ResourcePath+"/symbol-nightmarenights.png"),
-    "Ciderfest": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponyvilleciderfest.png"),
-    "Adventure": PIL_Helper.LoadImage(ResourcePath+"/symbol-adventure.png"),
-    "Custom": PIL_Helper.LoadImage(ResourcePath+"/symbol-custom.png"),
-    "Power": PIL_Helper.LoadImage(ResourcePath+"/symbol-power.png"),
-    "Multiplicity": PIL_Helper.LoadImage(ResourcePath+"/symbol-multiplicity.png"),
-    "Canon": PIL_Helper.LoadImage(ResourcePath+"/symbol-canon.png"),
-    "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
-    "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
-    "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
-    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
-    "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
-    "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png"),
-    "web-outline": PIL_Helper.LoadImage(ResourcePath+"/symbol-web-circledark.png"),
-    "web-white": PIL_Helper.LoadImage(ResourcePath+"/symbol-www.png"),
-    "web-grey": PIL_Helper.LoadImage(ResourcePath+"/symbol-web-circlegrey.png")
+    "Everfree14": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Everfree14.png"),
+    "Indiegogo": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Indiegogo.png"),
+    "Birthday": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-birthday.png"),
+    "Bronycon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Bronycon14.png"),
+    "Summer": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-summer-lovin.png"),
+    "Apricity": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-apricity.png"),
+    "BronyCAN": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Bronycan14.png"),
+    "Xtra": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-extracredit.png"),
+    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-extracredit-black.png"),
+    "NMND": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-nightmarenights.png"),
+    "Ciderfest": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-ponyvilleciderfest.png"),
+    "Adventure": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-adventure.png"),
+    "Custom": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-custom.png"),
+    "Power": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-power.png"),
+    "Multiplicity": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-multiplicity.png"),
+    "Canon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-canon.png"),
+    "Dungeon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-dungeon.png"),
+    "50": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-50.png"),
+    "2014": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-2014.png"),
+    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-hearthswarming.png"),
+    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-ponynyc.png"),
+    "Patreon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-Patreon.png"),
+    "Gameshow": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-gameshow.png"),
+    "BABScon": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-BABScon.png"),
+    "web-outline": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-web-circledark.png"),
+    "web-white": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-www.png"),
+    "web-grey": PIL_Helper.LoadImage(ResourcePath + EXPS_DIR + "/symbol-web-circlegrey.png")
     }
 
 ColorDict={
