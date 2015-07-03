@@ -212,11 +212,13 @@ def LoadImageFromURL(url):
         raise BadNetStatusException(r.status_code)
     return Image.open(StringIO(r.content))
 
-def LoadImage(filepath, fallback="blank.png"):
+def LoadImage(filepath, fallback=True):
     try:
         return Image.open(filepath)
     except Exception:
-        if fallback:
+        if fallback is True:
+            return Image.open("blank.png")
+        elif fallback:
             return Image.open(os.path.join(os.path.split(filepath)[0], fallback))
         else:
             raise
