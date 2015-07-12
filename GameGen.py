@@ -14,16 +14,15 @@ from sys import exit
 #individual artist naming
 #.pon files have symbols like {ALICORN} and so on.
 
-CARDGEN_NAME = "CardGen"
 pjoin = os.path.join
         
 def LoadModule(folder):
     """
-    Loads the CardGen.py file from the given folder as a new module. 
+    Loads the __init__.py file from the given folder as a new module. 
     """
     print "Loading module {}...".format(folder)
     try:
-        return importlib.import_module("{}.{}".format(folder, CARDGEN_NAME))
+        return importlib.import_module(folder)
     except ValueError:
         print "Failed to load module: {}".format(folder)
         raise
