@@ -1,3 +1,7 @@
+/BaBOC/resources
+/BaBOC/cardart
+/BaBOC/BaBOC_testing
+/BaBOC/workspace
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -103,6 +107,5 @@ $RECYCLE.BIN/
 # Data files
 # =========================
 
-BaBOC/
 TSSSF/
 WSotT/

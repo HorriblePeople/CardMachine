@@ -2,7 +2,7 @@
 Master Game Gen
 1.0b
 '''
-import os, glob
+import os, glob, sys
 import PIL_Helper
 import argparse
 from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
@@ -19,9 +19,10 @@ def main(folder=".", filepath="deck.cards"):
     card_set = os.path.dirname(filepath)
 
     # Read first line of file to determine module
-    first_line = CardFile.readline()
+    modulename = CardFile.readline().strip()
+    sys.path.append(modulename)
     try:
-        module = __import__(first_line.strip())
+        module = __import__("CardGen")
     except ValueError:
         print "Failed to load module: " + str(ValueError)
         return
