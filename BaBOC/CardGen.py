@@ -114,6 +114,30 @@ PlotTwistImages={
     "M": "Frame_PlotTwist_Magic.png"     
 }
 
+FandomBackdrops={
+    "GH": "Fandom_GrimdarkHardcore.png",
+    "GM": "Fandom_GrimdarkMagic.png",
+    "GS": "Fandom_GrimdarkSci.png",
+    "HG": "Fandom_HardcoreGrimdark.png",
+    "HM": "Fandom_HardcoreMagic.png",
+    "HS": "Fandom_HardcoreSci.png",
+    "MG": "Fandom_MagicGrimdark.png",
+    "MH": "Fandom_MagicHardcore.png",
+    "MS": "Fandom_MagicSci.png",
+    "SG": "Fandom_SciGrimdark.png",
+    "SH": "Fandom_SciHardcore.png",
+    "SM": "Fandom_SciMagic.png"
+}
+
+SnowflakeIcons={
+    "": "Symbol_None.png",
+    "0": "Symbol_None.png",
+    "1": "1-Point.png",
+    "2": "2-Points.png",
+    "3": "3-Points.png",
+    "4": "4-Points.png" 
+}
+
 ArtMissing=["artmissing00.png","artmissing01.png","artmissing02.png"]
 
 RulesDict={
@@ -137,8 +161,9 @@ def BuildCard(linein,filename=None):
     return im
 
 def BuildBack(linein):
-    tags = linein.strip('\n').replace(r'\n', '\n').split('`')
-    image = PIL_Helper.BlankImage(width, height)
+    image = PIL_Helper.LoadImage(ResourcePath + "bleed_back.png")
+    #tags = linein.strip('\n').replace(r'\n', '\n').split('`')
+    #image = PIL_Helper.BlankImage(width, height)
     return image
 
 def PickCardFunc(card_type, tags):
@@ -319,6 +344,11 @@ def MakeFormCard( tags):
         ResourcePath+tags[ARTWORK],
         (240,220)
         )
+    AddArt(image,
+        ResourcePath+SnowflakeIcons[tags[VALUE]],
+        (90,230)
+        )
+
     GenreText(image,
                    GenreDict[tags[COLOR][0]],
                    ColDictDark[tags[COLOR][0]]
@@ -331,7 +361,7 @@ def MakeFormCard( tags):
     return image
 
 def MakeFandomCard( tags):
-    image = PIL_Helper.Image.open(ResourcePath+"Fandom_SciHardcore.png")
+    image = PIL_Helper.Image.open(ResourcePath+FandomBackdrops[tags[COLOR]])
     #DrawLines(image, ('G','S','M','H'))
     # Add flavor text if it's in the list
     PIL_Helper.AddText(
@@ -372,6 +402,12 @@ def MakeFeatureCard( tags):
         ResourcePath+tags[ARTWORK],
         (240,220)
         )
+    AddArt(image,
+        ResourcePath+SnowflakeIcons[tags[VALUE]],
+        (90,230)
+        )
+
+
     GenreText(image,
                    GenreDict[tags[COLOR][0]],
                    ColDictDark[tags[COLOR][0]]
@@ -395,6 +431,12 @@ def MakeModifierCard( tags):
         ResourcePath+tags[ARTWORK],
         (240,220)
         )
+    AddArt(image,
+        ResourcePath+SnowflakeIcons[tags[VALUE]],
+        (90,230)
+        )
+
+
     GenreText(image,
                    GenreDict[tags[COLOR][0]],
                    ColDictDark[tags[COLOR][0]]
@@ -418,6 +460,11 @@ def MakeFormModifierCard( tags):
         ResourcePath+tags[ARTWORK],
         (240,220)
         )    
+    AddArt(image,
+        ResourcePath+SnowflakeIcons[tags[VALUE]],
+        (90,230)
+        )
+
     GenreText(image,
                    GenreDict[tags[COLOR][0]],
                    ColDictDark[tags[COLOR][0]],nudge=50
@@ -490,6 +537,10 @@ def MakeGenreChangeCard( tags):
     AddArt(image,
         ResourcePath+tags[ARTWORK],
         (240,220)
+        )
+    AddArt(image,
+        ResourcePath+SnowflakeIcons[tags[VALUE]],
+        (90,230)
         )
 
 
