@@ -125,8 +125,8 @@ def get_resource(option, card_type=None, card_name=None):
 
 def getfont(option, card_type=None, card_name=None):
     if not preload_assets:
-        return loadfont(card_type, option, get("fonts directory", "Card Defaults"))
-    font = get_resource("font_"+option, card_type, card_name)
+        return loadfont(card_type, option.lower(), get("fonts directory", "Card Defaults"))
+    font = get_resource("font_"+option.lower(), card_type, card_name)
     if font is None:
         raise FontParseError("Font not found: {}|{}|{}".format(
             option, card_type, card_name
