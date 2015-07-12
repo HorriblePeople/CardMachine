@@ -5,6 +5,7 @@ Master Game Gen
 import os, glob, importlib
 import PIL_Helper
 import OS_Helper
+import config_helper
 import sys
 from sys import exit
 
@@ -14,8 +15,8 @@ from sys import exit
 #.pon files have symbols like {ALICORN} and so on.
 
 CARDGEN_NAME = "CardGen"
-print os.environ
-
+pjoin = os.path.join
+        
 def LoadModule(folder):
     """
     Loads the CardGen.py file from the given folder as a new module. 
@@ -27,11 +28,16 @@ def LoadModule(folder):
         print "Failed to load module: {}".format(folder)
         raise
 
-def main(folder=None, card_set=None, filename='cards.pon'):
+def main(folder, card_set, filename='cards.pon',
+         config_filename="config.ini"):
+    config_helper.LoadConfig(folder, card_set, config_filename)
+    config_helper.print_config()
+    return
+
+    
+    LoadPaths(config, folder, card_set)
     module = LoadModule(folder)
-    module.LoadAssets(card_set)
-    workspace_path = module.WorkspacePath
-    output_path = module.OutputPath
+    module.config = config
 
     print "Creating {} from file {}".format(folder, filename)
 

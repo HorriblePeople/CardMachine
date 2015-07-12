@@ -214,6 +214,8 @@ def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)
 
 def LoadImage(filepath):
+    if filepath is None:
+        return Image.new('L', (1,1))
     return Image.open(filepath)
 
 def ResizeImage(image, size, method=Image.ANTIALIAS):

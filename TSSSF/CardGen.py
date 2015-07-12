@@ -1,6 +1,45 @@
+from ConfigParser import SafeConfigParser
 import os, glob, shutil, traceback, random
 import PIL_Helper
 import OS_Helper
+
+config = None
+
+def Setup():
+    global cfg
+    cfg = LoadConfig()
+    LoadPaths(cfg, card_set)
+    CleanDirectories(cfg)
+    return cfg
+
+def LoadConfig(filename="CardGen.cfg"):
+    return SafeConfigParser(filename)
+
+def LoadPaths(cfg, card_set):
+    cfg["BleedsPath"] = pjoin(DIRECTORY, card_set, cfg["BleedsFolder"])
+    cfg["CropPath"] = pjoin(DIRECTORY, card_set, cfg["CropFolder"])
+    cfg["VassalPath"] = pjoin(DIRECTORY, card_set, cfg["VassalFolder"])
+    cfg["OutputPath"] = pjoin(DIRECTORY, card_set, cfg["OutputFolder"])
+    # cfg["CardPath"] = pjoin(DIRECTORY, cfg["Card Art"])
+    # cfg["FontsPath"] = pjoin(DIRECTORY, cfg["Fonts"])
+    # cfg["AnchorsPath"] = pjoin(DIRECTORY, cfg["Anchors"])
+    # cfg["SymbolsPath"] = pjoin(DIRECTORY, cfg["Symbols"])
+    ResourcePath = pjoin(DIRECTORY, "resources")
+    WorkspacePath = pjoin(DIRECTORY, "workspace")
+    
+def CleanDirectories():
+    print "Cleaning directories..."
+    # Create workspace for card images
+    OS_Helper.CleanDirectory(WorkspacePath)
+    # Create image directories
+    OS_Helper.CleanDirectory(BleedsPath)
+    OS_Helper.CleanDirectory(CropPath)
+    OS_Helper.CleanDirectory(VassalPath)
+    # Create output directory
+    OS_Helper.CleanDirectory(OutputPath, rmstring="*.pdf")
+
+
+
 
 # Make an alias for os.path.join() function
 pjoin = os.path.join
@@ -44,17 +83,6 @@ def LoadPaths(card_set):
     VassalPath = pjoin(DIRECTORY, card_set, VassalPath)
     OutputPath = pjoin(DIRECTORY, card_set)
 
-def CleanDirectories(card_set):
-    print "Cleaning directories..."
-    # Create workspace for card images
-    OS_Helper.CleanDirectory(WorkspacePath)
-    # Create image directories
-    OS_Helper.CleanDirectory(BleedsPath)
-    OS_Helper.CleanDirectory(CropPath)
-    OS_Helper.CleanDirectory(VassalPath)
-    # Create output directory
-    OS_Helper.CleanDirectory(OutputPath, rmstring="*.pdf")
-
 VassalWorkspacePath = pjoin(DIRECTORY, "vassal workspace")
 VassalImagesPath = pjoin(VassalWorkspacePath, "images")
 VASSAL_SCALE = (260,359)
@@ -74,7 +102,7 @@ croprect=(50,63,788+50,1088+63)
 
 TextHeightThresholds = [350, 360, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
-BarTextThreshold = [500]
+BarTextThreshold = [575]
 
 print pjoin(ResourcePath, "TSSSFBartholomew-Bold.otf")
 
@@ -123,6 +151,7 @@ ArtMissing = [
 
 Frames = {
     "START": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Start.png")),
+    "SStart": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Special-Start.png")),
     "Warning": PIL_Helper.LoadImage(pjoin(CardPath, "BLEED_Card - Warning.png")),
     "Pony": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Pony.png")),
     "Ship": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Blank-Ship.png")),
@@ -193,6 +222,9 @@ ColorDict={
     "START": (58, 50, 53),
     "START bar text": (237, 239, 239),
     "START flavor": (28, 20, 23),
+    "SpecialStart": (255, 75, 27),
+    "SpecialStart bar text": (255, 239, 239),
+    "SpecialStart flavor": (255, 75, 27),
     "Pony": (70, 44, 137),
     "Pony bar text": (234, 220, 236),
     "Pony flavor": (25, 2, 51),
@@ -209,23 +241,26 @@ ColorDict={
 
 RulesDict={
     "{replace}": "While this card is in your hand, you may discard a Pony card from the grid and play this card in its place. This power cannot be copied.",
+    "{midreplace}": "While this card is in your hand, you may discard a Pony card from the grid and play this card in its place.",
     "{swap}": "You may swap 2 Pony cards on the grid.",
     "{3swap}": "You may swap up to 3 Pony cards on the grid.",
     "{draw}": "You may draw 1 card from the Ship or Pony deck.",
-    "{goal}": "You may discard 1 Goal card and draw 1 new Goal card to replace it.",
+    "{goal}": "You may discard 1 active Goal card and draw 1 new Goal card to replace it.",
     "{search}": "You may search the Ship or Pony discard pile for 1 card of your choice and put it into your hand. If it's still in your hand at the end of your turn, discard it.",
     "{copy}": "You may copy the power of any Pony card currently on the grid, except for Changelings.",
     "{hermaphrodite}": "May count as either {male} or {female} for all Goals, Ships, and powers.",
     "{double pony}": "This card counts as 2 Ponies.",
     "{love poison}": "Instead of playing this Ship with a Pony card from your hand, you must remove a Pony card from the grid and reattach it elsewhere with this Ship. That card's power activates.",
-    "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as having any one keyword of your choice, except pony names.",
+    "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card gains any one keyword of your choice, except pony names.",
     "{gender change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes the opposite gender.",
-    "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes a race of your choice. This cannot affect Changelings.",
-    "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as {postapocalypse}",
+    "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes a race of your choice. This cannot affect Ponies with the Changeling keyword.",
+    "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes {postapocalypse}",
     "{play from discard}": "You may choose to play the top card on the Pony discard pile with this Ship, rather than use a Pony card from your hand.",
+    "{clone}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as two ponies."
     }
 
 backs = {"START": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Start.png")),
+         "SStart": PIL_Helper.LoadImage(pjoin(ResourcePath, "BLEED-Special-Start-Back.png")),
          "Pony": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Main.png")),
          "Goal": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Goals.png")),
          "Ship": PIL_Helper.LoadImage(pjoin(ResourcePath, "Back-Ships.png")),
@@ -334,6 +369,8 @@ def BuildBack(linein):
 def PickCardFunc(tags):
     if tags[TYPE] == "START":
         return MakeStartCard(tags)
+    elif tags[TYPE] == "SStart":
+        return MakeSpecialStartCard(tags)
     elif tags[TYPE] == "Pony":
         return MakePonyCard(tags)
     elif tags[TYPE] == "Ship":
@@ -419,18 +456,24 @@ def TitleText(image, text, color):
         )
 
 def BarText(image, text, color):
-    bar_text_size = PIL_Helper.GetTextBlockSize(text,fonts["Bar"],textmaxwidth)
+    font = fonts["Bar"]
+    bar_text_size = PIL_Helper.GetTextBlockSize(text, font)
     if bar_text_size[0] > BarTextThreshold[0]:
         font = fonts["BarSmall"]
-    else:
-        font = fonts["Bar"]
+        bar_text_size = PIL_Helper.GetTextBlockSize(text, font)
+        if bar_text_size[0] > BarTextThreshold[0]:
+            font = fonts["BarSmaller"]
+            bar_text_size = PIL_Helper.GetTextBlockSize(text, font)
+            if bar_text_size[0] > BarTextThreshold[0]:
+                font = fonts["BarSmallest"]
     PIL_Helper.AddText(
         image = image,
         text = text,
         font = font,
         fill = color,
         anchor = Anchors["Bar"],
-        halign = "right"
+        halign = "right",
+        valign = "center"
         )
 
 def BodyText(image, text, color, flavor_text_size=0, font=None):
@@ -534,6 +577,19 @@ def MakeStartCard(tags):
     BarText(image, tags[KEYWORDS], ColorDict["START bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["START flavor"])
     BodyText(image, tags[BODY], ColorDict["START"], text_size)
+    CopyrightText(tags, image, ColorDict["Copyright"])
+    if len(tags) > EXPANSION:
+        AddExpansion(image, tags[EXPANSION])
+    return image
+
+def MakeSpecialStartCard(tags):
+    image = GetFrame(tags[TYPE])
+    AddCardArt(image, tags[PICTURE], Anchors["PonyArt"])
+    TitleText(image, tags[TITLE], ColorDict["SpecialStart"])
+    AddSymbols(image, tags[SYMBOLS].split('!'))
+    BarText(image, tags[KEYWORDS], ColorDict["SpecialStart bar text"])
+    text_size = FlavorText(image, tags[FLAVOR], ColorDict["SpecialStart flavor"])
+    BodyText(image, tags[BODY], ColorDict["SpecialStart"], text_size)
     CopyrightText(tags, image, ColorDict["Copyright"])
     if len(tags) > EXPANSION:
         AddExpansion(image, tags[EXPANSION])
