@@ -553,7 +553,20 @@ def MakeSwitchCard( tags):
 def MakeGenreChangeCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+PlotTwistImages[tags[COLOR][0]])
     #DrawLines(image,tags[COLOR])
-    TitleText(image, tags[TITLE])
+    #TitleText(image, tags[TITLE])
+    PIL_Helper.AddText(
+        image = image,
+        text = tags[TITLE],
+        font = TitleFontSnug,
+        fill = (255,255,255),
+        anchor = (150,height-80),
+        max_width = height-380,
+        leading_offset = -40,
+        valign = "bottom",
+        halign = "center",
+        justification = "left",
+        rotate = 90
+        )
 
     if tags[COLOR][0]=="A":
         NonGenreOffset=-130
