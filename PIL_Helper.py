@@ -61,15 +61,42 @@ def GetTextBlockSize(text, font, max_width=-1, leading_offset=0):
     return (max_line_width, len(lines)*leading)
 
 def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
-            max_width=-1, halign="center", valign="top", leading_offset=0,
-            rotate=0):
+            max_width=-1, halign="center", valign="top",
+            justification=None, leading_offset=0, rotate=0):
     '''
-    First, attempt to wrap the text if max_width is set,
-    and creates a list of each line.
-    Then paste each individual line onto a transparent
-    layer one line at a time, taking into account halign.
-    Then rotate the layer, and paste on the image according
-    to the anchor point, halign, and valign.
+    @param PIL.Image image: The image to add the text to
+    @param str text: The text to add
+    @param ImageFont font: The font to apply to the text
+    @param (int,int,int) fill: The color to mark the text, in RGB
+    @param (int, int) anchor: The anchor point for the text, in pixels relative
+        to the top-left corner of the target image.
+    @param int max_width: Used when determining if the text needs wrapping.
+        If set, it will call the WrapText function with this parameter.
+    @param str halign: Horizontal alignment of the text layer, relative to
+        the anchor point. If "left", the anchor point will be on the left side
+        of the layer. If "center", the center (to the nearest floored pixel).
+        If "right", then the right sideright. Note that this is applied AFTER
+        the text is rotated, so is relative to the left/right side of the
+        image, not the text.
+    @param str valign: Vertical alignment of the text layer, relative to
+        the anchor point. If "top", the anchor point will be on the top edge of
+        the layer. If "center", the center (to the nearest floored pixel).
+        If "bottom", then the bottom edge. Note that this is applied AFTER
+        the text is rotated, so is relative to the top/bottom of the
+        image, not the text.
+    @param str justification: Sets the horizontal justification of the text.
+        If not set, it will match halign. It can also be "left", "center", or
+        "right".
+    @param int leading_offset: Extra leading between the lines. Can be set to
+        a negative number to bring the lines closer together.
+    @param int rotate: Degrees to rotate text, counter-clockwise, before
+        applying to the text to the image.
+    
+    First, attempt to wrap the text if max_width is set, and creates a list
+        of each line. Then paste each individual line onto a transparent layer
+        one line at a time, taking into account justification. Then rotate the
+        layer, and paste on the image according to the anchor point, halign,
+        and valign.
 
     @return (int, int): Total width and height of the text block
         added, in pixels.
@@ -80,15 +107,18 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
         wrapped_text = text
     lines = wrapped_text.split('\n')
 
+    if justification is None:
+        justification = halign
+
     # Initiliaze layer and draw object
     layer = Image.new('L', (5000,5000))
     draw = ImageDraw.Draw(layer)
     start_y = 500
-    if halign == "left":
+    if justification == "left":
         start_x = 500
-    elif halign == "center":
+    elif justification == "center":
         start_x = 2500
-    elif halign == "right":
+    elif justification == "right":
         start_x = 4500
     
     # Set leading
@@ -101,11 +131,11 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
         # If current line is blank, just change y and skip to next
         if not line == "":
             line_width, line_height = font.getsize(line)
-            if halign == "left":
+            if justification == "left":
                 x_pos = start_x
-            elif halign == "center":
+            elif justification == "center":
                 x_pos = start_x-(line_width/2)
-            elif halign == "right":
+            elif justification == "right":
                 x_pos = start_x-line_width
             # Keep track of the longest line width
             max_line_width = max(max_line_width, line_width)
@@ -117,13 +147,13 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     # Now that the text is added to the image, find the crop points
     top = start_y
     bottom = y - leading_offset
-    if halign == "left":
+    if justification == "left":
         left = start_x
         right = start_x + max_line_width
-    elif halign == "center":
+    elif justification == "center":
         left = start_x - max_line_width/2
         right = start_x + max_line_width/2
-    elif halign == "right":
+    elif justification == "right":
         left = start_x - max_line_width
         right = start_x
     layer = layer.crop((left, top, right, bottom))
