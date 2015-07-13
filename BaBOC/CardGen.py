@@ -259,11 +259,11 @@ def TitleText(image, text, color=(0, 0, 0), nudge=0):
         text = text,
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (60,580),
-        max_width = height-180,
+        anchor = (150,height-80),
+        max_width = height-400,
         leading_offset = -20,
-        valign = "center",
-        halign = "left",
+        valign = "bottom",
+        halign = "center",
         rotate = 90
     )
 
@@ -336,6 +336,10 @@ def MakeBlankCard():
 def MakeFormCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+GenreImages[tags[COLOR][0]])
     TypeText(image, "Form")
+    if tags[COLOR][0]=="A":
+        NonGenreOffset=-150
+    else:
+        NonGenreOffset=0
     AddArt(image,
         ResourcePath+GenreIcons[tags[COLOR][0]],
         (78,70)
@@ -346,7 +350,7 @@ def MakeFormCard( tags):
         )
     AddArt(image,
         ResourcePath+SnowflakeIcons[tags[VALUE]],
-        (90,230)
+        (90,230+NonGenreOffset)
         )
 
     GenreText(image,
@@ -354,7 +358,6 @@ def MakeFormCard( tags):
                    ColDictDark[tags[COLOR][0]]
                    )
     TitleText(image, tags[TITLE])
-    ValueText(image, tags[VALUE])
 #    RulesText(image, RulesDict["FEATURE"])
     if len(tags) > FLAVOR:
         FlavorText(image, tags[FLAVOR])
@@ -394,6 +397,10 @@ def MakeFeatureCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+GenreImages[tags[COLOR][0]])
     TypeText(image, "Feature")
 
+    if tags[COLOR][0]=="A":
+        NonGenreOffset=-150
+    else:
+        NonGenreOffset=0
     AddArt(image,
         ResourcePath+GenreIcons[tags[COLOR][0]],
         (78,70)
@@ -404,7 +411,7 @@ def MakeFeatureCard( tags):
         )
     AddArt(image,
         ResourcePath+SnowflakeIcons[tags[VALUE]],
-        (90,230)
+        (90,230+NonGenreOffset)
         )
 
 
@@ -423,6 +430,10 @@ def MakeModifierCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+GenreImages[tags[COLOR][0]])
     TypeText(image, "Modifier")
 
+    if tags[COLOR][0]=="A":
+        NonGenreOffset=-150
+    else:
+        NonGenreOffset=0
     AddArt(image,
         ResourcePath+GenreIcons[tags[COLOR][0]],
         (78,70)
@@ -433,7 +444,7 @@ def MakeModifierCard( tags):
         )
     AddArt(image,
         ResourcePath+SnowflakeIcons[tags[VALUE]],
-        (90,230)
+        (90,230+NonGenreOffset)
         )
 
 
@@ -442,7 +453,6 @@ def MakeModifierCard( tags):
                    ColDictDark[tags[COLOR][0]]
                    )
     TitleText(image, tags[TITLE])
-    ValueText(image, tags[VALUE])
 #    RulesText(image, RulesDict["MODIFIER"])
     if len(tags) > FLAVOR:
         FlavorText(image, tags[FLAVOR])
@@ -452,6 +462,10 @@ def MakeFormModifierCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+GenreImages[tags[COLOR][0]])
     TypeText(image, "Form Modifier",nudge=20)
     
+    if tags[COLOR][0]=="A":
+        NonGenreOffset=-150
+    else:
+        NonGenreOffset=0
     AddArt(image,
         ResourcePath+GenreIcons[tags[COLOR][0]],
         (78,70)
@@ -459,10 +473,10 @@ def MakeFormModifierCard( tags):
     AddArt(image,
         ResourcePath+tags[ARTWORK],
         (240,220)
-        )    
+        )
     AddArt(image,
         ResourcePath+SnowflakeIcons[tags[VALUE]],
-        (90,230)
+        (90,230+NonGenreOffset)
         )
 
     GenreText(image,
@@ -470,7 +484,6 @@ def MakeFormModifierCard( tags):
                    ColDictDark[tags[COLOR][0]],nudge=50
                    )
     TitleText(image, tags[TITLE])
-    ValueText(image, tags[VALUE])
 #    RulesText(image, RulesDict["FORM MODIFIER"])
     if len(tags) > FLAVOR:
         FlavorText(image, tags[FLAVOR])
@@ -485,10 +498,11 @@ def MakeSwitchCard( tags):
         text = tags[1].split("/")[0],
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (width-120,height/2),
+        anchor = (width-130,height/2),
         max_width = height-150,
         leading_offset = -20,
         valign = "center",
+        halign = "center",
         rotate = 270
         )
     PIL_Helper.AddText(
@@ -496,10 +510,11 @@ def MakeSwitchCard( tags):
         text = tags[1].split("/")[1],
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (120,height/2),
+        anchor = (150,height/2),
         max_width = height-150,
         leading_offset = -20,
         valign = "center",
+        halign = "center",
         rotate = 90
         )
     PIL_Helper.AddText(
@@ -530,6 +545,11 @@ def MakeGenreChangeCard( tags):
     image = PIL_Helper.Image.open(ResourcePath+PlotTwistImages[tags[COLOR][0]])
     #DrawLines(image,tags[COLOR])
     TitleText(image, tags[TITLE])
+
+    if tags[COLOR][0]=="A":
+        NonGenreOffset=-150
+    else:
+        NonGenreOffset=0
     AddArt(image,
         ResourcePath+GenreIcons[tags[COLOR][0]],
         (78,70)
@@ -540,7 +560,7 @@ def MakeGenreChangeCard( tags):
         )
     AddArt(image,
         ResourcePath+SnowflakeIcons[tags[VALUE]],
-        (90,230)
+        (90,230+NonGenreOffset)
         )
 
 
