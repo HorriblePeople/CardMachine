@@ -4,6 +4,7 @@ from ConfigParser import SafeConfigParser, NoOptionError
 
 config = None
 resources_cache = None
+DEFAULT_SECTION = "Card Defaults"
 
 pjoin = os.path.join
 
@@ -20,7 +21,8 @@ def LoadConfig(folder, card_set, filename):
         that config can overwrite anything in the first config. This is useful for
         making small tweaks to the config file that apply only to that card set.
 
-    Some config options are meant to have the assets preloaded.
+    @return None: The config file and resources cache will be saved in this module.
+        No other module should be handling these objects.
     '''
     global config, resources_cache
     # Init config object
@@ -64,16 +66,77 @@ def get(option, section="Settings", val_type="str", default=None):
     raise ConfigParseError("Invalid val_type: {}\n".format(val_type)+
                            "The only valid options are: str, int, float, bool")
 
-def find_option_in_config(option, card_type=None, card_name=None):
+def getcolor(option, card_type=None, card_name=None):
+    option = "color_"+option if option else "color"
+    return _get_list_from_config(option, card_type, card_name)
+
+def getanchor(option, card_type=None, card_name=None):
+    option = "anchor_"+option if option else "anchor"
+    anchor = _get_list_from_config(option, card_type, card_name)
+    if not isinstance(anchor, seq):
+        raise AnchorParseError(
+            "Anchor option is not a list or tuple: {}|{}|{}".format(
+                option, card_type, card_name
+                )
+            )
+    return anchor
+
+def getframe(option, card_type=None, card_name=None):
+    # Name of the option for the frame image
+    option = "frame_"+option if option else "frame"
+    return _find_and_load_image(option, card_type, card_name,
+                                get("frames directory", DEFAULT_SECTION))
+
+def getback(option, card_type=None, card_name=None):
+    # Name of the option for the back image
+    option = "back_"+option if option else "back"
+    return _find_and_load_image(option, card_type, card_name,
+                                get("frames directory", DEFAULT_SECTION))
+
+def getsymbol(option, card_type=None, card_name=None):
+    # Name of the option for the symbol image
+    option = "symbol_"+option if option else "symbol"
+    return _find_and_load_image(option, card_type, card_name,
+                                get("symbols directory", DEFAULT_SECTION))
+
+def getfont(option, card_type=None, card_name=None):
+    '''
+    Checks for a font object in the resources_cache dict. If it's not there,
+    checks the config file and attempts to load the font into the
+    resources_cache directory. 
+    '''
+    # Name of the option for the font object and filename
+    font_option = "font_"+option
+    fontfile_option = "fontfile_"+option
+    # Check resources_cache for font object
+    font = _get_resource(font_option, card_type, card_name)
+    if font is None:
+        # If not in resources_cache, check if the fontfile_ option exists in the
+        # config.
+        section = _find_option_in_config(fontfile_option,
+                                        card_type, card_name)
+        # If not, throw an error.
+        if section is None:
+            raise FontParseError("Font not found: {}|{}|{}".format(
+                option, card_type, card_name
+                ))
+        # Attempt to load a new font object from the config
+        font = _load_font(section, option,
+                          get("fonts directory", DEFAULT_SECTION))
+        # Add that new font object to the resources_cache object.
+        _add_to_resources(section, font_option, font)
+    return font
+
+def _find_option_in_config(option, card_type=None, card_name=None):
     if config.has_section(card_name) and config.has_option(card_name, option):
         return card_name
     if config.has_section(card_type) and config.has_option(card_type, option):
         return card_type
-    if config.has_section("Card Defaults") and config.has_option("Card Defaults", option):
-        return "Card Defaults"
+    if config.has_section(DEFAULT_SECTION) and config.has_option(DEFAULT_SECTION, option):
+        return DEFAULT_SECTION
     return None
 
-def get_resource(option, card_type=None, card_name=None):
+def _get_resource(option, card_type=None, card_name=None):
     '''
     @param str option: The option to pull the value for
     @param str card_type: If not None, will check this section for the given option.
@@ -93,28 +156,13 @@ def get_resource(option, card_type=None, card_name=None):
         section = card_name
     elif card_type in resources_cache and option in resources_cache[card_type]:
         section = card_type
-    elif "Card Defaults" in resources_cache and option in resources_cache["Card Defaults"]:
-        section = "Card Defaults"
+    elif DEFAULT_SECTION in resources_cache and option in resources_cache[DEFAULT_SECTION]:
+        section = DEFAULT_SECTION
     else:
         return None
     return resources_cache[section][option]
 
-def getcolor(option, card_type=None, card_name=None):
-    option = "color_"+option if option else "color"
-    return get_list_from_config(option, card_type, card_name)
-
-def getanchor(option, card_type=None, card_name=None):
-    option = "anchor_"+option if option else "anchor"
-    anchor = get_list_from_config(option, card_type, card_name)
-    if not isinstance(anchor, seq):
-        raise AnchorParseError(
-            "Anchor option is not a list or tuple: {}|{}|{}".format(
-                option, card_type, card_name
-                )
-            )
-    return anchor
-
-def get_list_from_config(option, card_type=None, card_name=None):
+def _get_list_from_config(option, card_type=None, card_name=None):
     '''
     Attempts to retrieve a value from the config file, then convert it to a
     list of integers. If the conversion fails, it just returns the string value.
@@ -126,7 +174,7 @@ def get_list_from_config(option, card_type=None, card_name=None):
 
     @return tuple
     '''
-    section = find_option_in_config(option, card_type, card_name)
+    section = _find_option_in_config(option, card_type, card_name)
     if section is None:
         raise ConfigParseError("Option not found in config: {}|{}|{}".format(
             option, card_type, card_name
@@ -138,34 +186,16 @@ def get_list_from_config(option, card_type=None, card_name=None):
     except ValueError:
         return value_str
 
-def getframe(option, card_type=None, card_name=None):
-    # Name of the option for the frame image
-    option = "frame_"+option if option else "frame"
-    return find_and_load_image(option, card_type, card_name,
-                               get("frames directory", "Card Defaults"))
-
-def getback(option, card_type=None, card_name=None):
-    # Name of the option for the back image
-    option = "back_"+option if option else "back"
-    return find_and_load_image(option, card_type, card_name,
-                               get("frames directory", "Card Defaults"))
-
-def getsymbol(option, card_type=None, card_name=None):
-    # Name of the option for the symbol image
-    option = "symbol_"+option if option else "symbol"
-    return find_and_load_image(option, card_type, card_name,
-                               get("symbols directory", "Card Defaults"))
-
-def find_and_load_image(option, card_type=None, card_name=None,
+def _find_and_load_image(option, card_type=None, card_name=None,
                         resource_directory=None):
     '''
     Checks for an image in the resources_cache dict. If it's not there,
     checks the config file and attempts to load the image into the
     resources_cache directory. 
     '''
-    image = get_resource(option, card_type, card_name)
+    image = _get_resource(option, card_type, card_name)
     if image is None:
-        section = find_option_in_config(option,
+        section = _find_option_in_config(option,
                                         card_type, card_name)
         # If not, throw an error.
         if section is None:
@@ -176,38 +206,10 @@ def find_and_load_image(option, card_type=None, card_name=None,
         image = ph.LoadImage(pjoin(resource_directory,
                                    get(option, section)))
         # Add that new image to the resources_cache object.
-        add_to_resources(section, option, image)
+        _add_to_resources(section, option, image)
     return image
 
-def getfont(option, card_type=None, card_name=None):
-    '''
-    Checks for a font object in the resources_cache dict. If it's not there,
-    checks the config file and attempts to load the font into the
-    resources_cache directory. 
-    '''
-    # Name of the option for the font object and filename
-    font_option = "font_"+option
-    fontfile_option = "fontfile_"+option
-    # Check resources_cache for font object
-    font = get_resource(font_option, card_type, card_name)
-    if font is None:
-        # If not in resources_cache, check if the fontfile_ option exists in the
-        # config.
-        section = find_option_in_config(fontfile_option,
-                                        card_type, card_name)
-        # If not, throw an error.
-        if section is None:
-            raise FontParseError("Font not found: {}|{}|{}".format(
-                option, card_type, card_name
-                ))
-        # Attempt to load a new font object from the config
-        font = loadfont(section, option,
-                        get("fonts directory", "Card Defaults"))
-        # Add that new font object to the resources_cache object.
-        add_to_resources(section, font_option, font)
-    return font
-
-def loadfont(section, fontname, fonts_directory):
+def _load_font(section, fontname, fonts_directory):
     try:
         fontfile = get("fontfile_"+fontname, section)
     except NoOptionError:
@@ -235,7 +237,7 @@ def loadfont(section, fontname, fonts_directory):
     except Exception as e:
         raise FontParseError("Error when loading font: {}".format(e))
 
-def add_to_resources(section, option, value):
+def _add_to_resources(section, option, value):
     # If the section (e.g. Pony) doesn't exist in resources_cache, create it.
     if section not in resources_cache:
         resources_cache[section] = {}
