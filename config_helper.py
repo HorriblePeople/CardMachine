@@ -113,14 +113,15 @@ def getfont(option, card_type=None, card_name=None):
     checks the config file and attempts to load the font into the resources_cache
     directory. 
     '''
-    # Name of the option for the font object
-    option = "font_"+option.lower()
+    # Name of the option for the font object and filename
+    font_option = "font_"+option
+    fontfile_option = "fontfile_"+option
     # Check resources_cache for font object
-    font = get_resource(option, card_type, card_name)
+    font = get_resource(font_option, card_type, card_name)
     if font is None:
         # If not in resources_cache, check if the fontfile_ option exists in the
         # config.
-        section = find_option_in_config("fontfile_"+option.lower(),
+        section = find_option_in_config(fontfile_option,
                                         card_type, card_name)
         # If not, throw an error.
         if section is None:
@@ -128,9 +129,10 @@ def getfont(option, card_type=None, card_name=None):
                 option, card_type, card_name
                 ))
         # Attempt to load a new font object from the config
-        font = loadfont(section, option, get("fonts directory", "Card Defaults"))
+        font = loadfont(section, option,
+                        get("fonts directory", "Card Defaults"))
         # Add that new font object to the resources_cache object.
-        add_to_resources(section, option, font)
+        add_to_resources(section, font_option, font)
     return font
 
 def loadfont(section, fontname, fonts_directory):
