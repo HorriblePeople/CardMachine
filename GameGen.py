@@ -30,7 +30,9 @@ def LoadModule(folder):
 def main(folder, card_set, filename='cards.pon',
          config_filename="config.ini"):
     config_helper.LoadConfig(folder, card_set, config_filename)
-    config_helper.print_config()
+    config_helper.print_resources()
+    print config_helper.getanchor("default", "Pony", "Changeling")
+    config_helper.print_resources()
     return
 
     

@@ -213,8 +213,8 @@ def BuildPage(card_list, grid_width, grid_height, filename,
 def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)
 
-def LoadImage(filepath):
-    if filepath is None:
+def LoadImage(filepath, load_blank_on_fail=True):
+    if not os.path.exists(filepath) and load_blank_on_fail:
         return Image.new('L', (1,1))
     return Image.open(filepath)
 
