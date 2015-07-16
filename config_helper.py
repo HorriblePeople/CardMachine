@@ -1,3 +1,29 @@
+'''
+config_helper.py
+
+This file is meant as a wrapper for the config file and resources cache dictionary
+    to be used with GameGen.py.
+config_helper supports two config files: One main file, and one optional file to be
+    found in the 'card set' folder. Any options in the optional config file will
+    overwrite identical options in the mail file. In this way, card sets can be
+    configured to vary slightly from the main config without having to constantly
+    update the main file.
+
+When first started, GameGen should call LoadConfig to load the config files. Assets
+    like fonts and images are not preloaded into the resources cache. Rather they
+    are processed and loaded as needed.
+From within a CardGen script, the specific function should be called to load
+    a particular type from the resources cache. E.g. To load a font, the getfont()
+    function should be called.
+config_helper supports a hierarchy of default values in both the config file and
+    resources cache. Every function to be called from the CardGen script should
+    include both the card name and the card type. This way, config_helper will
+    check the resources cache or config file in the following order of sections
+    for the given option: Card name -> Card type -> Card Defaults
+If the resource is not found in the cache (for some options), config_helper
+    will attempt to load that resource from the config and add it to the cache.
+'''
+
 import os
 import PIL_Helper as ph
 from ConfigParser import SafeConfigParser, NoOptionError
