@@ -142,7 +142,7 @@ def loadfont(section, fontname, fonts_directory):
         raise FontParseError("No config option {}/fontsize_{}".format(
             section, fontname
             ))
-    fontpath = pjoin(fonts_directory, fontfile)
+    fontpath = os.path.abspath(pjoin(fonts_directory, fontfile))
     # Make sure the fontpath exists
     if not os.path.exists(fontpath):
         raise FontParseError("{} does not exist".format(fontpath))
