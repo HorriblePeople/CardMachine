@@ -163,7 +163,6 @@ def loadfont(section, fontname, fonts_directory):
     except Exception as e:
         raise FontParseError("Error when loading font: {}".format(e))
     
-
 ##def getimage(config, option, card_type=None, card_name=None):
 ##    image = get(config, option, card_type, card_name)
 ##    if image is None:
@@ -171,15 +170,19 @@ def loadfont(section, fontname, fonts_directory):
 ##    return value
 
 def print_config():
+    if len(config.sections()) == 0:
+        print ""
     for section in config.sections():
-        print config.items(section)
+        print "{}: {}".format(section, config.items(section))
 
 def print_resources():
     if resources_cache is None:
         print resources_cache
         return
+    if len(resources_cache) == 0:
+        print ""
     for section in resources_cache:
-        print section, resources_cache[section]
+        print "{}: {}".format(section, resources_cache[section])
 
 class ConfigParseError(Exception):
     pass
