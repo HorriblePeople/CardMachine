@@ -99,9 +99,9 @@ def getcolor(option, card_type=None, card_name=None):
 def getanchor(option, card_type=None, card_name=None):
     option = "anchor_"+option if option else "anchor"
     anchor = _get_list_from_config(option, card_type, card_name)
-    if not isinstance(anchor, seq):
+    if not (isinstance(anchor, (list, tuple)) and len(anchor) == 2):
         raise AnchorParseError(
-            "Anchor option is not a list or tuple: {}|{}|{}".format(
+            "Not a valid anchor: {}|{}|{}".format(
                 option, card_type, card_name
                 )
             )
