@@ -31,6 +31,17 @@ def main(folder, card_set, filename='cards.pon',
          config_filename="config.ini"):
     config_helper.LoadConfig(folder, card_set, config_filename)
     config_helper.print_resources()
+    font = config_helper.getfont("title", "Pony", "Changeling")
+    print font.getname(), font.getmetrics()
+    font = config_helper.getfont("body", "Pony", "Changeling")
+    print font.getname(), font.getmetrics()
+    image = config_helper.getframe("", "Pony", "Changeling")
+    image.show()
+    image = config_helper.getback("", "Pony", "Changeling")
+    image.show()
+    image = config_helper.getsymbol("female", "Pony", "Changeling")
+    image.show()
+    print config_helper.getcolor("default", "Pony", "Changeling")
     print config_helper.getanchor("default", "Pony", "Changeling")
     config_helper.print_resources()
     return
