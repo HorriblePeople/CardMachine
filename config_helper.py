@@ -5,7 +5,7 @@ This file is meant as a wrapper for the config file and resources cache dictiona
     to be used with GameGen.py.
 config_helper supports two config files: One main file, and one optional file to be
     found in the 'card set' folder. Any options in the optional config file will
-    overwrite identical options in the mail file. In this way, card sets can be
+    overwrite identical options in the main file. In this way, card sets can be
     configured to vary slightly from the main config without having to constantly
     update the main file.
 
@@ -31,6 +31,8 @@ from ConfigParser import SafeConfigParser, NoOptionError
 config = None
 resources_cache = None
 DEFAULT_SECTION = "Card Defaults"
+CARD_NAME_PREFIX = "Card."
+CARD_TYPE_PREFIX = "Type."
 
 pjoin = os.path.join
 
@@ -68,12 +70,12 @@ def get(option, section="Settings", val_type="str", default=None):
     @param str section: The config section to pull from
     @param str val_type: The value type to try to cast the config option to.
         Accepted options: str (default), int, float, bool
+    @param any default: If the given option isn't found, default is returned.
 
-    Convenience function for allowing 
-    Attempts to return the value for the given option, first from a section
-        matching card_name, then from a section matching card_type, then
-        from the Defaults section. If none of the sections (if they exist)
-        have that option, then None is returned.
+    Attempts to load the given option from the given section, casting it 
+        to the given value type.
+    If default is returned, it is not cast using the val_type, but will be
+        returned exactly as it was passed in.
 
     @return str or None: None, or the value from the config
     '''
@@ -106,6 +108,17 @@ def getanchor(option, card_type=None, card_name=None):
                 )
             )
     return anchor
+
+def getart(filename, folder=None):
+    '''
+    The art is not loaded into the cache because it's expected that the art is
+    unique for each card. This means that 99% of the time, the art will not
+    need to be cached, and when building a deck of 160+ cards, you don't
+    want to cache 160+ card art images for no reason.
+    '''
+    if folder is None:
+        folder = get("card art directory", DEFAULT_SECTION)
+    return ph.LoadImage(pjoin(folder, filename))
 
 def getframe(option, card_type=None, card_name=None):
     # Name of the option for the frame image
@@ -154,6 +167,8 @@ def getfont(option, card_type=None, card_name=None):
     return font
 
 def _find_option_in_config(option, card_type=None, card_name=None):
+    card_name = CARD_NAME_PREFIX+card_name
+    card_type = CARD_TYPE_PREFIX+card_type
     if config.has_section(card_name) and config.has_option(card_name, option):
         return card_name
     if config.has_section(card_type) and config.has_option(card_type, option):
@@ -178,6 +193,8 @@ def _get_resource(option, card_type=None, card_name=None):
 
     @return str or None: None, or the value from the config
     '''
+    card_name = CARD_NAME_PREFIX+card_name
+    card_type = CARD_TYPE_PREFIX+card_type
     if card_name in resources_cache and option in resources_cache[card_name]:
         section = card_name
     elif card_type in resources_cache and option in resources_cache[card_type]:
@@ -213,7 +230,7 @@ def _get_list_from_config(option, card_type=None, card_name=None):
         return value_str
 
 def _find_and_load_image(option, card_type=None, card_name=None,
-                        resource_directory=None):
+                         resource_directory=None):
     '''
     Checks for an image in the resources_cache dict. If it's not there,
     checks the config file and attempts to load the image into the
@@ -222,7 +239,7 @@ def _find_and_load_image(option, card_type=None, card_name=None,
     image = _get_resource(option, card_type, card_name)
     if image is None:
         section = _find_option_in_config(option,
-                                        card_type, card_name)
+                                         card_type, card_name)
         # If not, throw an error.
         if section is None:
             raise FrameParseError("Image not found: {}|{}|{}".format(
