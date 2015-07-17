@@ -4,9 +4,9 @@ Master Game Gen
 '''
 import os, glob, importlib
 import PIL_Helper
-import OS_Helper
+import argparse
+from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
 import config_helper
-import sys
 from sys import exit
 
 #TSSSF Migration TODO:
@@ -100,4 +100,17 @@ def main(folder, card_set, filename='cards.pon',
     print "Done!"
 
 if __name__ == '__main__':
-    main('TSSSF', 'Test')
+    default_folder = 'TSSSF'
+    default_file = 'Test/cards.pon'
+    parser = argparse.ArgumentParser(prog="GameGen")
+
+    parser.add_argument('-f', '--set-file', \
+                        help="Location of set file to be parsed",
+                        default=default_file)
+    parser.add_argument('-b', '--basedir',
+                        help="Workspace base directory with resources output directory",
+                        default=default_folder)
+
+    args = parser.parse_args()
+
+    main(args.basedir, args.set_file)
