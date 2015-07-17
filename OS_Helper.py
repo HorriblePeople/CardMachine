@@ -9,12 +9,13 @@ def Delete(filename):
     for f in filelist:
         os.remove(f)
 
-def CleanDirectory(path=".", rmstring="*.*"):
-    if not os.path.exists(path):
-        os.mkdir(path)
+def CleanDirectory(path=".", mkdir="workspace", rmstring="*.*"):
+    dir_path = os.path.join(path, mkdir)
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
     else:
-        Delete(os.path.join(path, rmstring))
-    return path
+        Delete(os.path.join(dir_path, rmstring))
+    return dir_path
 
 def BuildPage(card_list, page_num, page_width, page_height,
               workspace_path):
