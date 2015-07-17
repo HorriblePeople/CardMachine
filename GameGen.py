@@ -2,10 +2,11 @@
 Master Game Gen
 1.0b
 '''
-import os, glob
+import os, glob, importlib
 import PIL_Helper
 import argparse
 from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
+import config_helper
 from sys import exit
 
 #TSSSF Migration TODO:
@@ -13,51 +14,59 @@ from sys import exit
 #individual artist naming
 #.pon files have symbols like {ALICORN} and so on.
 
-def main(folder=".", filepath="deck.cards"):
-
-    CardFile = open(os.path.join(folder, filepath))
-    card_set = os.path.dirname(filepath)
-
-    # Read first line of file to determine module
-    first_line = CardFile.readline()
+pjoin = os.path.join
+        
+def LoadModule(folder):
+    """
+    Loads the __init__.py file from the given folder as a new module. 
+    """
+    print "Loading module {}...".format(folder)
     try:
-        module = __import__(first_line.strip())
+        return importlib.import_module(folder)
     except ValueError:
-        print "Failed to load module: " + str(ValueError)
-        return
-    module.CardSet = card_set
+        print "Failed to load module: {}".format(folder)
+        raise
 
-    # Create workspace for card images
-    workspace_path = CleanDirectory(path=folder, mkdir="workspace", rmstring="*.*")
+def main(folder, card_set, filename='cards.pon',
+         config_filename="config.ini"):
+    config_helper.LoadConfig(folder, card_set, config_filename)
+    config_helper.print_resources()
+    font = config_helper.getfont("title", "Pony", "Changeling")
+    print font.getname(), font.getmetrics()
+    font = config_helper.getfont("body", "Pony", "Changeling")
+    print font.getname(), font.getmetrics()
+    image = config_helper.getframe("", "Pony", "Changeling")
+    image.show()
+    image = config_helper.getback("", "Pony", "Changeling")
+    image.show()
+    image = config_helper.getsymbol("female", "Pony", "Changeling")
+    image.show()
+    print config_helper.getcolor("default", "Pony", "Changeling")
+    print config_helper.getanchor("default", "Pony", "Changeling")
+    config_helper.print_resources()
+    return
 
-    # Create image directories
-    bleed_path = CleanDirectory(path=folder+"/"+card_set, mkdir="bleed-images",rmstring="*.*")
-    module.BleedsPath = bleed_path
-    cropped_path = CleanDirectory(path=folder+"/"+card_set, mkdir="cropped-images",rmstring="*.*")
-    module.CropPath = cropped_path
-    vassal_path = CleanDirectory(path=folder+"/"+card_set, mkdir="vassal-images",rmstring="*.*")
-    module.VassalPath = vassal_path
+    
+    LoadPaths(config, folder, card_set)
+    module = LoadModule(folder)
+    module.config = config
 
-    # Create output directory
-    output_folder = CleanDirectory(path=folder, mkdir=card_set,rmstring="*.pdf")
+    print "Creating {} from file {}".format(folder, filename)
+
+    CardFile = open(os.path.join(folder, card_set, filename))
 
     # Load Card File and strip out comments
     cardlines = [line for line in CardFile if not line[0] in ('#', ';', '/')]
     CardFile.close()
 
-##    # Make a list of lists of cards, each one page in scale
-##    cardpages = []
-##    cardlines += ["BLANK" for i in range(1, module.TOTAL_CARDS)]
-##    cardlines.reverse()
-##    while len(cardlines) > module.TOTAL_CARDS:
-##        cardpages.append([cardlines.pop() for i in range(0,module.TOTAL_CARDS)])
-
     # Make pages
     card_list = []
     back_list = []
+    item_num = 0
     page_num = 0
     for line in cardlines:
-        card_list.append(module.BuildCard(line))
+        item_num += 1
+        card_list.append(module.BuildCard(line, filename="{:>03}.png".format(item_num)))
         back_list.append(module.BuildBack(line))
         # If the card_list is big enough to make a page
         # do that now, and set the card list to empty again
@@ -78,45 +87,30 @@ def main(folder=".", filepath="deck.cards"):
             back_list.append(module.BuildCard("BLANK"))
         page_num += 1
         print "Building Page {}...".format(page_num)
-        BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
-        BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+        OS_Helper.BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+        OS_Helper.BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
 
     #Build Vassal
     module.CompileVassalModule()
 
     print "\nCreating PDF..."
-    os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_path, card_set))
     print "\nCreating PDF of backs..."
-    os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_path, card_set))
     print "Done!"
 
 if __name__ == '__main__':
+    default_folder = 'TSSSF'
+    default_file = 'Test/cards.pon'
     parser = argparse.ArgumentParser(prog="GameGen")
 
     parser.add_argument('-f', '--set-file', \
                         help="Location of set file to be parsed",
-                        default="cards.pon")
+                        default=default_file)
     parser.add_argument('-b', '--basedir',
                         help="Workspace base directory with resources output directory",
-                        default="TSSSF")
+                        default=default_folder)
 
     args = parser.parse_args()
 
     main(args.basedir, args.set_file)
-    #main('TSSSF', '1.1.0 Patch/cards.pon')
-    #main('TSSSF', '2014 Con Exclusives/cards.pon')
-    #main('TSSSF', 'BABScon 2015/cards.pon')
-    #main('TSSSF', 'Core 1.0.5/cards.pon')
-    #main('TSSSF', 'Core 1.0.5 Delta/cards.pon')
-    #main('TSSSF', 'Core 1.1.0/cards.pon')
-    #main('TSSSF', 'Core 1.1.0 Test/cards.pon')
-    #main('TSSSF', 'Custom Card for/cards.pon')
-    #main('TSSSF', 'Extra Credit 0.10.4/cards.pon')
-    #main('TSSSF', 'Indiegogo/cards.pon')
-    #main('TSSSF', 'Patreon Expansion 1/cards.pon')
-    #main('TSSSF', 'Ponycon Panel 2015/cards.pon')
-    #main('TSSSF', 'Ponyville University 0.0.2/cards.pon')
-    #main('TSSSF', 'Ponyville University 1.0.1/cards.pon')
-    #main('TSSSF', 'Ponyville University 1.0.2/cards.pon')
-    #main('TSSSF', 'Thank You/cards.pon')
-    #main('BaBOC', 'BaBOC 0.1.0/deck.cards')

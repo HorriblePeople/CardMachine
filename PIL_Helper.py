@@ -1,4 +1,4 @@
-from PIL import Image, ImageFont, ImageDraw, ImageOps
+from PIL import Image, ImageFont, ImageDraw, ImageOps, ImageCms
 import os, glob
 from math import ceil
 
@@ -94,19 +94,22 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     # Set leading
     leading = font.font.ascent + font.font.descent + leading_offset
 
+    sw = font.getsize("   ")[0]
+
     # Begin laying down the lines, top to bottom
     y = start_y
     max_line_width = 0
     for line in lines:
         # If current line is blank, just change y and skip to next
         if not line == "":
+            line = "   " + line + "   "  # dirty fix
             line_width, line_height = font.getsize(line)
             if halign == "left":
-                x_pos = start_x
+                x_pos = start_x-sw
             elif halign == "center":
                 x_pos = start_x-(line_width/2)
             elif halign == "right":
-                x_pos = start_x-line_width
+                x_pos = start_x-line_width+sw
             # Keep track of the longest line width
             max_line_width = max(max_line_width, line_width)
             draw.text((x_pos, y), line, font=font, fill=255)
@@ -115,8 +118,9 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     total_text_size = (max_line_width, len(lines)*leading)
 
     # Now that the text is added to the image, find the crop points
-    top = start_y
-    bottom = y - leading_offset
+    padding = 5
+    top = start_y - padding
+    bottom = y - leading_offset + padding
     if halign == "left":
         left = start_x
         right = start_x + max_line_width
@@ -126,6 +130,8 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     elif halign == "right":
         left = start_x - max_line_width
         right = start_x
+    left -= padding
+    right += padding
     layer = layer.crop((left, top, right, bottom))
     # Now that the image is cropped down to just the text, rotate
     if rotate != 0:
@@ -158,7 +164,8 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     return total_text_size
 
 def BuildPage(card_list, grid_width, grid_height, filename,
-              cut_line_width=3, page_ratio=8.5/11.0, h_margin=100):
+              cut_line_width=3, page_ratio=8.5/11.0, h_margin=100,
+              make_bg=False):
     '''
     Adds cards, in order, to a grid defined by grid_width, grid_height.
     It then adds a border to the grid, making sure to preserve the
@@ -167,7 +174,10 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     '''
     # Create card grid based on size of the first card
     w,h = card_list[0].size
-    bg = Image.new("RGB", (w*grid_width, h*grid_height))
+    bg = Image.new("RGB", (w * grid_width + cut_line_width * (grid_width - 1),
+                           h * grid_height + cut_line_width * (grid_height - 1)
+                           )
+                  )
     # Add cards to the grid, top down, left to right
     for y in xrange(grid_height):
         for x in xrange(grid_width):
@@ -185,6 +195,9 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     #     page.save(filename)
     # else:
         # bg.save(filename)
+    if not make_bg:
+        bg.save(filename)
+        return
     # Create a paper image the exact size of an 8.5x11 paper
     # to paste the card images onto
     paper_width = int(8.5*300)  # 8.5 inches times 300 dpi
@@ -194,11 +207,13 @@ def BuildPage(card_list, grid_width, grid_height, filename,
     # TODO Add code that shrinks the bg if it's bigger than any dimension
     # of the Paper image
     paper_image.paste(bg, ((paper_width - w)/2, (paper_height - h)/2))
-    paper_image.save(filename, dpi=(300, 300))
+    print filename
+    paper_image.save(filename)
 
 def BlankImage(w, h, color=(255,255,255), image_type="RGBA"):
     return Image.new(image_type, (w, h), color=color)
 
+<<<<<<< HEAD
 def LoadImage(filepath, fallback="blank.png"):
     try:
         return Image.open(filepath)
@@ -207,13 +222,35 @@ def LoadImage(filepath, fallback="blank.png"):
             return Image.open(os.path.join(os.path.split(filepath)[0], fallback))
         else:
             raise
+=======
+def LoadImage(filepath, load_blank_on_fail=True):
+    if not os.path.exists(filepath) and load_blank_on_fail:
+        return Image.new('L', (1,1))
+    return Image.open(filepath)
+>>>>>>> origin/Restructuring
 
 def ResizeImage(image, size, method=Image.ANTIALIAS):
+    # If size is an integer/float, assume it's meant as a percentage scale
+    # Create a new size tuple to match
+    if isinstance(size, (float, int)):
+        # If no scaling necessary, return same image
+        if size == 1:
+            return image
+        w, h = image.size
+        size = (int(round(size*w)), int(round(size*h)))
     return image.resize(size, method)
 
 def DrawRect(image, x, y, width, height, color):
     draw = ImageDraw.Draw(image)
     draw.rectangle((x, y, width, height), fill=color)
+
+def ConvertToCmyk(image):
+    #in_profile = ImageCms.createProfile("profiles/sRGB Color Space Profile.ICM")
+    in_profile = "profiles/sRGB Color Space Profile.ICM"
+    #out_profile = ImageCms.createProfile("profiles/CMY.icm")
+    out_profile = "profiles/CMY.icm"
+    transform = ImageCms.buildTransform(in_profile, out_profile, "RGBA", "CMYK")
+    ImageCms.applyTransform(image, transform, inPlace=True)
 
 if __name__ == "__main__":
     image = Image.open("y.png")
