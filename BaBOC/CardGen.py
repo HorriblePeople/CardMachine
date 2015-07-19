@@ -8,6 +8,9 @@ DIRECTORY = "BaBOC"
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
+#BLEED_SCALING = 0.97  # Percentage, 1 = no scaling
+USE_BLEEDS_FOR_PDF = False
+ABORT_ON_ERROR = True
 
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
@@ -16,11 +19,16 @@ card_set = os.path.dirname("deck.cards")
 CardPath = "BaBOC/cards/"
 CardArtPath = "BaBOC/cardart/"
 ResourcePath = "BaBOC/resources/"
+BleedsPath = "BaBOC/bleed-images/"
+CropPath = "BaBOC/cropped-images/"
+CardCount=0
 VassalTemplatesPath = DIRECTORY+"/vassal templates"
 VassalWorkspacePath = DIRECTORY+"/vassal workspace"
 VassalImagesPath = os.path.join(VassalWorkspacePath, "images")
 VassalCard = [0]
 
+
+croprect=(50,63,788+50,1088+63)
 width = 788
 height = 1088
 width_center = width/2
@@ -140,8 +148,8 @@ SnowflakeIcons={
 }
 
 BacksImages={
-    "FANDOM": "bleed_backA2.png",
-    "FORM": "bleed_backA1.png",
+    "FANDOM": "Back_Fandom.png",
+    "FORM": "Back_Form.png",
     "FEATURE": "bleed_back.png",
     "MODIFIER": "bleed_back.png",
     "FORM MODIFIER": "bleed_back.png",
@@ -165,11 +173,45 @@ def BuildCard(linein,filename=None):
     try:
         im = PickCardFunc(tags[TYPE], tags)
         MakeVassalCard(im)
+        filename=FixFileName("Card_"+tags[0])
+        #im_bleed = PIL_Helper.ResizeImage(im, BLEED_SCALING)
+        SaveCard(os.path.join(BleedsPath, filename), im)
+        im_crop = im.crop(croprect)
+        SaveCard(os.path.join(CropPath, filename), im_crop)
     except Exception as e:
         im = MakeBlankCard()
         print "Warning, Bad Card: {0}".format(tags)
         traceback.print_exc()
     return im
+
+def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
+    '''
+    If the filepath already exists, insert _001 just before the
+    extension. If that exists, increment the number until we get to
+    a filepath that doesn't exist yet.
+    '''
+    if os.path.exists(filepath):
+        basepath, extension = os.path.splitext(filepath)
+        i = 0
+        while os.path.exists(filepath):
+            i += 1
+            filepath = "{}_{:>03}{}".format(basepath, i, extension)
+    w,h = image.size
+    new_w = int(scale*w)
+    new_h = int(scale*h)
+    image = PIL_Helper.ResizeImage(image, (new_w, new_h))
+    if convert_to_cmyk:
+        PIL_Helper.ConvertToCmyk(image)
+    image.save(filepath, dpi=(300,300))
+
+def FixFileName(tagin):
+    FileName = tagin.replace("\n", "")
+    invalid_chars = [",", "?", '"', ":"]
+    for c in invalid_chars:
+        FileName = FileName.replace(c,"")
+    FileName = u"{0}.png".format(FileName)
+    #print FileName
+    return FileName
 
 def BuildBack(linein):
     #image = PIL_Helper.LoadImage(ResourcePath + "bleed_back.png")
