@@ -28,7 +28,7 @@ VassalImagesPath = os.path.join(VassalWorkspacePath, "images")
 VassalCard = [0]
 
 
-croprect=(50,63,788+50,1088+63)
+croprect=(50,50,775,1050)
 width = 788
 height = 1088
 width_center = width/2
@@ -182,7 +182,7 @@ def BuildCard(linein,filename=None):
         im = MakeBlankCard()
         print "Warning, Bad Card: {0}".format(tags)
         traceback.print_exc()
-    return im
+    return im_crop
 
 def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
     '''

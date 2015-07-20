@@ -105,6 +105,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Linux
+# =========================
+.directory
+
 # Data files
 # =========================
 
