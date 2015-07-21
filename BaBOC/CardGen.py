@@ -29,8 +29,10 @@ VassalCard = [0]
 
 
 croprect=(50,50,775,1050)
-width = 788
-height = 1088
+#width = 788
+#height = 1088
+width = 862
+height = 1178
 width_center = width/2
 height_center = height/2
 w_marg = 31
@@ -45,7 +47,7 @@ titlefont = ResourcePath+"Eligible-Regular.ttf"
 titleboldfont = ResourcePath+"Eligible-Bold.ttf"
 symbolfont = ResourcePath+"Eligible-Regular.ttf"
 TitleFont = PIL_Helper.BuildFont(titleboldfont, 55)
-TitleFontSnug = PIL_Helper.BuildFont(titleboldfont, 50)
+TitleFontSnug = PIL_Helper.BuildFont(titleboldfont, 45)
 SymbolFont = PIL_Helper.BuildFont(symbolfont, 150)
 BigSymbolFont = PIL_Helper.BuildFont(symbolfont, 200)
 BigFont = PIL_Helper.BuildFont(symbolfont, 200)
@@ -173,7 +175,7 @@ def BuildCard(linein,filename=None):
     try:
         im = PickCardFunc(tags[TYPE], tags)
         MakeVassalCard(im)
-        filename=FixFileName("Card_"+tags[0])
+        filename=FixFileName("Card")
         #im_bleed = PIL_Helper.ResizeImage(im, BLEED_SCALING)
         SaveCard(os.path.join(BleedsPath, filename), im)
         im_crop = im.crop(croprect)
@@ -197,9 +199,10 @@ def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
             i += 1
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
     w,h = image.size
-    new_w = int(scale*w)
-    new_h = int(scale*h)
-    image = PIL_Helper.ResizeImage(image, (new_w, new_h))
+    #new_w = int(scale*w)
+    #new_h = int(scale*h)
+    #image = PIL_Helper.ResizeImage(image, (w, h))
+    image=image.crop((0,0,width,height))
     if convert_to_cmyk:
         PIL_Helper.ConvertToCmyk(image)
     image.save(filepath, dpi=(300,300))
@@ -279,7 +282,7 @@ def TypeText(image, text, nudge=0):
         text = text,
         font = BiggishFont,
         fill = (0,0,0),
-        anchor = (width_center+100, 140+nudge),
+        anchor = (width_center+60, 140+nudge),
         max_width = width/2,
         leading_offset = -60,
         valign = "center",
@@ -303,7 +306,7 @@ def GenreText(image, text, color, nudge=0):
         text = text,
         font = GenreFont,
         fill = color,
-        anchor = (width_center+100, 180+nudge),
+        anchor = (width_center+60, 180+nudge),
         valign = "top",
         halign = "center",
         )
@@ -315,7 +318,7 @@ def TitleText(image, text, color=(0, 0, 0), nudge=0):
         text = text,
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (150,height-80),
+        anchor = (150,height-180),
         max_width = height-400,
         leading_offset = -37,
         valign = "bottom",
@@ -348,7 +351,7 @@ def RulesText(image, text):
         image = image,
         text = text,
         font = RulesFont,
-        anchor = (width/2+100, height*4/5),
+        anchor = (width/2+100, height*4/5-100),
         max_width = width*0.6,
         leading_offset = -20
         )
@@ -420,7 +423,7 @@ def MakeFandomCard( tags):
         text = tags[1].split("/")[0],
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (width/2,height*1/5),
+        anchor = (width/2-25,height*1/5),
         max_width = width*4/5,
         leading_offset = -20,
         valign = "center",
@@ -431,7 +434,7 @@ def MakeFandomCard( tags):
         text = tags[1].split("/")[1],
         font = TitleFont,
         fill = (255,255,255),
-        anchor = (width/2,height*4/5),
+        anchor = (width/2-25,height*4/5),
         max_width = width*4/5,
         leading_offset = -20,
         valign = "center",
@@ -551,8 +554,8 @@ def MakeSwitchCard( tags):
         text = tags[1].split("/")[0],
         font = TitleFontSnug,
         fill = (255,255,255),
-        anchor = (width-120,80),
-        max_width = height-300,
+        anchor = (width-195,80),
+        max_width = height-400,
         leading_offset = -30,
         valign = "top",
         halign = "center",
@@ -564,8 +567,8 @@ def MakeSwitchCard( tags):
         text = tags[1].split("/")[1],
         font = TitleFontSnug,
         fill = (255,255,255),
-        anchor = (150,height-80),
-        max_width = height-300,
+        anchor = (147,height-180),
+        max_width = height-400,
         leading_offset = -30,
         valign = "bottom",
         halign = "center",
@@ -577,7 +580,7 @@ def MakeSwitchCard( tags):
         text = RulesDict["SWITCH"],
         font = RulesFont,
         fill = (0,0,0),
-        anchor = (width/2+10,height*5/6),
+        anchor = (width/2-25,height*4/5),
         max_width = width*0.4,
         leading_offset = -20,
         valign = "center",
@@ -605,7 +608,7 @@ def MakeGenreChangeCard( tags):
         text = tags[TITLE],
         font = TitleFontSnug,
         fill = (255,255,255),
-        anchor = (145,height-80),
+        anchor = (150,height-180),
         max_width = height-380,
         leading_offset = -30,
         valign = "bottom",
@@ -634,7 +637,7 @@ def MakeGenreChangeCard( tags):
         text = RulesDict["GENRE CHANGE"],
         font = RulesFont,
         fill = (255,255,255),
-        anchor = (width/2+100,height*5/6),
+        anchor = (width/2+50,height*4/5-20),
         max_width = width*0.4,
         leading_offset = -20,
         valign = "center",
