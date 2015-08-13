@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.basedir, args.set_file)
+    #main(args.basedir, args.set_file)
     #main('TSSSF', '1.1.0 Patch/cards.pon')
     #main('TSSSF', '2014 Con Exclusives/cards.pon')
     #main('TSSSF', 'BABScon 2015/cards.pon')
@@ -120,4 +120,4 @@ if __name__ == '__main__':
     #main('TSSSF', 'Ponyville University 1.0.1/cards.pon')
     #main('TSSSF', 'Ponyville University 1.0.2/cards.pon')
     #main('TSSSF', 'Thank You/cards.pon')
-    #main('BaBOC', 'BaBOC 0.1.0/deck.cards')
+    main('BaBOC', 'BaBOC 0.0.10/deck.cards')
