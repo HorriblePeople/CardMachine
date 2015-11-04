@@ -1,4 +1,34 @@
-(README is currently under construction)
+CardMachine
+by Horrible People Productions
+version: OH GOD EVERYTHING IS TERRIBLE
+
+!!WARNING!!
+This script is NOT user-friendly by any stretch of the imagination! This is a slapped-together conglomeration of last-minute decisions and hasty shortcuts we've taken while maintaining our ability to make decks of cards. Unless you are a Python expert, we do NOT recommend using this tool for casually creating cards. There are much better options out there.
+
+INSTALLATION:
+This tool relies on files being set up in a proper hierarchy:
+
+Base Folder > Card Set > card set files
+
+The Base Folder represents a particular game. E.g. TSSSF, BaBOC, Dominion, Fluxx, Poker
+The Card Set is a variant of the base game, possibly an expansion, or just a collection of different versions. E.g. Core 1.0.3, Ponyville University 1.5.6.
+The base folder and card set can be named anything.
+
+Within the base folder is where you should put your "Card Art" and "resources" directories, or any other directories that contain necessary assets.
+
+To get started, create the Base Folder in the CardMachine directory. In the Base Folder, make the Card Set directory. And in the Card Set directory, put your cards.pon file. (You can see an example cards.pon file in this repository)
+
+GETTING STARTED:
+Once your files are in place, you can either:
+
+1) Edit GameGen.py so that it calls main() with the proper arguments (see the main() docstring for more info)
+2) Call the proper arguments using the command line. E.g. python GameGen.py -b TSSSF -f "Core 1.0.3/cards.pon"
+
+The script will open the filepath to cards.pon (or whatever you name it), and will call the CardGen code once for each card. It will attempt to bundle the cards created into 3x3 card images and, at the very end, compile all the images into PDFs of both the fronts and backs.
+
+
+
+
 
 This script assumes that the TSSSFCabin-Medium font is used, with special changes as described below:
 

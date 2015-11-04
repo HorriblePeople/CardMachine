@@ -13,7 +13,13 @@ from sys import exit
 #individual artist naming
 #.pon files have symbols like {ALICORN} and so on.
 
-def main(folder=".", filepath="deck.cards"):
+def main(folder="TSSSF", filepath="Core 1.0.3/deck.cards"):
+    '''
+    @param folder: The base game folder where we'll be working.
+        E.g. TSSSF, BaBOC
+    @param filepath: The filepath (relative to the base folder) where the
+        file that defines the different cards in the game are stored.
+    '''
 
     print "Creating {} from file {}".format(folder, filepath)
 
@@ -95,6 +101,13 @@ def main(folder=".", filepath="deck.cards"):
     print "Done!"
 
 if __name__ == '__main__':
+    # To run this script, you have two options:
+    # 1) Run it from the command line with arguments. E.g.:
+    #       python GameGen -b TSSSF -f "Core 1.0.3/cards.pon"
+    # 2) Comment out "main(args.basedir, args.set_file)" in this file
+    #       and add a new line with the proper folder and card set
+    #       in the arguments.
+    # See the main() docstring for more info on the use of the arguments
     parser = argparse.ArgumentParser(prog="GameGen")
 
     parser.add_argument('-f', '--set-file', \
