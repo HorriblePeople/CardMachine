@@ -2,7 +2,7 @@
 Master Game Gen
 1.0b
 '''
-import os, glob
+import os, glob, sys
 import PIL_Helper
 import argparse
 from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
@@ -13,23 +13,17 @@ from sys import exit
 #individual artist naming
 #.pon files have symbols like {ALICORN} and so on.
 
-def main(folder="TSSSF", filepath="Core 1.0.3/deck.cards"):
-    '''
-    @param folder: The base game folder where we'll be working.
-        E.g. TSSSF, BaBOC
-    @param filepath: The filepath (relative to the base folder) where the
-        file that defines the different cards in the game are stored.
-    '''
-
-    print "Creating {} from file {}".format(folder, filepath)
+def main(folder, filepath="deck.cards"):
 
     CardFile = open(os.path.join(folder, filepath))
-    card_set = os.path.dirname(filepath)
+    folder, card_set = folder.split("/")
 
     # Read first line of file to determine module
-    first_line = CardFile.readline()
+    modulename = CardFile.readline().strip()
+    sys.path.append(modulename)
     try:
-        module = __import__(first_line.strip())
+        import_name = folder+"_CardGen"
+        module = __import__(import_name)
     except ValueError:
         print "Failed to load module: " + str(ValueError)
         return
@@ -63,11 +57,9 @@ def main(folder="TSSSF", filepath="Core 1.0.3/deck.cards"):
     # Make pages
     card_list = []
     back_list = []
-    item_num = 0
     page_num = 0
     for line in cardlines:
-        item_num += 1
-        card_list.append(module.BuildCard(line, filename="{:>03}.png".format(item_num)))
+        card_list.append(module.BuildCard(line))
         back_list.append(module.BuildBack(line))
         # If the card_list is big enough to make a page
         # do that now, and set the card list to empty again
@@ -104,36 +96,16 @@ if __name__ == '__main__':
     # To run this script, you have two options:
     # 1) Run it from the command line with arguments. E.g.:
     #       python GameGen -b TSSSF -f "Core 1.0.3/cards.pon"
-    # 2) Comment out "main(args.basedir, args.set_file)" in this file
-    #       and add a new line with the proper folder and card set
-    #       in the arguments.
+    # 2) Edit run_gamegen.py as appropriate
     # See the main() docstring for more info on the use of the arguments
+	default_dir, default_file = "TSSSF/Core 1.0.5", "cards.pon"
+    
     parser = argparse.ArgumentParser(prog="GameGen")
-
     parser.add_argument('-f', '--set-file', \
                         help="Location of set file to be parsed",
-                        default="cards.pon")
+                        default=default_file)
     parser.add_argument('-b', '--basedir',
                         help="Workspace base directory with resources output directory",
-                        default="TSSSF")
-
+                        default=default_dir)
     args = parser.parse_args()
-
     main(args.basedir, args.set_file)
-    #main('TSSSF', '1.1.0 Patch/cards.pon')
-    #main('TSSSF', '2014 Con Exclusives/cards.pon')
-    #main('TSSSF', 'BABScon 2015/cards.pon')
-    #main('TSSSF', 'Core 1.0.5/cards.pon')
-    #main('TSSSF', 'Core 1.0.5 Delta/cards.pon')
-    #main('TSSSF', 'Core 1.1.0/cards.pon')
-    #main('TSSSF', 'Core 1.1.0 Test/cards.pon')
-    #main('TSSSF', 'Custom Card for/cards.pon')
-    #main('TSSSF', 'Extra Credit 0.10.4/cards.pon')
-    #main('TSSSF', 'Indiegogo/cards.pon')
-    #main('TSSSF', 'Patreon Expansion 1/cards.pon')
-    #main('TSSSF', 'Ponycon Panel 2015/cards.pon')
-    #main('TSSSF', 'Ponyville University 0.0.2/cards.pon')
-    #main('TSSSF', 'Ponyville University 1.0.1/cards.pon')
-    #main('TSSSF', 'Ponyville University 1.0.2/cards.pon')
-    #main('TSSSF', 'Thank You/cards.pon')
-    #main('BaBOC', 'BaBOC 0.1.0/deck.cards')

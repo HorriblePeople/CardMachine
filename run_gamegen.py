@@ -1,0 +1,15 @@
+import GameGen
+
+#GameGen.main("TSSSF/2015 Con Exclusives", "cards.pon")
+#GameGen.main("TSSSF/2015 Workshop Cards", "cards.pon")
+#GameGen.main("TSSSF/Core 1.1.5", "cards.pon")
+#GameGen.main("TSSSF/Extra Credit 1.0.1", "cards.pon")
+GameGen.main("TSSSF/Ponyville University 1.0.5", "cards.pon")
+#GameGen.main("TSSSF/Equestria LA Panel 2015", "cards.pon")
+#GameGen.main("TSSSF/Gracious Givers Set 1", "cards.pon")
+#GameGen.main("TSSSF/Gracious Givers Set 2", "cards.pon")
+#GameGen.main("TSSSF/Flufflepuff Pack", "cards.pon")
+#GameGen.main("TSSSF/Panels of Ponies 0.0.1", "cards.pon")
+#GameGen.main("TSSSF/So Long and Thanks", "cards.pon")
+#GameGen.main("BaBOC/BaBOC 0.0.9", "deck.cards")
+#GameGen.main("BaBOC/BaBOC 0.0.10", "deck.cards")
