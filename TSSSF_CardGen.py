@@ -193,6 +193,7 @@ RulesDict={
     "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes a race of your choice. This cannot affect Changelings.",
     "{timeline change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony's timeline changes to {postapocalypse}.",
     "{play from discard}": "You may choose to play the top card of the Pony discard pile with this Ship, rather than play a Pony card from your hand.",
+    "{clone}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as 2 Ponies.",
     }
 
 backs = {"start": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
