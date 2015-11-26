@@ -10,9 +10,7 @@ LegacySymbolMode = False
 PAGE_WIDTH = 3
 PAGE_HEIGHT = 3
 TOTAL_CARDS = PAGE_WIDTH*PAGE_HEIGHT
-BLEED_SCALING = 0.97  # Percentage, 1 = no scaling
-USE_BLEEDS_FOR_PDF = False
-ABORT_ON_ERROR = True
+
 
 workspace_path = os.path.dirname("workspace")
 card_set = os.path.dirname("deck.cards")
@@ -30,7 +28,6 @@ VASSAL_SCALE=(260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
-ART_HEIGHT = 443
 base_w = 889
 base_h = 1215
 base_w_center = base_w/2
@@ -41,9 +38,8 @@ baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
-ART_CROPRECT=(0,0,ART_WIDTH, ART_HEIGHT)
 
-TextHeightThresholds = [350, 360, 600]
+TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
@@ -72,12 +68,12 @@ Anchors = {
     "Title": (-65-50, 160),
     "TitleTwoLine": (-65-50, 159),
     "TitleSmall": (-65-50, 157),
-    "Bar": (-68-50, 660),
+    "Bar": (-68-50, 598+67),
     "Body": (base_w_center, 735),
-    "BodyShiftedUp": (base_w_center, 725),
+    "BodyShiftedUp": (base_w_center, 730),
     "Flavor": (base_w_center, -110),
     "Expansion": (640+50, 525+63),
-    "Copyright": (-38-50, -13-58)
+    "Copyright": (-38-50, -13-61)
 }
 
 ArtMissing = [
@@ -91,16 +87,20 @@ ArtMissing = [
     ]
 
 Frames = {
-    "start": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
-    "warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
-    "rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
-    "rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
-    "rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
-    "derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
-    "testsubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
+    #"START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
+    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start.png"),
+    "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
+    #"Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
+    #"Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
+    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony.png"),
+    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship.png"),
+    "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
+    "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
+    "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
+    #"Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
+    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal.png"),
+    "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
+    "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
 
 Symbols = {
@@ -108,7 +108,6 @@ Symbols = {
     "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
     "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
     "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "earthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
     "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
     "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
     "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
@@ -118,7 +117,7 @@ Symbols = {
     "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
     "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
     "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
-    "eqg":PIL_Helper.LoadImage(ResourcePath+"/symbol-canterlot.png"),
+    "mirror": PIL_Helper.LoadImage(ResourcePath+"/symbol-mirror.png"),
     "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
     "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
     "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
@@ -129,7 +128,7 @@ Symbols = {
     "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
     "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
     }
-TIMELINE_SYMBOL_LIST = ["dystopian","eqg"]
+TIMELINE_SYMBOL_LIST = ["Dystopian", "Mirror"]
 
 Expansions = {
     "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
@@ -151,12 +150,14 @@ Expansions = {
     "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
     "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
     "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
+    "2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-2015.png"),
     "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
     "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
     "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
     "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
     "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png"),
-    "Fluffle": PIL_Helper.LoadImage(ResourcePath+"/symbol-Fluffle.png")
+    "EQLA": PIL_Helper.LoadImage(ResourcePath+"/symbol-eqla.png"),
+    "BronyCon15": PIL_Helper.LoadImage(ResourcePath+"/symbol-brony15.png")
     }
 
 ColorDict={
@@ -196,18 +197,18 @@ RulesDict={
     "{clone}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as 2 Ponies.",
     }
 
-backs = {"start": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
-         "pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
-         "ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
-         "card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "blank": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "rules1": PIL_Helper.LoadImage(CardPath + "BLEED_Rules2.png"),
-         "rules3": PIL_Helper.LoadImage(CardPath + "BLEED_Rules4.png"),
-         "rules5": PIL_Helper.LoadImage(CardPath + "BLEED_Rules6.png"),
-         "testsubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
+backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
+         "Pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "Goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
+         "Ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
+         "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
+         "Rules1": PIL_Helper.LoadImage(CardPath + "BLEED_Rules2.png"),
+         "Rules3": PIL_Helper.LoadImage(CardPath + "BLEED_Rules4.png"),
+         "Rules5": PIL_Helper.LoadImage(CardPath + "BLEED_Rules6.png"),
+         "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
+         "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
         }
 
 def FixFileName(tagin):
@@ -243,10 +244,9 @@ def FixUnicode(text):
         text=text.replace('{pegasus}', u"\uE002")
         text=text.replace('{alicorn}', u"\uE003")
         text=text.replace('{postapocalypse}', u"\uE004")
-        text=text.replace('{<3}', u"\u27B3")
     return text
 
-def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
+def SaveCard(filepath, image_to_save):
     '''
     If the filepath already exists, insert _001 just before the
     extension. If that exists, increment the number until we get to
@@ -258,26 +258,18 @@ def SaveCard(filepath, image, scale=1, convert_to_cmyk=False):
         while os.path.exists(filepath):
             i += 1
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
-    w,h = image.size
-    new_w = int(scale*w)
-    new_h = int(scale*h)
-    image = PIL_Helper.ResizeImage(image, (new_w, new_h))
-    if convert_to_cmyk:
-        PIL_Helper.ConvertToCmyk(image)
-    image.save(filepath, dpi=(300,300))
+    image_to_save.save(filepath, dpi=(300, 300))
 
-def BuildCard(linein, filename=None):
+def BuildCard(linein):
     tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
     try:
-        im = PickCardFunc(tags)
+        im = PickCardFunc(tags[TYPE], tags)
         if len(tags) >= 2:
-            if filename is None:
             if len(tags) == 2:
                 filename = FixFileName(tags[0]+"_"+tags[1])
             else:
                 filename = FixFileName(tags[0]+"_"+tags[3])
-            im_bleed = PIL_Helper.ResizeImage(im, BLEED_SCALING)
-            SaveCard(os.path.join(BleedsPath, filename), im_bleed)
+            SaveCard(os.path.join(BleedsPath, filename), im)
             im_crop=im.crop(croprect)
             SaveCard(os.path.join(CropPath, filename), im_crop)
             im_vassal=PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
@@ -286,51 +278,50 @@ def BuildCard(linein, filename=None):
             im_crop=im.crop(croprect)
         #MakeVassalCard(im_cropped)
     except Exception as e:
-        if ABORT_ON_ERROR:
-            raise
         print "Warning, Bad Card: {0}".format(tags)
         traceback.print_exc()
         im_crop = MakeBlankCard().crop(croprect)
     #im.show()  # TEST
-    if USE_BLEEDS_FOR_PDF:
-        return im
-    else:
     return im_crop
 
 def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
     #print("Back type: " + tags[TYPE])
-    return backs[tags[TYPE].lower()]
+    card = tags[TYPE]
+    back = backs[tags[TYPE]]
+    if card.startswith("Rules"):
+        print "Cropping rules back..."
+        back = back.crop(croprect)
+    return back
   
-def PickCardFunc(tags):
-    card_type = tags[TYPE].lower()
-    if card_type == "start":
+def PickCardFunc(card_type, tags):
+    if tags[TYPE] == "START":
         return MakeStartCard(tags)
-    elif card_type == "pony":
+    elif tags[TYPE] == "Pony":
         return MakePonyCard(tags)
-    elif card_type == "ship":
+    elif tags[TYPE] == "Ship":
         return MakeShipCard(tags)
-    elif card_type == "goal":
+    elif tags[TYPE] == "Goal":
         return MakeGoalCard(tags)
-    elif card_type == "blank":
+    elif tags[TYPE] == "BLANK":
         return MakeBlankCard()
-    elif card_type == "warning":
-        return MakeSpecialCard(tags)
-    elif card_type == "rules1":
-        return MakeSpecialCard(tags)
-    elif card_type == "rules3":
-        return MakeSpecialCard(tags)
-    elif card_type == "rules5":
-        return MakeSpecialCard(tags)
-    elif card_type == "testsubject":
+    elif tags[TYPE] == "Warning":
+        return MakeSpecialCard("Warning")
+    elif tags[TYPE] == "Rules1":
+        return MakeSpecialCard("Rules1")
+    elif tags[TYPE] == "Rules3":
+        return MakeSpecialCard("Rules3")
+    elif tags[TYPE] == "Rules5":
+        return MakeSpecialCard("Rules5")
+    elif tags[TYPE] == "TestSubject":
         return MakePonyCard(tags)
-    elif card_type == "card":
-        return MakeSpecialCard(tags)
+    elif tags[TYPE] == "Card":
+        return MakeSpecialCard(tags[PICTURE])
     else:
-        raise Exception("No card of type {0}".format(card_type))
+        raise Exception("No card of type {0}".format(tags[TYPE]))
 
 def GetFrame(card_type):
-    return Frames[card_type.lower()].copy()
+    return Frames[card_type].copy()
 
 def AddCardArt(image, filename, anchor):
     if filename == "NOART":
@@ -341,20 +332,12 @@ def AddCardArt(image, filename, anchor):
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
     w, h = art.size
-    if float(w)/float(h) < float(ART_WIDTH)/float(ART_HEIGHT):
-        h = int((float(ART_WIDTH)/w)*h)
-        # Resize image to fit in frame
-        art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
-    else:
-        w = int((float(ART_HEIGHT)/h)*w)
-        # Resize image to fit in frame
-        art = PIL_Helper.ResizeImage(art, (w, ART_HEIGHT))
-
-    art = art.crop(ART_CROPRECT)
+    h = int((float(ART_WIDTH)/w)*h)
+    # Resize image to fit in frame
+    art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
-    symbols = [x.lower() for x in symbols]
     # Remove any timeline symbols from the symbols list
     pruned_symbols = set(symbols)-set(TIMELINE_SYMBOL_LIST)
     if card_type == "Goal":
@@ -369,7 +352,7 @@ def AddSymbols(image, symbols, card_type=""):
             positions = [Anchors["Symbol1"], Anchors["Symbol2"]]
 
     for index,s in enumerate(symbols):
-        sym = Symbols.get(s, None)
+        sym = Symbols.get(s.lower(), None)
         if sym:
             if s in TIMELINE_SYMBOL_LIST:
                 image.paste(sym, Anchors["TimelineSymbol"], sym)
@@ -455,7 +438,6 @@ def BodyText(image, text, color, flavor_text_size=0, font=None):
         )
 
 def FlavorText(image, text, color):
-    text = FixUnicode(text)
     return PIL_Helper.AddText(
         image = image,
         text = text,
@@ -558,11 +540,9 @@ def MakeGoalCard(tags):
         AddExpansion(image, tags[EXPANSION])
     return image
 
-def MakeSpecialCard(tags):
-    print repr(tags[TYPE])
-    image = GetFrame(tags[TYPE])
-    CopyrightText(tags, image, ColorDict["Copyright"])
-    return image
+def MakeSpecialCard(picture):
+    print repr(picture)
+    return GetFrame(picture)
 
 def InitVassalModule():
     pass
@@ -570,7 +550,7 @@ def InitVassalModule():
 def MakeVassalCard(im):
     VassalCard[0]+=1
     #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
-    im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png", dpi=(300,300))
+    im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png")
     
 def CompileVassalModule():
     pass
