@@ -176,7 +176,7 @@ RulesDict={
     "{3swap}": "You may swap up to 3 Pony cards on the grid.",
     "{draw}": "You may draw 1 card from the Ship or Pony deck.",
     "{goal}": "You may discard 1 active Goal and draw 1 new Goal to replace it.",
-    "{search}": "You may search the Ship or Pony discard pile for 1 card of your choice and put it into your hand. If it’s still in your hand at the end of your turn, discard it.",
+    "{search}": "You may search the Ship or Pony discard pile for 1 card of your choice and put it into your hand. If it's still in your hand at the end of your turn, discard it.",
     "{copy}": "You may copy the power of any Pony card currently on the shipping grid, except for Changelings.",
     "{hermaphrodite}": "May count as either {male} or {female} for all Goals, Ships, and powers.",
     "{double pony}": "This card counts as 2 Ponies.",
