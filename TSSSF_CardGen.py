@@ -180,7 +180,7 @@ RulesDict={
     "{copy}": "You may copy the power of any Pony card currently on the shipping grid, except for Changelings.",
     "{hermaphrodite}": "May count as either {male} or {female} for all Goals, Ships, and powers.",
     "{double pony}": "This card counts as 2 Ponies.",
-    "{love poison}": "Instead of playing this Ship with a Pony card from your hand, or connecting two Pony cards already on the grid, you may take a Pony card from the shipping grid and reattach it elsewhere with this Ship. That card’s power activates.",
+    "{love poison}": "Instead of playing this Ship with a Pony card from your hand, or connecting two Pony cards already on the grid, you may take a Pony card from the shipping grid and reattach it elsewhere with this Ship. That card's power activates.",
     "{keyword change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card gains one keyword of your choice, except for Pony names.",
     "{gender change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes the opposite gender.",
     "{race change}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card becomes the race of your choice. This cannot affect Changelings.",
