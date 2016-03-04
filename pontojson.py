@@ -23,18 +23,10 @@ Expansion_Icons = {
     "Indiegogo": "symbol-Indiegogo.png",
     "Summer": "symbol-summer-lovin.png",
     "Xtra": "symbol-extracredit.png",
-    "Adventure": "symbol-adventure.png",
-    "Custom": "symbol-custom.png",
     "Power": "symbol-power.png",
     "Multiplicity": "symbol-multiplicity.png",
     "Canon": "symbol-canon.png",
-    "Dungeon": "symbol-dungeon.png",
-    "2014": "symbol-2014.png",
-    "2015": "symbol-2015.png",
-    "Workshop": "symbol-workshop.png",
-    "Hearthswarming": "symbol-hearthswarming.png",
-    "Patreon": "symbol-Patreon.png",
-    "anime": "symbol-weeaboo.png",
+    "Comics": "symbol-comics.png"
 }
 
 
