@@ -5,6 +5,7 @@ TYPE, PICTURE, SYMBOLS, TITLE, KEYWORDS, BODY, FLAVOR, EXPANSION, CLIENT = range
 DIRECTORY = "TSSSF"
 ARTIST = "Pixel Prism"
 
+Expansion_Icon = None
 
 LegacySymbolMode = False
 PAGE_WIDTH = 3
@@ -20,6 +21,12 @@ ResourcePath = DIRECTORY+"/resources/"
 BleedsPath = DIRECTORY+"/bleed-images/"
 CropPath = DIRECTORY+"/cropped-images/"
 VassalPath = DIRECTORY+"/vassal-images/"
+
+BleedTemplatesPath = ResourcePath+"/bleed templates/"
+SymbolsPath = ResourcePath+"/symbols/"
+ExpansionIconsPath = ResourcePath+"/expansion icons/"
+CardBacksPath = ResourcePath+"/card backs/"
+FontsPath = ResourcePath+"/fonts/"
 
 VassalTemplatesPath = DIRECTORY+"/vassal templates/"
 VassalWorkspacePath = DIRECTORY+"/vassal workspace/"
@@ -44,15 +51,15 @@ TitleWidthThresholds = [50] #This is in #characters, fix later plox
 BarTextThreshold = [500]
 
 fonts = {
-    "Title":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 55),
-    "TitleSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFBartholomew-Bold.otf", 45),
-    "Body":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodySmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "BodyChangeling":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 31),
-    "Bar":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 38),
-    "BarSmall":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 35),
-    "Flavortext":PIL_Helper.BuildFont(ResourcePath+"KlinicSlabBookIt.otf", 28),
-    "Copyright":PIL_Helper.BuildFont(ResourcePath+"TSSSFCabin-Medium.ttf", 18)
+    "Title":PIL_Helper.BuildFont(FontsPath+"TSSSFBartholomew-Bold.otf", 55),
+    "TitleSmall":PIL_Helper.BuildFont(FontsPath+"TSSSFBartholomew-Bold.otf", 45),
+    "Body":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 35),
+    "BodySmall":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 35),
+    "BodyChangeling":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 31),
+    "Bar":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 38),
+    "BarSmall":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 35),
+    "Flavortext":PIL_Helper.BuildFont(FontsPath+"KlinicSlabBookIt.otf", 28),
+    "Copyright":PIL_Helper.BuildFont(FontsPath+"TSSSFCabin-Medium.ttf", 18)
 }
 
 Anchors = {
@@ -77,79 +84,79 @@ Anchors = {
 }
 
 ArtMissing = [
-    PIL_Helper.LoadImage(CardPath+"/artmissing01.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing02.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing03.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing04.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing05.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing06.png"),
-    PIL_Helper.LoadImage(CardPath+"/artmissing07.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing01.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing02.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing03.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing04.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing05.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing06.png"),
+    PIL_Helper.LoadImage(CardPath+"artmissing07.png"),
     ]
 
 Frames = {
-    "START": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Start-bleed.png"),
-    "Warning": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Warning.png"),
-    "Pony": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Pony-bleed.png"),
-    "Ship": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Ship-bleed.png"),
-    "Rules1": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules1.png"),
-    "Rules3": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules3.png"),
-    "Rules5": PIL_Helper.LoadImage(CardPath+"/BLEED_Rules5.png"),
-    "Goal": PIL_Helper.LoadImage(ResourcePath+"/BLEED-Blank-Goal-bleed.png"),
-    "Derpy": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - Derpy Hooves.png"),
-    "TestSubject": PIL_Helper.LoadImage(CardPath+"/BLEED_Card - OverlayTest Subject Cheerilee.png")
+    "START": PIL_Helper.LoadImage(BleedTemplatesPath+"BLEED-Blank-Start-bleed.png"),
+    "Warning": PIL_Helper.LoadImage(CardPath+"BLEED_Card - Warning.png"),
+    "Pony": PIL_Helper.LoadImage(BleedTemplatesPath+"BLEED-Blank-Pony-bleed.png"),
+    "Ship": PIL_Helper.LoadImage(BleedTemplatesPath+"BLEED-Blank-Ship-bleed.png"),
+    "Rules1": PIL_Helper.LoadImage(CardPath+"BLEED_Rules1.png"),
+    "Rules3": PIL_Helper.LoadImage(CardPath+"BLEED_Rules3.png"),
+    "Rules5": PIL_Helper.LoadImage(CardPath+"BLEED_Rules5.png"),
+    "Goal": PIL_Helper.LoadImage(BleedTemplatesPath+"BLEED-Blank-Goal-bleed.png"),
+    "Derpy": PIL_Helper.LoadImage(CardPath+"BLEED_Card - Derpy Hooves.png"),
+    "TestSubject": PIL_Helper.LoadImage(CardPath+"BLEED_Card - OverlayTest Subject Cheerilee.png")
     }
 
 Symbols = {
-    "male": PIL_Helper.LoadImage(ResourcePath+"/Symbol-male.png"),
-    "female": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Female.png"),
-    "malefemale": PIL_Helper.LoadImage(ResourcePath+"/Symbol-MaleFemale.png"),
-    "earth pony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Earth-Pony.png"),
-    "unicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Unicorn.png"),
-    "uniearth": PIL_Helper.LoadImage(ResourcePath+"/symbol-uniearth.png"),
-    "pegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Pegasus.png"),
-    "alicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Alicorn.png"),
-    "changelingearthpony": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingEarthPony.png"),
-    "changelingunicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingUnicorn.png"),
-    "changelingpegasus": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingPegasus.png"),
-    "changelingalicorn": PIL_Helper.LoadImage(ResourcePath+"/Symbol-ChangelingAlicorn.png"),
-    "dystopian": PIL_Helper.LoadImage(ResourcePath+"/symbol-dystopian-future.png"),
-    "ship": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Ship.png"),
-    "goal": PIL_Helper.LoadImage(ResourcePath+"/Symbol-Goal.png"),
-    "0": PIL_Helper.LoadImage(ResourcePath+"/symbol-0.png"),
-    "1": PIL_Helper.LoadImage(ResourcePath+"/symbol-1.png"),
-    "2": PIL_Helper.LoadImage(ResourcePath+"/symbol-2.png"),
-    "3": PIL_Helper.LoadImage(ResourcePath+"/symbol-3.png"),
-    "4": PIL_Helper.LoadImage(ResourcePath+"/symbol-4.png"),
-    "3-4": PIL_Helper.LoadImage(ResourcePath+"/symbol-34.png"),
-    "2-3": PIL_Helper.LoadImage(ResourcePath+"/symbol-23.png")
+    "male": PIL_Helper.LoadImage(SymbolsPath+"Symbol-male.png"),
+    "female": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Female.png"),
+    "malefemale": PIL_Helper.LoadImage(SymbolsPath+"Symbol-MaleFemale.png"),
+    "earth pony": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Earth-Pony.png"),
+    "unicorn": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Unicorn.png"),
+    "uniearth": PIL_Helper.LoadImage(SymbolsPath+"symbol-uniearth.png"),
+    "pegasus": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Pegasus.png"),
+    "alicorn": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Alicorn.png"),
+    "changelingearthpony": PIL_Helper.LoadImage(SymbolsPath+"Symbol-ChangelingEarthPony.png"),
+    "changelingunicorn": PIL_Helper.LoadImage(SymbolsPath+"Symbol-ChangelingUnicorn.png"),
+    "changelingpegasus": PIL_Helper.LoadImage(SymbolsPath+"Symbol-ChangelingPegasus.png"),
+    "changelingalicorn": PIL_Helper.LoadImage(SymbolsPath+"Symbol-ChangelingAlicorn.png"),
+    "dystopian": PIL_Helper.LoadImage(SymbolsPath+"symbol-dystopian-future.png"),
+    "ship": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Ship.png"),
+    "goal": PIL_Helper.LoadImage(SymbolsPath+"Symbol-Goal.png"),
+    "0": PIL_Helper.LoadImage(SymbolsPath+"symbol-0.png"),
+    "1": PIL_Helper.LoadImage(SymbolsPath+"symbol-1.png"),
+    "2": PIL_Helper.LoadImage(SymbolsPath+"symbol-2.png"),
+    "3": PIL_Helper.LoadImage(SymbolsPath+"symbol-3.png"),
+    "4": PIL_Helper.LoadImage(SymbolsPath+"symbol-4.png"),
+    "3-4": PIL_Helper.LoadImage(SymbolsPath+"symbol-34.png"),
+    "2-3": PIL_Helper.LoadImage(SymbolsPath+"symbol-23.png")
     }
 TIMELINE_SYMBOL_LIST = ["Dystopian"]
 
 Expansions = {
-    "Everfree14": PIL_Helper.LoadImage(ResourcePath+"/symbol-Everfree14.png"),
-    "Indiegogo": PIL_Helper.LoadImage(ResourcePath+"/symbol-Indiegogo.png"),
-    "Birthday": PIL_Helper.LoadImage(ResourcePath+"/symbol-birthday.png"),
-    "Bronycon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycon14.png"),
-    "Summer": PIL_Helper.LoadImage(ResourcePath+"/symbol-summer-lovin.png"),
-    "Apricity": PIL_Helper.LoadImage(ResourcePath+"/symbol-apricity.png"),
-    "BronyCAN": PIL_Helper.LoadImage(ResourcePath+"/symbol-Bronycan14.png"),
-    "Xtra": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit.png"),
-    "Xtra-dark": PIL_Helper.LoadImage(ResourcePath+"/symbol-extracredit-black.png"),
-    "NMND": PIL_Helper.LoadImage(ResourcePath+"/symbol-nightmarenights.png"),
-    "Ciderfest": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponyvilleciderfest.png"),
-    "Adventure": PIL_Helper.LoadImage(ResourcePath+"/symbol-adventure.png"),
-    "Custom": PIL_Helper.LoadImage(ResourcePath+"/symbol-custom.png"),
-    "Power": PIL_Helper.LoadImage(ResourcePath+"/symbol-power.png"),
-    "Multiplicity": PIL_Helper.LoadImage(ResourcePath+"/symbol-multiplicity.png"),
-    "Canon": PIL_Helper.LoadImage(ResourcePath+"/symbol-canon.png"),
-    "Dungeon": PIL_Helper.LoadImage(ResourcePath+"/symbol-dungeon.png"),
-    "50": PIL_Helper.LoadImage(ResourcePath+"/symbol-50.png"),
-    "2014": PIL_Helper.LoadImage(ResourcePath+"/symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ResourcePath+"/symbol-hearthswarming.png"),
-    "Ponycon 2015": PIL_Helper.LoadImage(ResourcePath+"/symbol-ponynyc.png"),
-    "Patreon": PIL_Helper.LoadImage(ResourcePath+"/symbol-Patreon.png"),
-    "Gameshow": PIL_Helper.LoadImage(ResourcePath+"/symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ResourcePath+"/symbol-BABScon.png")
+    "Everfree14": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-Everfree14.png"),
+    "Indiegogo": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-Indiegogo.png"),
+    "Birthday": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-birthday.png"),
+    "Bronycon": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-Bronycon14.png"),
+    "Summer": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-summer-lovin.png"),
+    "Apricity": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-apricity.png"),
+    "BronyCAN": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-Bronycan14.png"),
+    "Xtra": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-extracredit.png"),
+    "Xtra-dark": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-extracredit-black.png"),
+    "NMND": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-nightmarenights.png"),
+    "Ciderfest": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-ponyvilleciderfest.png"),
+    "Adventure": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-adventure.png"),
+    "Custom": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-custom.png"),
+    "Power": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-power.png"),
+    "Multiplicity": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-multiplicity.png"),
+    "Canon": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-canon.png"),
+    "Dungeon": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-dungeon.png"),
+    "50": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-50.png"),
+    "2014": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-2014.png"),
+    "Hearthswarming": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-hearthswarming.png"),
+    "Ponycon 2015": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-ponynyc.png"),
+    "Patreon": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-Patreon.png"),
+    "Gameshow": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-gameshow.png"),
+    "BABScon": PIL_Helper.LoadImage(ExpansionIconsPath+"symbol-BABScon.png")
     }
 
 ColorDict={
@@ -189,18 +196,18 @@ RulesDict={
     "{clone}": "When you attach this card to the grid, you may choose one Pony card attached to this Ship. Until the end of your turn, that Pony card counts as 2 Ponies.",
     }
 
-backs = {"START": PIL_Helper.LoadImage(ResourcePath + "Back-Start.png"),
-         "Pony": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Goal": PIL_Helper.LoadImage(ResourcePath + "Back-Goals.png"),
-         "Ship": PIL_Helper.LoadImage(ResourcePath + "Back-Ships.png"),
-         "Card": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Shipwrecker": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "BLANK": PIL_Helper.LoadImage(ResourcePath + "Blank - Intentionally Left Blank.png"),
-         "Rules1": PIL_Helper.LoadImage(CardPath + "Rules2.png"),
-         "Rules3": PIL_Helper.LoadImage(CardPath + "Rules4.png"),
-         "Rules5": PIL_Helper.LoadImage(CardPath + "Rules6.png"),
-         "TestSubject": PIL_Helper.LoadImage(ResourcePath + "Back-Main.png"),
-         "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
+backs = {"START": PIL_Helper.LoadImage(CardBacksPath+"Back-Start.png"),
+         "Pony": PIL_Helper.LoadImage(CardBacksPath+"Back-Main.png"),
+         "Goal": PIL_Helper.LoadImage(CardBacksPath+"Back-Goals.png"),
+         "Ship": PIL_Helper.LoadImage(CardBacksPath+"Back-Ships.png"),
+         "Card": PIL_Helper.LoadImage(CardBacksPath+"Back-Main.png"),
+         "Shipwrecker": PIL_Helper.LoadImage(CardBacksPath+"Back-Main.png"),
+         "BLANK": PIL_Helper.LoadImage(CardBacksPath+"Blank - Intentionally Left Blank.png"),
+         "Rules1": PIL_Helper.LoadImage(CardPath+"Rules2.png"),
+         "Rules3": PIL_Helper.LoadImage(CardPath+"Rules4.png"),
+         "Rules5": PIL_Helper.LoadImage(CardPath+"Rules6.png"),
+         "TestSubject": PIL_Helper.LoadImage(CardBacksPath+"Back-Main.png"),
+         "Warning": PIL_Helper.LoadImage(CardPath+"Card - Contact.png")
         }
 
 def FixFileName(tagin):
@@ -209,7 +216,6 @@ def FixFileName(tagin):
     for c in invalid_chars:
         FileName = FileName.replace(c,"")
     FileName = u"{0}.png".format(FileName)
-    #print FileName
     return FileName
 
 def FixUnicode(text):
@@ -218,7 +224,6 @@ def FixUnicode(text):
         text=text.replace(';', u"\u2642")
         text=text.replace('*', u"\u2640")
         text=text.replace('>', u"\u26A4")
-        #text=text.replace('#', u"\u2714")
         text=text.replace('<', u"\u2764")
         text=text.replace('%', u"\uE000")
         text=text.replace('8', u"\uE001")
@@ -229,7 +234,6 @@ def FixUnicode(text):
         text=text.replace('{male}', u"\u2642")
         text=text.replace('{female}', u"\u2640")
         text=text.replace('{malefemale}', u"\u26A4")
-        #text=text.replace('{goal}', u"\u2714")
         text=text.replace('{ship}', u"\u2764")
         text=text.replace('{earthpony}', u"\uE000")
         text=text.replace('{unicorn}', u"\uE001")
@@ -252,15 +256,30 @@ def SaveCard(filepath, image_to_save):
             filepath = "{}_{:>03}{}".format(basepath, i, extension)
     image_to_save.save(filepath, dpi=(300, 300))
 
-def BuildCard(linein):
-    tags = linein.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
+def BuildCard(data):
+    picture = None
+    title = None
+
+    if type(data).__name__ == 'dict':
+        card = data
+        card_type = data['type']
+        picture = data.get('picture', None)
+        title = data.get('title', None)
+    else:
+        card = data.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
+        card_type = card[TYPE]
+        if len(card) >= 2:
+            picture = card[PICTURE]
+        if len(card) > 2:
+            title = card[TITLE]
+
     try:
-        im = PickCardFunc(tags[TYPE], tags)
-        if len(tags) >= 2:
-            if len(tags) == 2:
-                filename = FixFileName(tags[0]+"_"+tags[1])
+        im = PickCardFunc(card_type, card)
+        if picture is not None:
+            if title is not None:
+                filename = FixFileName(card_type+"_"+title)
             else:
-                filename = FixFileName(tags[0]+"_"+tags[3])
+                filename = FixFileName(card_type+"_"+picture)
             SaveCard(os.path.join(BleedsPath, filename), im)
             im_crop=im.crop(croprect)
             SaveCard(os.path.join(CropPath, filename), im_crop)
@@ -268,44 +287,51 @@ def BuildCard(linein):
             SaveCard(os.path.join(VassalPath, filename), im_vassal)
         else:
             im_crop=im.crop(croprect)
-        #MakeVassalCard(im_cropped)
+
     except Exception as e:
-        print "Warning, Bad Card: {0}".format(tags)
+        print "Warning, Bad Card: {0}".format(data)
         traceback.print_exc()
         im_crop = MakeBlankCard().crop(croprect)
-    #im.show()  # TEST
     return im_crop
 
-def BuildBack(linein):
-    tags = linein.strip('\n').replace(r'\n', '\n').split('`')
-    #print("Back type: " + tags[TYPE])
-    return backs[tags[TYPE]]
-  
-def PickCardFunc(card_type, tags):
-    if tags[TYPE] == "START":
-        return MakeStartCard(tags)
-    elif tags[TYPE] == "Pony":
-        return MakePonyCard(tags)
-    elif tags[TYPE] == "Ship":
-        return MakeShipCard(tags)
-    elif tags[TYPE] == "Goal":
-        return MakeGoalCard(tags)
-    elif tags[TYPE] == "BLANK":
-        return MakeBlankCard()
-    elif tags[TYPE] == "Warning":
-        return MakeSpecialCard("Warning")
-    elif tags[TYPE] == "Rules1":
-        return MakeSpecialCard("Rules1")
-    elif tags[TYPE] == "Rules3":
-        return MakeSpecialCard("Rules3")
-    elif tags[TYPE] == "Rules5":
-        return MakeSpecialCard("Rules5")
-    elif tags[TYPE] == "TestSubject":
-        return MakePonyCard(tags)
-    elif tags[TYPE] == "Card":
-        return MakeSpecialCard(tags[PICTURE])
+def BuildBack(data):
+    if type(data).__name__ == 'dict':
+        card_type = data['type']
     else:
-        raise Exception("No card of type {0}".format(tags[TYPE]))
+        card = data.strip('\n').strip('\r').replace(r'\n', '\n').split('`')
+        card_type = card[TYPE]
+
+    return backs[card_type]
+  
+def PickCardFunc(card_type, data):
+    if card_type == "START":
+        return MakeStartCard(data)
+    elif card_type == "Pony":
+        return MakePonyCard(data)
+    elif card_type == "Ship":
+        return MakeShipCard(data)
+    elif card_type == "Goal":
+        return MakeGoalCard(data)
+    elif card_type == "BLANK":
+        return MakeBlankCard()
+    elif card_type == "Warning":
+        return MakeSpecialCard("Warning")
+    elif card_type == "Rules1":
+        return MakeSpecialCard("Rules1")
+    elif card_type == "Rules3":
+        return MakeSpecialCard("Rules3")
+    elif card_type == "Rules5":
+        return MakeSpecialCard("Rules5")
+    elif card_type == "TestSubject":
+        return MakePonyCard(data)
+    elif card_type == "Card":
+        if type(data).__name__ == 'dict':
+            picture = data['picture']
+        else:
+            picture = data[PICTURE]
+        return MakeSpecialCard(picture)
+    else:
+        raise Exception("No card of type {0}".format(card_type))
 
 def GetFrame(card_type):
     return Frames[card_type].copy()
@@ -437,20 +463,33 @@ def FlavorText(image, text, color):
         max_width = textmaxwidth,
         )
 
+def GetExpansionIcon(expansion):
+    return PIL_Helper.LoadImage(ExpansionIconsPath+expansion)
+
 def AddExpansion(image, expansion):
-    #print "Expansion: {}".format(expansion)
     expansion_symbol = Expansions.get(expansion, None)
     if expansion_symbol:
         image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
 
-def CopyrightText(tags, image, color):
+def AddExpansionJSON(image, expansion_symbol):
+    if expansion_symbol:
+        image.paste(expansion_symbol, Anchors["Expansion"], expansion_symbol)
+
+def CopyrightText(card, image, color, artist):
     card_set = CardSet.replace('_',' ')
-    #print tags[CLIENT], repr(tags)
-    if len(tags)-1 >= CLIENT:
-        card_set += " " + str(tags[CLIENT])
+    client = None
+
+    if type(card).__name__ == 'dict':
+        client = card.get('client')
+    else:
+        if len(card)-1 >= CLIENT:
+            client = str(card[CLIENT])
+
+    if client is not None:
+        card_set += " " + client
     text = "{}; TSSSF by Horrible People Games. Art by {}.".format(
         card_set,
-        ARTIST
+        artist
         )
     PIL_Helper.AddText(
         image = image,
@@ -475,7 +514,26 @@ def MakeBlankCard():
         )    
     return image
 
-def MakeStartCard(tags):
+def MakeStartCard(card):
+    if type(card).__name__ == 'dict':
+        return MakeStartCardJSON(card)
+    else:
+        return MakeStartCardPON(card)
+
+def MakeStartCardJSON(data):
+    image = GetFrame(data['type'])
+    AddCardArt(image, data['picture'], Anchors["PonyArt"])
+    TitleText(image, data['title'], ColorDict["START"])
+    AddSymbols(image, data.get('symbols', []))
+    BarText(image, ', '.join(data.get('keywords', [])), ColorDict["START bar text"])
+    text_size = FlavorText(image, data.get('flavor', ''), ColorDict["START flavor"])
+    BodyText(image, data.get('body', ''), ColorDict["START"], text_size)
+    CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
+    if Expansion_Icon is not None:
+        AddExpansionJSON(image, Expansion_Icon)
+    return image
+
+def MakeStartCardPON(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["PonyArt"])
     TitleText(image, tags[TITLE], ColorDict["START"])
@@ -483,12 +541,31 @@ def MakeStartCard(tags):
     BarText(image, tags[KEYWORDS], ColorDict["START bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["START flavor"])
     BodyText(image, tags[BODY], ColorDict["START"], text_size)
-    CopyrightText(tags, image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"], ARTIST)
     if len(tags) > EXPANSION:
         AddExpansion(image, tags[EXPANSION])
     return image
 
-def MakePonyCard(tags):
+def MakePonyCard(card):
+    if type(card).__name__ == 'dict':
+        return MakePonyCardJSON(card)
+    else:
+        return MakePonyCardPON(card)
+
+def MakePonyCardJSON(data):
+    image = GetFrame(data['type'])
+    AddCardArt(image, data['picture'], Anchors["PonyArt"])
+    TitleText(image, data['title'], ColorDict["Pony"])
+    AddSymbols(image, data.get('symbols', []))
+    BarText(image, ', '.join(data.get('keywords', [])), ColorDict["Pony bar text"])
+    text_size = FlavorText(image, data.get('flavor', ''), ColorDict["Pony flavor"])
+    BodyText(image, data.get('body', ''), ColorDict["Pony"], text_size)
+    CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
+    if Expansion_Icon is not None:
+        AddExpansionJSON(image, Expansion_Icon)
+    return image
+
+def MakePonyCardPON(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["PonyArt"])
     TitleText(image, tags[TITLE], ColorDict["Pony"])
@@ -496,33 +573,69 @@ def MakePonyCard(tags):
     BarText(image, tags[KEYWORDS], ColorDict["Pony bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Pony flavor"])
     BodyText(image, tags[BODY], ColorDict["Pony"], text_size)
-    CopyrightText(tags, image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"], ARTIST)
     if len(tags) > EXPANSION:
         AddExpansion(image, tags[EXPANSION])
     return image
 
-def MakeShipCard(tags):
+def MakeShipCard(card):
+    if type(card).__name__ == 'dict':
+        return MakeShipCardJSON(card)
+    else:
+        return MakeShipCardPON(card)
+
+def MakeShipCardJSON(data):
+    image = GetFrame(data['type'])
+    AddCardArt(image, data['picture'], Anchors["ShipArt"])
+    TitleText(image, data['title'], ColorDict["Ship"])
+    AddSymbols(image, data.get('symbols', []), "Ship")
+    BarText(image, ', '.join(data.get('keywords', [])), ColorDict["Ship bar text"])
+    text_size = FlavorText(image, data.get('flavor', ''), ColorDict["Ship flavor"])
+    BodyText(image, data.get('body', ''), ColorDict["Ship"], text_size)
+    CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
+    if Expansion_Icon is not None:
+        AddExpansionJSON(image, Expansion_Icon)
+    return image
+
+def MakeShipCardPON(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["ShipArt"])
     TitleText(image, tags[TITLE], ColorDict["Ship"])
     AddSymbols(image, tags[SYMBOLS].split('!'), "Ship")
-    #AddSymbols(image, "Ship")
     BarText(image, tags[KEYWORDS], ColorDict["Ship bar text"])
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Ship flavor"])
     BodyText(image, tags[BODY], ColorDict["Ship"], text_size)
-    CopyrightText(tags, image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"], ARTIST)
     if len(tags) > EXPANSION:
         AddExpansion(image, tags[EXPANSION])
     return image
 
-def MakeGoalCard(tags):
+def MakeGoalCard(card):
+    if type(card).__name__ == 'dict':
+        return MakeGoalCardJSON(card)
+    else:
+        return MakeGoalCardPON(card)
+
+def MakeGoalCardJSON(data):
+    image = GetFrame(data['type'])
+    AddCardArt(image, data['picture'], Anchors["GoalArt"])
+    TitleText(image, data['title'], ColorDict["Goal"])
+    AddSymbols(image, data.get('symbols', []), card_type="Goal")
+    text_size = FlavorText(image, data.get('flavor', ''), ColorDict["Goal flavor"])
+    BodyText(image, data.get('body', ''), ColorDict["Goal"], text_size)
+    CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
+    if Expansion_Icon is not None:
+        AddExpansionJSON(image, Expansion_Icon)
+    return image
+
+def MakeGoalCardPON(tags):
     image = GetFrame(tags[TYPE])
     AddCardArt(image, tags[PICTURE], Anchors["GoalArt"])
     TitleText(image, tags[TITLE], ColorDict["Goal"])
     AddSymbols(image, tags[SYMBOLS].split('!'), card_type="Goal")
     text_size = FlavorText(image, tags[FLAVOR], ColorDict["Goal flavor"])
     BodyText(image, tags[BODY], ColorDict["Goal"], text_size)
-    CopyrightText(tags, image, ColorDict["Copyright"])
+    CopyrightText(tags, image, ColorDict["Copyright"], ARTIST)
     if len(tags) > EXPANSION:
         AddExpansion(image, tags[EXPANSION])
     return image
@@ -536,7 +649,6 @@ def InitVassalModule():
 
 def MakeVassalCard(im):
     VassalCard[0]+=1
-    #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
     im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png")
     
 def CompileVassalModule():
