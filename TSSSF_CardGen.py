@@ -210,6 +210,9 @@ backs = {
      "Warning": PIL_Helper.LoadImage(CardPath + "Card - Contact.png")
 }
 
+special_card_types = ["Rules1", "Rules3", "Rules5", "Warning", "Derpy", "Card"]
+special_cards_with_copyright = ["Derpy"]
+
 
 def FixFileName(tagin):
     FileName = tagin.replace("\n", "")
@@ -320,22 +323,10 @@ def PickCardFunc(card_type, data):
         return MakeGoalCard(data)
     elif card_type == "BLANK":
         return MakeBlankCard()
-    elif card_type == "Warning":
-        return MakeSpecialCard("Warning")
-    elif card_type == "Rules1":
-        return MakeSpecialCard("Rules1")
-    elif card_type == "Rules3":
-        return MakeSpecialCard("Rules3")
-    elif card_type == "Rules5":
-        return MakeSpecialCard("Rules5")
     elif card_type == "TestSubject":
         return MakePonyCard(data)
-    elif card_type == "Card":
-        if type(data).__name__ == 'dict':
-            picture = data['picture']
-        else:
-            picture = data[PICTURE]
-        return MakeSpecialCard(picture)
+    elif card_type in special_card_types:
+        return MakeSpecialCard(data)
     else:
         raise Exception("No card of type {0}".format(card_type))
 
@@ -671,9 +662,31 @@ def MakeGoalCardPON(tags):
     return image
 
 
-def MakeSpecialCard(picture):
-    print repr(picture)
-    return GetFrame(picture)
+def MakeSpecialCard(card):
+    if type(card).__name__ == 'dict':
+        return MakeSpecialCardJSON(card)
+    else:
+        return MakeSpecialCardPON(card)
+
+
+def MakeSpecialCardJSON(data):
+    print repr(data['picture'])
+    image = GetFrame(data['picture'])
+    if data['picture'] in special_cards_with_copyright:
+        CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
+    if Expansion_Icon is not None:
+        AddExpansionJSON(image, Expansion_Icon)
+    return image
+
+
+def MakeSpecialCardPON(data):
+    print repr(data[PICTURE])
+    image = GetFrame(data[PICTURE])
+    if data[PICTURE] in special_cards_with_copyright:
+        CopyrightText(data, image, ColorDict["Copyright"], ARTIST)
+    if len(data) > EXPANSION:
+        AddExpansion(image, data[EXPANSION])
+    return image
 
 
 def InitVassalModule():
