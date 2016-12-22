@@ -28,6 +28,7 @@ VASSAL_SCALE=(260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
+ART_HEIGHT = 443
 base_w = 889
 base_h = 1215
 base_w_center = base_w/2
@@ -279,7 +280,7 @@ def BuildBack(linein):
     tags = linein.strip('\n').replace(r'\n', '\n').split('`')
     #print("Back type: " + tags[TYPE])
     return backs[tags[TYPE]]
-  
+
 def PickCardFunc(card_type, tags):
     if tags[TYPE] == "START":
         return MakeStartCard(tags)
@@ -318,9 +319,18 @@ def AddCardArt(image, filename, anchor):
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
     w, h = art.size
-    h = int((float(ART_WIDTH)/w)*h)
-    # Resize image to fit in frame
-    art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+    if h > w:
+        h = int((float(ART_WIDTH)/w)*h)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+        cropRect = (0,(h-ART_HEIGHT)/2,ART_WIDTH,(h+ART_HEIGHT)/2)
+    else:
+        w = int((float(ART_HEIGHT)/h)*w)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (w, ART_HEIGHT))
+        cropRect = ((ART-WIDTH-w)/2,0,(ART-WIDTH+w)/2,ART_HEIGHT)
+
+    art = art.crop(cropRect)
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
@@ -463,7 +473,7 @@ def CopyrightText(tags, image, color):
 
 def MakeBlankCard():
     image = PIL_Helper.BlankImage(base_w, base_h)
-    
+
     PIL_Helper.AddText(
         image = image,
         text = "This Card Intentionally Left Blank",
@@ -471,7 +481,7 @@ def MakeBlankCard():
         fill = ColorDict["Blankfill"],
         anchor = Anchors["Blank"],
         max_width = textmaxwidth
-        )    
+        )
     return image
 
 def MakeStartCard(tags):
@@ -537,7 +547,7 @@ def MakeVassalCard(im):
     VassalCard[0]+=1
     #BuildCard(line).save(VassalImagesPath + "/" + str(VassalCard) + ".png")
     im.save(VassalImagesPath + "/" + str(VassalCard[0]) + ".png")
-    
+
 def CompileVassalModule():
     pass
 
