@@ -28,6 +28,7 @@ VASSAL_SCALE=(260,359)
 
 VassalCard = [0]
 ART_WIDTH = 600
+ART_HEIGHT = 443
 base_w = 889
 base_h = 1215
 base_w_center = base_w/2
@@ -38,6 +39,7 @@ baserect=[(w_marg,h_marg),(base_w-w_marg,base_h-h_marg)]
 textmaxwidth = 689
 
 croprect=(50,63,788+50,1088+63)
+ART_CROPRECT=(0,0,ART_WIDTH, ART_HEIGHT)
 
 TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50] #This is in #characters, fix later plox
@@ -318,9 +320,16 @@ def AddCardArt(image, filename, anchor):
         art = random.choice(ArtMissing)
     # Find desired height of image based on width of 600 px
     w, h = art.size
-    h = int((float(ART_WIDTH)/w)*h)
-    # Resize image to fit in frame
-    art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+    if float(w)/float(h) < float(ART_WIDTH)/float(ART_HEIGHT):
+        h = int((float(ART_WIDTH)/w)*h)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (ART_WIDTH,h))
+    else:
+        w = int((float(ART_HEIGHT)/h)*w)
+        # Resize image to fit in frame
+        art = PIL_Helper.ResizeImage(art, (w, ART_HEIGHT))
+
+    art = art.crop(ART_CROPRECT)
     image.paste(art, anchor)
 
 def AddSymbols(image, symbols, card_type=""):
