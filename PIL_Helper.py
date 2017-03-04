@@ -62,7 +62,7 @@ def GetTextBlockSize(text, font, max_width=-1, leading_offset=0):
 
 def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
             max_width=-1, halign="center", valign="top", leading_offset=0,
-            rotate=0):
+            rotate=0, padline=False):
     '''
     First, attempt to wrap the text if max_width is set,
     and creates a list of each line.
@@ -100,6 +100,8 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     for line in lines:
         # If current line is blank, just change y and skip to next
         if not line == "":
+            if padline == True:
+                line = " {0} ".format(line)
             line_width, line_height = font.getsize(line)
             if halign == "left":
                 x_pos = start_x
