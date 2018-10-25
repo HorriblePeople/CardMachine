@@ -41,3 +41,5 @@ WINDEX,Downstairs Bath,MONTHLY,2,,,
 WINDEX,Master Bath,MONTHLY,2,,,
 WINDEX,Office Bath,MONTHLY,2,,,
 SCRUB,Litter Boxes,MONTHLY,3,,,
+CHANGE SHEETS,Master Bed,WEEKLY,2,,,
+LAUNDRY,Laundry,WEEKLY,2,PUT AWAY,Laundry,1

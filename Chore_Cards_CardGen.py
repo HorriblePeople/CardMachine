@@ -48,6 +48,7 @@ fonts = {
     "title": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro-Bold.otf", 120),
     "title_small": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro-Bold.otf", 110),
     "title_smaller": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro-Bold.otf", 90),
+    "title_smallest": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro-Bold.otf", 80),
     "subtitle": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro.otf", 70),
     "subtitle_small": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro.otf", 60),
     "subtitle_smaller": PIL_Helper.BuildFont(resource_path + "CenturyGothicPro.otf", 50)
@@ -141,6 +142,9 @@ def shrink_text(text, font_name, max_width=max_text_width):
     if PIL_Helper.GetTextBlockSize(text, font)[0] <= max_text_width:
         return font
     font = fonts[font_name + "_smaller"]
+    if PIL_Helper.GetTextBlockSize(text, font)[0] <= max_text_width:
+        return font
+    font = fonts[font_name + "_smallest"]
     return font
 
 
@@ -259,6 +263,6 @@ def stars2_symbol(image, tags):
 
 
 if __name__ == "__main__":
-    text = ["WIPE SWITCHES", "Kitchen", "WEEKLY", "1", "MOP", "Bedroom", "2"]
+    text = ["CHANGE SHEETS", "Kitchen", "WEEKLY", "1", "MOP", "Bedroom", "2"]
     image, name, back, back_name = build_card(text)
     image.show()
