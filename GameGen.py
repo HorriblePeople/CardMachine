@@ -1,107 +1,167 @@
-'''
+"""
 Master Game Gen
-1.0b
-'''
-import os, glob, sys
-import PIL_Helper
+1.1
+@TODO Rework TSSSF/BABOC/etc to work with updated GameGen
+"""
 import argparse
-from OS_Helper import Delete, CleanDirectory, BuildPage, BuildBack
-from sys import exit
+import csv
+import os
+import sys
 
-#TSSSF Migration TODO:
-#automagickally create vassal module :D
-#individual artist naming
-#.pon files have symbols like {ALICORN} and so on.
+from OS_Helper import clean_directory, build_page, build_back
 
-def main(folder, filepath="deck.cards"):
+COMMENT_CHARS = ('#', ';', '/')
+DELIMITER = ','
 
-    CardFile = open(os.path.join(folder, filepath))
-    folder, card_set = folder.split("/")
 
-    # Read first line of file to determine module
-    modulename = CardFile.readline().strip()
-    sys.path.append(modulename)
-    try:
-        import_name = folder+"_CardGen"
-        module = __import__(import_name)
-    except ValueError:
-        print "Failed to load module: " + str(ValueError)
+def save_card(filepath, image_to_save):
+    """
+    If the filepath already exists, insert _001 just before the
+    extension. If that exists, increment the number until we get to
+    a filepath that doesn't exist yet.
+    """
+    if os.path.exists(filepath):
+        basepath, extension = os.path.splitext(filepath)
+        i = 0
+        while os.path.exists(filepath):
+            i += 1
+            filepath = "{}_{:>03}{}".format(basepath, i, extension)
+    image_to_save.save(filepath, dpi=(300, 300))
+
+
+def split_line(line):
+    """
+    Splits cards file lines. Will skip if the line is empty, or starts with a comment character.
+    Leading/trailing whitespace is ignored and removed.
+    Note: Comments after valid text will not be removed.
+    :param line: string
+    :return: List of strings, split based on DELIMITER. If the line should be skipped, will return None.
+    """
+    # Skip empty lists, strings, and None
+    if not line:
         return
-    module.CardSet = card_set
+
+    if isinstance(line, str):
+        line = line.strip('\r\n').strip()
+        # Skip empty lines
+        if not line:
+            return
+        # Skip comments
+        if line and line[0] in COMMENT_CHARS:
+            return
+        line = line.replace(r'\n', '\n').split(DELIMITER)
+    elif isinstance(line, list):
+        # Skip empty lines
+        if not line or line == ['']:
+            return
+        # Skip comments
+        if line[0][0] in COMMENT_CHARS:
+            return
+    else:
+        raise ValueError("line must be a list or a string")
+
+    return [item.strip() for item in line]
+
+
+def main(folder, filepath="cards.txt"):
+    path = os.path.join(folder, filepath)
+    if not os.path.exists(path):
+        raise LookupError("'{}' does not exist".format(path))
+
+    # Load card module
+    try:
+        folder, card_set = folder.split("/")
+    except ValueError:
+        raise ValueError("Folder must reference a folder and subfolder. e.g. Druid/Level 9")
+
+    module_name = folder
+    sys.path.append(module_name)
+    try:
+        import_name = folder.replace(' ', '_') + "_CardGen"
+        module = __import__(import_name)
+    except (ValueError, ImportError) as e:
+        raise ValueError("Failed to load module: {}".format(e))
 
     # Create workspace for card images
-    workspace_path = CleanDirectory(path=folder, mkdir="workspace", rmstring="*.*")
-
-    # Create image directories
-    bleed_path = CleanDirectory(path=folder+"/"+card_set, mkdir="bleed-images",rmstring="*.*")
-    module.BleedsPath = bleed_path
-    cropped_path = CleanDirectory(path=folder+"/"+card_set, mkdir="cropped-images",rmstring="*.*")
-    module.CropPath = cropped_path
-    vassal_path = CleanDirectory(path=folder+"/"+card_set, mkdir="vassal-images",rmstring="*.*")
-    module.VassalPath = vassal_path
+    workspace_path = clean_directory(path=folder, mkdir="workspace", rm_string="*.*")
 
     # Create output directory
-    output_folder = CleanDirectory(path=folder, mkdir=card_set,rmstring="*.pdf")
+    output_folder = clean_directory(path=folder, mkdir=card_set, rm_string="*.pdf")
+    
+    # Create image directories
+    bleed_path = clean_directory(path=os.path.join(folder, card_set), mkdir="bleed-images", rm_string="*.*")
 
-    # Load Card File and strip out comments
-    cardlines = [line for line in CardFile if not line[0] in ('#', ';', '/')]
-    CardFile.close()
+    # Read in card lines
+    f = open(path)
+    card_lines = csv.reader(f) if path.endswith(".csv") else f.readlines()
 
-##    # Make a list of lists of cards, each one page in scale
-##    cardpages = []
-##    cardlines += ["BLANK" for i in range(1, module.TOTAL_CARDS)]
-##    cardlines.reverse()
-##    while len(cardlines) > module.TOTAL_CARDS:
-##        cardpages.append([cardlines.pop() for i in range(0,module.TOTAL_CARDS)])
+    if module.BUILD_PAGES:
+        page_num = 0
+        card_list = []
+        back_list = []
 
-    # Make pages
-    card_list = []
-    back_list = []
-    page_num = 0
-    for line in cardlines:
-        card_list.append(module.BuildCard(line))
-        back_list.append(module.BuildBack(line))
-        # If the card_list is big enough to make a page
-        # do that now, and set the card list to empty again
-        if len(card_list) >= module.TOTAL_CARDS:
+    # Make cards
+    for line in card_lines:
+        line = split_line(line)
+        if line is None:
+            return
+
+        card_image, filename, back_image, filename_back = module.build_card(line)
+        # card_image.show()
+        # back_image.show()
+        # Save images of cards
+        if filename:
+            save_card(os.path.join(bleed_path, filename), card_image)
+        if filename_back:
+            save_card(os.path.join(bleed_path, filename_back), back_image)
+
+        if module.BUILD_PAGES:
+            card_list.append(card_image)
+            back_list.append(back_image)
+            if len(card_list) >= module.TOTAL_CARDS:
+                page_num += 1
+                print "Building Page {}...".format(page_num)
+                build_page(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+                build_back(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+                card_list = []
+                back_list = []
+
+    if module.BUILD_PAGES:
+        # If there are leftover cards, fill in the remaining
+        # card slots with blanks and gen the last page
+        if len(card_list) > 0:
+            # Fill in the missing slots with blanks
+            while len(card_list) < module.TOTAL_CARDS:
+                card_list.append(module.build_blank())
+                back_list.append(module.build_blank())
             page_num += 1
             print "Building Page {}...".format(page_num)
-            BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
-            BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
-            card_list = []
-            back_list = []
+            build_page(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+            build_page(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
 
-    # If there are leftover cards, fill in the remaining
-    # card slots with blanks and gen the last page
-    if len(card_list) > 0:
-        # Fill in the missing slots with blanks
-        while len(card_list) < module.TOTAL_CARDS:
-            card_list.append(module.BuildCard("BLANK"))
-            back_list.append(module.BuildCard("BLANK"))
-        page_num += 1
-        print "Building Page {}...".format(page_num)
-        BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
-        BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
+        # Build PDF
+        print "\nCreating PDF..."
+        os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
+        print "\nCreating PDF of backs..."
+        os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
+        print "Done!"
 
-    #Build Vassal
-    module.CompileVassalModule()
+    if module.BUILD_VASSAL:
+        module.CompileVassalModule()
 
-    print "\nCreating PDF..."
-    os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "\nCreating PDF of backs..."
-    os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "Done!"
+    f.close()
+
 
 if __name__ == '__main__':
     # To run this script, you have two options:
     # 1) Run it from the command line with arguments. E.g.:
-    #       python GameGen -b TSSSF -f "Core 1.0.3/cards.pon"
+    #       python GameGen -b "Druid/Level 8" -f cards.txt
     # 2) Edit run_gamegen.py as appropriate
     # See the main() docstring for more info on the use of the arguments
-	default_dir, default_file = "TSSSF/Core 1.0.5", "cards.pon"
+    default_dir, default_file = "Druid/Level 9", "cards.csv"
     
     parser = argparse.ArgumentParser(prog="GameGen")
-    parser.add_argument('-f', '--set-file', \
+    parser.add_argument('-f', '--set-file',
                         help="Location of set file to be parsed",
                         default=default_file)
     parser.add_argument('-b', '--basedir',

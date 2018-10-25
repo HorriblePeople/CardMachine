@@ -106,3 +106,7 @@ $RECYCLE.BIN/
 BaBOC/
 TSSSF/
 WSotT/
+bleed-images/
+cropped-images/
+
+*.pdf

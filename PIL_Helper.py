@@ -1,12 +1,13 @@
+import os
+
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-import os, glob
-from math import ceil
+
 
 def BuildFont(fontname, fontsize):
     return ImageFont.truetype(fontname, fontsize)
 
 def WrapText(text, font, max_width):
-    '''
+    """
     Wraps text properly, so that each line does not exceed
     a maximum width in pixels. It does this by adding words
     in the string to the line, one by one, until the next
@@ -14,7 +15,7 @@ def WrapText(text, font, max_width):
     It then start a new line with that word instead.
     New lines get special treatment. It's kind of funky.
     "Words" are split around spaces.
-    '''
+    """
     temp = ""
     wrapped_text = ""
 
@@ -63,7 +64,7 @@ def GetTextBlockSize(text, font, max_width=-1, leading_offset=0):
 def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
             max_width=-1, halign="center", valign="top",
             justification=None, leading_offset=0, rotate=0):
-    '''
+    """
     @param PIL.Image image: The image to add the text to
     @param str text: The text to add
     @param ImageFont font: The font to apply to the text
@@ -100,7 +101,7 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
 
     @return (int, int): Total width and height of the text block
         added, in pixels.
-    '''
+    """
     if max_width > -1:
         wrapped_text = WrapText(text, font, max_width)
     else:
@@ -110,7 +111,7 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
     if justification is None:
         justification = halign
 
-    # Initiliaze layer and draw object
+    # Initialize layer and draw object
     layer = Image.new('L', (5000,5000))
     draw = ImageDraw.Draw(layer)
     start_y = 500
@@ -192,12 +193,12 @@ def AddText(image, text, font, fill=(0,0,0), anchor=(0,0),
 
 def BuildPage(card_list, grid_width, grid_height, filename,
               cut_line_width=3, page_ratio=8.5/11.0, h_margin=100):
-    '''
+    """
     Adds cards, in order, to a grid defined by grid_width, grid_height.
     It then adds a border to the grid, making sure to preserve the
     page ratio for later printing, and saves to filename
     Assumes that all the cards are the same size
-    '''
+    """
     # Create card grid based on size of the first card
     w,h = card_list[0].size
     bg = Image.new("RGB", (w * grid_width + cut_line_width * (grid_width - 1),

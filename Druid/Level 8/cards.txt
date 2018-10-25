@@ -1,0 +1,90 @@
+# 	Type`Name`CR`Str`Dex`Con`HP`AC`Speed`Fly`Swim`Climb`Burrow`Size`Attacks & Abilities`Skills
+
+BEAST`Ape`1/2`+3`+2`+2`19`12`30`-`-`30`-`Medium`Multi-attack: The {name} makes two fist attacks.\nFist: +5 to hit, 1d6+3 bludgeoning damage\nRock: +4 to hit, 25/50 feet, 1d6+3 bludgeoning damage.`Athletics +5, Perception +3
+BEAST`Axe Beak`1/4`+2`+1`+1`19`11`50`-`-`-`-`Large`Beak: +4 to hit, 1d8+2 slashing damage.`Passive Perception 10
+BEAST`Baboon`0`-1`+2`0`3`12`30`-`-`30`-`Small`Bite: +1 to hit, 1d4-1 piercing damage.\nPack Tactics: The {name} has advantage on an attack roll against a creature if at least one of the {name} is within 5 feet of the creature and the ally isn't incapacitated.`Passive Perception 11
+BEAST`Badger`0`-3`+0`+1`3`10`20`-`-`-`5`Tiny`Bite: +2 to hit, 1 piercing damage.`Darkvision 30ft, Passive Perception 11
+BEAST`Bat`0`-4`+2`-1`1`12`5`30`-`-`-`Tiny`Bite: +0 to hit, 1 Piercing\nEcholocation\nThe bat can't use its blindsight while deafened.\nKeen Hearing\nThe bat has advantage on Wisdom (Perception) checks that rely on hearing.`Blindsight 60ft, passive Perception 11
+BEAST`Black Bear`1/2`+2`+0`+2`19`11`40`-`-`30`-`Medium`Multi-attack: The {name} makes two attacks: one with its bite and one with its claws.\nBite: +3 to hit, 1d6+2 piercing damage\nClaws: +3 to hit, 2d4+2 slashing damage.\nKeen Smell: the {name} has advantage on Wisdom (Perception) checks that rely on smell.`Perception +3
+BEAST`Blood Hawk`1/8`-2`+2`+0`7`12`10`60`-`-`-`Small`Beak: +4 to hit, 1d4+2 piercing damage\nKeen Sight: The {name} has advantage on Wisdom (Perception) checks for sight.\nPack Tactics: The Hawk has advantage on an attack roll against a creature if at least one of the hawk's un-incapacitated allies is within 5 feet of the creature.`Perception +4
+BEAST`Boar`1/4`+1`+0`+1`11`11`40`-`-`-`-`Medium`Tusk: +3 to hit, 1d6+1 slashing damage\nCharge: If the {name} moved at least 20ft straight toward a target and hits it with an attack on the same turn, the target takes an extra die of damage. DC 11 Strength save or be knocked prone.`Passive Perception 9
+BEAST`Brown Bear`1`+4`+0`+3`34`11`40`-`-`30`-`Large`Multi-attack: The {name} makes two attacks: one with its bite and one with its claws.\nBite: +5 to hit, 1d8+4 piercing damage\nClaws: +5 to hit, 2d6+4 slashing damage\nKeen Smell: the {name} has advantage on Wisdom (Perception) checks that rely on smell.`Perception +3
+BEAST`Cactus Bopper
+BEAST`Camel`1/8`+3`-1`+2`15`9`50`-`-`-`-`Large`Bite: +5 to hit, 1d4 bludgeoning damage`Passive Perception 9
+BEAST`Cat`0`2`12`-4`+2`+0`40`-`-`30`-`Claws: +0 to hit, 1 slashing damage\nKeen Smell: the {name} has advantage on Wisdom (Perception) checks that rely on smell.`Perception +3, Stealth +4
+BEAST`Constrictor Snake`1/4
+BEAST`Crab
+BEAST`Crocodile
+BEAST`Deer
+BEAST`Dire Wolf
+BEAST`Draft Horse
+BEAST`Eagle
+BEAST`Elephant
+BEAST`Elk
+BEAST`Flying Snake
+BEAST`Frog
+BEAST`Genan Wolf Hound`1/8`+0`+2`+1`5`12`45`-`-`-`-`Medium`Bite: +3 to hit, 1d6 Piercing\nOn a hit, target must make a DC10 Strength save or else be knocked Prone.\nKeen Hearing\nThe {name} has advantage on Perception checks to hear.`Perception +4
+BEAST`Giant Ape
+BEAST`Giant Badger
+BEAST`Giant Bat
+BEAST`Giant Boar
+BEAST`Giant Centipede
+BEAST`Giant Constrictor Snake
+BEAST`Giant Crab
+BEAST`Giant Crocodile
+BEAST`Giant Eagle
+BEAST`Giant Elk
+BEAST`Giant Fire Beetle
+BEAST`Giant Frog
+BEAST`Giant Goat
+BEAST`Giant Hyena
+BEAST`Giant Lizard
+BEAST`Giant Lobster`5`+4`+0`+3`93`16`30`-`30`-`-`Large`Immune to Poison.\nMulti-attack: 2 Pincers & 1 Mouth on Grappled targets\nPincer: +6 to Hit, 2d8+4 Bludgeoning damage.\nOn a hit, target must make a DC14 Dex save or else be Grappled.\nMouth: Place grappled creature in mouth. Target must make DC 13 Con save or be poisoned for 1 minute. Paralyzed until poison ends, repeat Save at end of each turn.`Darkvision 60ft, Perception +4
+BEAST`Giant Octopus
+BEAST`Giant Owl
+BEAST`Giant Poisonous Snake
+BEAST`Giant Rat
+BEAST`Giant Scorpion
+BEAST`Giant Sea Horse
+BEAST`Giant Shark
+BEAST`Giant Spider
+BEAST`Giant Toad
+BEAST`Giant Vulture
+BEAST`Giant Wasp
+BEAST`Giant Weasel
+BEAST`Giant Wolf Spider
+BEAST`Goat
+BEAST`Hawk
+BEAST`Hunter Shark
+BEAST`Hyena
+BEAST`Jackal
+BEAST`Kangaroo`1/8`+1`+2`+3`7`13`40`-`-`-`-`Medium`Kick: +3 to hit, 1d6+1 Bludgeoning damage\nOn a hit, target must make a DC11 Strength save vs Trip.`Acrobatics +3 (+6 when jumping), Perception +3
+BEAST`Killer Whale
+BEAST`Lion
+BEAST`Lizard
+BEAST`Mammoth
+BEAST`Mastiff
+BEAST`Mule
+BEAST`Octopus
+BEAST`Owl
+BEAST`Panther
+BEAST`Pistol Lord Shrimp
+BEAST`Poisonous Snake
+BEAST`Polar Bear
+BEAST`Pony
+BEAST`Quipper
+BEAST`Rat
+BEAST`Raven
+BEAST`Reef Shark
+BEAST`Rhinocerous
+BEAST`Riding Horse
+BEAST`Sabertoothed Tiger
+BEAST`Scorpion
+BEAST`Sea Horse
+BEAST`Spider
+BEAST`Tiger
+BEAST`Trapdoor Spider
+BEAST`Vulture
+BEAST`Warhorse
+BEAST`Weasel
+BEAST`Wolf
