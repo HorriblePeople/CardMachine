@@ -101,10 +101,14 @@ def main(folder, filepath="cards.txt"):
         back_list = []
 
     # Make cards
-    for line in card_lines:
+    for i, line in enumerate(card_lines):
+        # Skip header
+        if i == 0 and module.FILE_HAS_HEADER:
+            continue
+
         line = split_line(line)
         if line is None:
-            return
+            continue
 
         card_image, filename, back_image, filename_back = module.build_card(line)
         # card_image.show()
@@ -120,7 +124,7 @@ def main(folder, filepath="cards.txt"):
             back_list.append(back_image)
             if len(card_list) >= module.TOTAL_CARDS:
                 page_num += 1
-                print "Building Page {}...".format(page_num)
+                print("Building Page {}...".format(page_num))
                 build_page(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
                 build_back(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
                 card_list = []
@@ -135,16 +139,16 @@ def main(folder, filepath="cards.txt"):
                 card_list.append(module.build_blank())
                 back_list.append(module.build_blank())
             page_num += 1
-            print "Building Page {}...".format(page_num)
+            print("Building Page {}...".format(page_num))
             build_page(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
             build_page(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
 
         # Build PDF
-        print "\nCreating PDF..."
+        print("\nCreating PDF...")
         os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
-        print "\nCreating PDF of backs..."
+        print("\nCreating PDF of backs...")
         os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
-        print "Done!"
+        print("Done!")
 
     if module.BUILD_VASSAL:
         module.CompileVassalModule()
@@ -158,7 +162,7 @@ if __name__ == '__main__':
     #       python GameGen -b "Druid/Level 8" -f cards.txt
     # 2) Edit run_gamegen.py as appropriate
     # See the main() docstring for more info on the use of the arguments
-    default_dir, default_file = "Druid/Level 9", "cards.csv"
+    default_dir, default_file = "Chore Cards/1.0", "cards.csv"
     
     parser = argparse.ArgumentParser(prog="GameGen")
     parser.add_argument('-f', '--set-file',

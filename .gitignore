@@ -103,6 +103,8 @@ $RECYCLE.BIN/
 # Data files
 # =========================
 
+.idea/
+
 BaBOC/
 TSSSF/
 WSotT/
