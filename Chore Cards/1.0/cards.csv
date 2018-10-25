@@ -1,0 +1,43 @@
+Title 1,Subtitle 1,Category 1,Stars 1,Title 2,Subtitle 2,Stars 2
+SWEEP,Kitchen,WEEKLY,1,MOP,Kitchen,2
+SWEEP,Downstairs Bath,WEEKLY,1,MOP,Downstairs Bath,2
+SWEEP,Master Bath,WEEKLY,1,MOP,Master Bath,2
+SWEEP,Office Bath,WEEKLY,1,MOP,Office Bath,2
+TIDY FLOOR,Living Room,WEEKLY,1,VACUUM,Living Room,2
+TIDY FLOOR,Gaming Room,WEEKLY,1,VACUUM,Gaming Room,2
+TIDY FLOOR,Bedroom,WEEKLY,1,VACUUM,Bedroom,2
+TIDY FLOOR,Hallway,WEEKLY,1,VACUUM,Hallway,2
+TIDY FLOOR,Stairs,WEEKLY,1,VACUUM,Stairs,2
+TIDY FLOOR,Office,WEEKLY,1,VACUUM,Office,2
+TIDY,Living Room,WEEKLY,2,DUST,Living Room,1
+TIDY,Downstairs Bath,WEEKLY,1,DUST,Downstairs Bath,1
+TIDY,Master Bath,WEEKLY,1,DUST,Master Bath,1
+TIDY,Office Bath,WEEKLY,1,DUST,Office Bath,1
+TIDY,Gaming Room,WEEKLY,2,DUST,Gaming Room,1
+TIDY,Bedroom,WEEKLY,2,DUST,Bedroom,1
+TIDY,Office,WEEKLY,2,DUST,Office,1
+SCRUB TOILET,Downstairs Bath,WEEKLY,2,SCRUB SINK,Downstairs Bath,2
+SCRUB TOILET,Master Bath,WEEKLY,2,SCRUB SINK,Master Bath,2
+SCRUB TOILET,Office Bath,WEEKLY,2,SCRUB SINK,Office Bath,2
+SCRUB TUB,Master Bath,WEEKLY,2,CLEAN,Hair Trap,1
+SCRUB TUB,Office Bath,MONTHLY,2,,,
+TIDY,Car,WEEKLY,1,VACUUM,Car,2
+TIDY,Any Closet,WEEKLY,1,PURGE,Two Items,2
+CLEAN OUT,Fridge,MONTHLY,2,SCRUB,Fridge,2
+CLEAN OUT,Pantry,MONTHLY,2,DUST,Pantry,1
+TIDY,Kitchen Counters,WEEKLY,1,SCRUB,Kitchen Counters,2
+SCRUB,Microwave (Inside),MONTHLY,2,SCRUB,Microwave (Outside),1
+SCRUB,Toaster Oven (Inside),MONTHLY,2,SCRUB,Toaster Oven (Outside),1
+SCRUB,Kitchen Sink,MONTHLY,2,,,
+CLEAN,Oven,MONTHLY,2,SCRUB,Stove Elements,2
+SORT,Mail,WEEKLY,1,PAY,Bills,2
+CLEAN OUT,Freezer,MONTHLY,2,SCRUB,Freezer,2
+WIPE WALLS,Downstairs Bath,MONTHLY,2,WIPE SWITCHES,Downstairs Bath,1
+WIPE WALLS,Laundry Room,MONTHLY,2,WIPE SWITCHES,Laundry Room,1
+WIPE WALLS,Kitchen,MONTHLY,2,WIPE SWITCHES,Kitchen,1
+WINDEX,Downstairs WIndows,MONTHLY,3,,,
+WINDEX,Upstairs Windows,MONTHLY,3,,,
+WINDEX,Downstairs Bath,MONTHLY,2,,,
+WINDEX,Master Bath,MONTHLY,2,,,
+WINDEX,Office Bath,MONTHLY,2,,,
+SCRUB,Litter Boxes,MONTHLY,3,,,
