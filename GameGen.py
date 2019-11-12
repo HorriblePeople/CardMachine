@@ -70,7 +70,10 @@ def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
     module.CropPath = cropped_path
     vassal_path = CleanDirectory(path=folder + "/" + card_set, mkdir="vassal-images", rmstring="*.*")
     module.VassalPath = vassal_path
-
+    TGC_path = CleanDirectory(path=folder+"/"+card_set, mkdir="TGC-images",rmstring="*.*")
+    module.TGCPath = TGC_path
+	
+	
     # Create output directory
     output_folder = CleanDirectory(path=folder, mkdir=card_set, rmstring="*.pdf")
 
@@ -132,4 +135,21 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.basedir, args.set_file)
+    #main(args.basedir, args.set_file)
+    main('TSSSF', 'Multiplicity 0.0.1a/cards.pon')
+    #main('TSSSF', '1.1.0 Patch/cards.pon')
+    #main('TSSSF', '2014 Con Exclusives/cards.pon')
+    #main('TSSSF', 'BABScon 2015/cards.pon')
+    #main('TSSSF', 'Core 1.0.5/cards.pon')
+    #main('TSSSF', 'Core 1.0.5 Delta/cards.pon')
+    #main('TSSSF', 'Core 1.1.0/cards.pon')
+    #main('TSSSF', 'Core 1.1.0 Test/cards.pon')
+    #main('TSSSF', 'Custom Card for/cards.pon')
+    #main('TSSSF', 'Extra Credit 0.10.4/cards.pon')
+    #main('TSSSF', 'Indiegogo/cards.pon')
+    #main('TSSSF', 'Patreon Expansion 1/cards.pon')
+    #main('TSSSF', 'Ponycon Panel 2015/cards.pon')
+    #main('TSSSF', 'Ponyville University 1.0.1/cards.pon')
+    #main('TSSSF', 'Ponyville University 0.0.2/cards.pon')
+    #main('TSSSF', 'Ponyville University 1.0.2/cards.pon')
+    #main('TSSSF', 'Thank You/cards.pon')

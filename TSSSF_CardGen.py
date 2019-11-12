@@ -20,6 +20,7 @@ ResourcePath = DIRECTORY + "/resources/"
 BleedsPath = DIRECTORY + "/bleed-images/"
 CropPath = DIRECTORY + "/cropped-images/"
 VassalPath = DIRECTORY + "/vassal-images/"
+TGCPath = DIRECTORY+"/TGC-images/"
 
 BleedTemplatesPath = ResourcePath + "/bleed templates/"
 SymbolsPath = ResourcePath + "/symbols/"
@@ -43,7 +44,9 @@ h_marg = 36
 baserect = [(w_marg, h_marg), (base_w - w_marg, base_h - h_marg)]
 textmaxwidth = 689
 
-croprect = (50, 63, 788 + 50, 1088 + 63)
+TGC_SCALE = (825,1125)
+
+croprect=(50,63,788+50,1088+63)
 
 TextHeightThresholds = [363, 378, 600]
 TitleWidthThresholds = [50]  # This is in #characters, fix later plox
@@ -288,7 +291,9 @@ def BuildCard(data):
             else:
                 filename = FixFileName(card_type + "_" + picture)
             SaveCard(os.path.join(BleedsPath, filename), im)
-            im_crop = im.crop(croprect)
+            im_TGC=PIL_Helper.ResizeImage(im, TGC_SCALE)
+            SaveCard(os.path.join(TGCPath, filename), im_TGC)
+            im_crop=im.crop(croprect)
             SaveCard(os.path.join(CropPath, filename), im_crop)
             im_vassal = PIL_Helper.ResizeImage(im_crop, VASSAL_SCALE)
             SaveCard(os.path.join(VassalPath, filename), im_vassal)
