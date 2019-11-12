@@ -36,7 +36,7 @@ VASSAL_SCALE = (260, 359)
 VassalCard = [0]
 ART_WIDTH = 600
 base_w = 889
-base_h = 1215
+base_h = 1214
 base_w_center = base_w / 2
 base_h_center = base_h / 2
 w_marg = 31
@@ -135,30 +135,30 @@ Symbols = {
 TIMELINE_SYMBOL_LIST = ["Dystopian"]
 
 Expansions = {
-    "Everfree14": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Everfree14.png"),
+    #"Everfree14": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Everfree14.png"),
     "Indiegogo": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Indiegogo.png"),
-    "Birthday": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-birthday.png"),
-    "Bronycon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Bronycon14.png"),
+    #"Birthday": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-birthday.png"),
+    #"Bronycon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Bronycon14.png"),
     "Summer": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-summer-lovin.png"),
-    "Apricity": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-apricity.png"),
-    "BronyCAN": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Bronycan14.png"),
+    #"Apricity": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-apricity.png"),
+    #"BronyCAN": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Bronycan14.png"),
     "Xtra": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-extracredit.png"),
-    "Xtra-dark": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-extracredit-black.png"),
-    "NMND": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-nightmarenights.png"),
-    "Ciderfest": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-ponyvilleciderfest.png"),
-    "Adventure": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-adventure.png"),
-    "Custom": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-custom.png"),
+    #"Xtra-dark": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-extracredit-black.png"),
+    #"NMND": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-nightmarenights.png"),
+    #"Ciderfest": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-ponyvilleciderfest.png"),
+    #"Adventure": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-adventure.png"),
+    #"Custom": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-custom.png"),
     "Power": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-power.png"),
     "Multiplicity": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-multiplicity.png"),
     "Canon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-canon.png"),
-    "Dungeon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-dungeon.png"),
+    #"Dungeon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-dungeon.png"),
     "50": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-50.png"),
-    "2014": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-2014.png"),
-    "Hearthswarming": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-hearthswarming.png"),
-    "Ponycon 2015": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-ponynyc.png"),
-    "Patreon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Patreon.png"),
-    "Gameshow": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-gameshow.png"),
-    "BABScon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-BABScon.png")
+    #"2014": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-2014.png"),
+    #"Hearthswarming": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-hearthswarming.png"),
+    #"Ponycon 2015": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-ponynyc.png"),
+    #"Patreon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-Patreon.png"),
+    #"Gameshow": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-gameshow.png"),
+    #"BABScon": PIL_Helper.LoadImage(ExpansionIconsPath + "symbol-BABScon.png")
 }
 
 ColorDict = {

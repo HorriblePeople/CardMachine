@@ -136,7 +136,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #main(args.basedir, args.set_file)
-    main('TSSSF', 'Multiplicity 0.0.1a/cards.pon')
+    #main('TSSSF', 'Core-Deck/cards.pon')
+    main('TSSSF', 'Multiplicity 0.0.1a/cards.json')
     #main('TSSSF', '1.1.0 Patch/cards.pon')
     #main('TSSSF', '2014 Con Exclusives/cards.pon')
     #main('TSSSF', 'BABScon 2015/cards.pon')
