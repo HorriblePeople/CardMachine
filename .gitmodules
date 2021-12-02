@@ -1,0 +1,12 @@
+[submodule "Mini Expansions"]
+	path = TSSSF
+	url = https://github.com/DieKatzchen/Mini-Expansions.git
+[submodule "Core Deck"]
+	path = TSSSF/Core-Deck
+	url = https://github.com/secretshipfic/Core-Deck.git
+[submodule "Card Art"]
+	path = TSSSF/Card Art
+	url = https://github.com/DieKatzchen/Card-Art.git
+[submodule "TSSSF Templates"]
+	path = TSSSF/resources
+	https://github.com/DieKatzchen/TSSSFTemplates.git
