@@ -10,7 +10,7 @@ from sys import exit
 import json
 
 
-def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
+def main(folder="TSSSF", filepath="Core Deck/cards.json"):
     '''
     @param folder: The base game folder where we'll be working.
         E.g. TSSSF, BaBOC
@@ -33,7 +33,7 @@ def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
     else:
         file_type = 'pon'
         if first_line == "TSSSF_CardGen":
-            print 'Warning: .pon files are DEPRECATED for TSSSF. Support for this format may be removed soon. Please use the pontojson.py converter to convert this file to JSON format.'
+            print('Warning: .pon files are DEPRECATED for TSSSF. Support for this format may be removed soon. Please use the pontojson.py converter to convert this file to JSON format.')
         module_name = first_line
         # Load Card File and strip out comments
         cards = [line for line in CardFile if not line[0] in ('#', ';', '/')]
@@ -42,7 +42,7 @@ def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
     try:
         module = __import__(module_name.strip())
     except ValueError:
-        print "Failed to load module: " + str(ValueError)
+        print("Failed to load module: " + str(ValueError))
         return
     card_set = os.path.dirname(filepath)
     if file_type == 'json':
@@ -88,7 +88,7 @@ def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
         # do that now, and set the card list to empty again
         if len(card_list) >= module.TOTAL_CARDS:
             page_num += 1
-            print "Building Page {}...".format(page_num)
+            print("Building Page {}...".format(page_num))
             BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
             BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
             card_list = []
@@ -102,18 +102,20 @@ def main(folder="TSSSF", filepath="Core Deck 1.1.6/cards.json"):
             card_list.append(module.BuildCard("BLANK"))
             back_list.append(module.BuildCard("BLANK"))
         page_num += 1
-        print "Building Page {}...".format(page_num)
+        print("Building Page {}...".format(page_num))
         BuildPage(card_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
         BuildBack(back_list, page_num, module.PAGE_WIDTH, module.PAGE_HEIGHT, workspace_path)
 
     # Build Vassal
     module.CompileVassalModule()
 
-    print "\nCreating PDF..."
-    os.system(r'convert "{}/page_*.png" "{}/{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "\nCreating PDF of backs..."
-    os.system(r'convert "{}/backs_*.png" "{}/backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
-    print "Done!"
+    print("\nCreating PDF...")
+    print('"{}\page_*.png" "{}\{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'convert "{}\page_*.png" "{}\{}.pdf"'.format(workspace_path, output_folder, card_set))
+    print("\nCreating PDF of backs...")
+    print('"{}\backs_*.png" "{}\backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'convert "{}\backs_*.png" "{}\backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
+    print("Done!")
 
 
 if __name__ == '__main__':
@@ -136,8 +138,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #main(args.basedir, args.set_file)
-    #main('TSSSF', 'Core-Deck/cards.pon')
-    main('TSSSF', 'Multiplicity 0.0.1a/cards.json')
+    #main('TSSSF', 'Core Deck/cards.pon')
+    #main('TSSSF', 'Mini Expansions\Multiplicity 0.0.1a\cards.json')
     #main('TSSSF', '1.1.0 Patch/cards.pon')
     #main('TSSSF', '2014 Con Exclusives/cards.pon')
     #main('TSSSF', 'BABScon 2015/cards.pon')

@@ -301,7 +301,7 @@ def BuildCard(data):
             im_crop = im.crop(croprect)
 
     except Exception as e:
-        print "Warning, Bad Card: {0}".format(data)
+        print("Warning, Bad Card: {0}".format(data))
         traceback.print_exc()
         im_crop = MakeBlankCard().crop(croprect)
     return im_crop
@@ -388,7 +388,7 @@ def TitleText(image, text, color):
     if len(text) > TitleWidthThresholds[0]:
         anchor = Anchors["TitleSmall"]
         font = fonts["TitleSmall"]
-    print repr(text)
+    print(repr(text))
     PIL_Helper.AddText(
         image=image,
         text=text,
@@ -676,7 +676,7 @@ def MakeSpecialCard(card):
 
 
 def MakeSpecialCardJSON(data):
-    print repr(data['picture'])
+    print(repr(data['picture']))
     image = GetFrame(data['picture'])
     if data['picture'] in special_cards_with_copyright:
         CopyrightText(data, image, ColorDict["Copyright"], data.get('artist', ARTIST))
@@ -686,7 +686,7 @@ def MakeSpecialCardJSON(data):
 
 
 def MakeSpecialCardPON(data):
-    print repr(data[PICTURE])
+    print(repr(data[PICTURE]))
     image = GetFrame(data[PICTURE])
     if data[PICTURE] in special_cards_with_copyright:
         CopyrightText(data, image, ColorDict["Copyright"], ARTIST)
@@ -709,4 +709,4 @@ def CompileVassalModule():
 
 
 if __name__ == "__main__":
-    print "Not a main module. Run GameGen.py"
+    print("Not a main module. Run GameGen.py")

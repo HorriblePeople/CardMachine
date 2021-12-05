@@ -1,12 +1,21 @@
-[submodule "Mini Expansions"]
-	path = TSSSF
-	url = https://github.com/DieKatzchen/Mini-Expansions.git
-[submodule "Core Deck"]
-	path = TSSSF/Core-Deck
+[submodule "TSSSF/Core Deck"]
+	path = TSSSF/Core Deck
 	url = https://github.com/secretshipfic/Core-Deck.git
-[submodule "Card Art"]
+[submodule "TSSSF/Card Art"]
 	path = TSSSF/Card Art
 	url = https://github.com/DieKatzchen/Card-Art.git
-[submodule "TSSSF Templates"]
+[submodule "TSSSF/Ponyville University"]
+	path = TSSSF/Ponyville University
+	url = https://github.com/secretshipfic/PonyvilleUniversity.git
+[submodule "TSSSF/Mini Expansions"]
+	path = TSSSF/Mini Expansions
+	url = https://github.com/DieKatzchen/Mini-Expansions.git
+[submodule "TSSSF/Expansions"]
+	path = TSSSF/Expansions
+	url = https://github.com/secretshipfic/Expansions.git
+[submodule "TSSSF/Extra Credit"]
+	path = TSSSF/Extra Credit
+	url = https://github.com/secretshipfic/ExtraCredit.git
+[submodule "TSSSF/resources"]
 	path = TSSSF/resources
-	https://github.com/DieKatzchen/TSSSFTemplates.git
+	url = https://github.com/secretshipfic/TSSSFTemplates.git
