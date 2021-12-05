@@ -34,7 +34,7 @@ VassalImagesPath = os.path.join(VassalWorkspacePath, "images")
 VASSAL_SCALE = (260, 359)
 
 VassalCard = [0]
-ART_WIDTH = 600
+ART_WIDTH = 602
 base_w = 889
 base_h = 1214
 base_w_center = base_w / 2
@@ -66,7 +66,7 @@ fonts = {
 
 Anchors = {
     "Blank": (base_w_center, 300),
-    "PonyArt": (173, 225),
+    "PonyArt": (172, 224),
     "ShipArt": (173, 226),
     "GoalArt": (174, 224),
     "Symbol1": (58 + 50, 56 + 63),
