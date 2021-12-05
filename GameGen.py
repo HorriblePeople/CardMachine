@@ -110,11 +110,9 @@ def main(folder="TSSSF", filepath="Core Deck/cards.json"):
     module.CompileVassalModule()
 
     print("\nCreating PDF...")
-    print('"{}\page_*.png" "{}\{}.pdf"'.format(workspace_path, output_folder, card_set))
-    os.system(r'convert "{}\page_*.png" "{}\{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'magick convert "{}\page_*.png" "{}\{}.pdf"'.format(workspace_path, output_folder, os.path.basename(card_set)))
     print("\nCreating PDF of backs...")
-    print('"{}\backs_*.png" "{}\backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
-    os.system(r'convert "{}\backs_*.png" "{}\backs_{}.pdf"'.format(workspace_path, output_folder, card_set))
+    os.system(r'magick convert "{}\backs_*.png" "{}\backs_{}.pdf"'.format(workspace_path, output_folder, os.path.basename(card_set)))
     print("Done!")
 
 
@@ -139,7 +137,7 @@ if __name__ == '__main__':
 
     #main(args.basedir, args.set_file)
     #main('TSSSF', 'Core Deck/cards.pon')
-    #main('TSSSF', 'Mini Expansions\Multiplicity 0.0.1a\cards.json')
+    main('TSSSF', 'Mini Expansions/Multiplicity 0.0.1a/cards.json')
     #main('TSSSF', '1.1.0 Patch/cards.pon')
     #main('TSSSF', '2014 Con Exclusives/cards.pon')
     #main('TSSSF', 'BABScon 2015/cards.pon')
